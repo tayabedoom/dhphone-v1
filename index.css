@@ -1,0 +1,291 @@
+:root {
+    --primary-light: #3b82f6;
+    --primary-dark: #1d4ed8;
+    --dark-900: #0f172a;
+}
+
+/* Simple Navbar Effects from Product Page */
+.nav-link {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #4f46e5;
+    transition: width 0.3s ease;
+}
+
+.dark .nav-link::after {
+    background-color: #818cf8;
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+.nav-link.active::after {
+    width: 100%;
+}
+
+.nav-link:hover {
+    color: #4f46e5 !important;
+}
+
+.dark .nav-link:hover {
+    color: #818cf8 !important;
+}
+
+/* Simple Button Hover Effects */
+.btn-animated {
+    transition: all 0.3s ease;
+}
+
+.btn-animated:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(79, 70, 229, 0.3);
+}
+
+/* Simple Logo Hover Effect */
+.logo-link {
+    transition: all 0.3s ease;
+}
+
+.logo-link:hover {
+    transform: scale(1.05);
+}
+
+/* Simple Language Toggle Hover Effect */
+#language-toggle, #language-toggle-mobile {
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    padding: 6px 12px;
+}
+
+#language-toggle:hover, #language-toggle-mobile:hover {
+    background: rgba(79, 70, 229, 0.1);
+    transform: translateY(-1px);
+}
+
+.dark #language-toggle:hover, .dark #language-toggle-mobile:hover {
+    background: rgba(129, 140, 248, 0.1);
+}
+
+/* Simple Theme Toggle Hover Effect */
+#theme-toggle, #theme-toggle-mobile {
+    transition: all 0.3s ease;
+    border-radius: 50%;
+}
+
+#theme-toggle:hover, #theme-toggle-mobile:hover {
+    background: rgba(79, 70, 229, 0.1);
+    transform: rotate(15deg) scale(1.1);
+}
+
+.dark #theme-toggle:hover, .dark #theme-toggle-mobile:hover {
+    background: rgba(129, 140, 248, 0.1);
+}
+
+/* Simple Mobile Menu Button Hover Effect */
+#mobile-menu-button {
+    transition: all 0.3s ease;
+    border-radius: 8px;
+}
+
+#mobile-menu-button:hover {
+    background: rgba(79, 70, 229, 0.1);
+    transform: scale(1.1);
+}
+
+.dark #mobile-menu-button:hover {
+    background: rgba(129, 140, 248, 0.1);
+}
+
+/* Simple Mobile Menu Close Button Hover Effect */
+#mobile-menu-close {
+    transition: all 0.3s ease;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#mobile-menu-close:hover {
+    background: rgba(0, 0, 0, 0.1);
+    transform: rotate(90deg) scale(1.1);
+}
+
+.dark #mobile-menu-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Simple Mobile Menu Navigation Links */
+#mobile-menu nav a {
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    margin: 2px 0;
+}
+
+#mobile-menu nav a:hover {
+    background: rgba(79, 70, 229, 0.1);
+    transform: translateX(8px);
+}
+
+.dark #mobile-menu nav a:hover {
+    background: rgba(129, 140, 248, 0.1);
+}
+
+/* Simple Language Dropdown Hover Effects */
+.lang-option {
+    transition: all 0.2s ease;
+    border-radius: 6px;
+    margin: 2px 4px;
+}
+
+.lang-option:hover {
+    background: rgba(79, 70, 229, 0.1) !important;
+    transform: translateX(4px);
+}
+
+.dark .lang-option:hover {
+    background: rgba(129, 140, 248, 0.1) !important;
+}
+
+/* Simple Dropdown Animation */
+#language-dropdown, #language-dropdown-mobile {
+    animation: dropdownSlide 0.3s ease;
+    transform-origin: top;
+}
+
+@keyframes dropdownSlide {
+    from {
+        opacity: 0;
+        transform: scaleY(0) translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: scaleY(1) translateY(0);
+    }
+}
+
+/* Simple Header Glass Effect from Product Page */
+.header-glass {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, 0.8);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.dark .header-glass {
+    background: rgba(30, 41, 59, 0.8);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Mobile menu styles */
+#mobile-menu {
+    z-index: 9999;
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Ensure mobile menu is properly positioned */
+@media (max-width: 768px) {
+    #mobile-menu {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 280px;
+        height: 100vh;
+        background: white;
+        box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+        transform: translateX(100%);
+    }
+    
+    .dark #mobile-menu {
+        background: #1e293b;
+    }
+    
+    #mobile-menu.translate-x-full {
+        transform: translateX(100%);
+    }
+    
+    #mobile-menu:not(.translate-x-full) {
+        transform: translateX(0);
+    }
+}
+
+/* RTL support for mobile menu */
+[dir="rtl"] #mobile-menu {
+    right: auto;
+    left: 0;
+    transform: translateX(-100%);
+}
+
+[dir="rtl"] #mobile-menu.translate-x-full {
+    transform: translateX(-100%);
+}
+
+[dir="rtl"] #mobile-menu:not(.translate-x-full) {
+    transform: translateX(0);
+}
+
+/* Language dropdown in mobile menu */
+#language-dropdown-mobile {
+    z-index: 10000;
+}
+
+/* Ensure overlay covers entire screen */
+#mobile-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(2px);
+}
+
+/* Animation for mobile menu */
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(100%);
+    }
+}
+
+/* RTL animations */
+@keyframes slideInRTL {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOutRTL {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-100%);
+    }
+} 

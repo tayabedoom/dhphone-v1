@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn More - DH Phone | Premium Mobile Experience</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="index.css">
+    <script src="index.js?v=2" defer></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            light: '#2563eb',
+                            dark: '#0ea5e9',
+                        },
+                        dark: {
+                            800: '#1e293b',
+                            900: '#0f172a',
+                        }
+                    },
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-white text-slate-800 dark:bg-dark-900 dark:text-slate-100 transition-colors duration-300">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white/80 dark:bg-slate-800/80 header-glass shadow-sm animate-slide-down">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-12 md:h-16 items-center">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="index.html" class="flex items-center space-x-2 logo-link">
+                        <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-primary-light dark:bg-primary-dark flex items-center justify-center shadow-lg">
+                            <span class="text-white font-bold text-lg md:text-xl">DH</span>
+                        </div>
+                        <span class="text-2xl font-bold bg-gradient-to-r from-primary-light to-blue-500 dark:from-primary-dark dark:to-blue-400 bg-clip-text text-transparent">Phone</span>
+                    </a>
+                </div>
+                <!-- Desktop Navigation -->
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-center space-x-8">
+                        <a href="index.html" class="text-gray-600 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 px-1 py-2 text-sm font-medium transition-colors nav-link btn-animated nav-link-underline" data-en="Home" data-fr="Accueil" data-ar="الصفحة الرئيسية">Home</a>
+                        <a href="porduct.html" class="text-gray-600 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 px-1 py-2 text-sm font-medium transition-colors nav-link btn-animated nav-link-underline" data-en="Products" data-fr="Produits" data-ar="المنتجات">Products</a>
+                        <a href="Contact.html" class="text-gray-600 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 px-1 py-2 text-sm font-medium transition-colors nav-link btn-animated nav-link-underline" data-en="Contact" data-fr="Contact" data-ar="اتصل بنا">Contact</a>
+                        <!-- Language Selector -->
+                        <div class="relative">
+                            <button id="language-toggle" class="flex items-center text-gray-600 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400">
+                                <span class="text-sm font-medium" data-en="EN" data-fr="FR" data-ar="AR">EN</span>
+                                <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                            </button>
+                            <div id="language-dropdown" class="hidden absolute right-0 mt-2 w-24 bg-white dark:bg-slate-700 rounded-lg shadow-lg py-1 z-10 border border-gray-200 dark:border-slate-600">
+                                <button data-lang="en" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-600 w-full text-left transition-colors lang-option">English</button>
+                                <button data-lang="fr" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-600 w-full text-left transition-colors lang-option">Français</button>
+                                <button data-lang="ar" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-600 w-full text-left transition-colors lang-option" dir="rtl">العربية</button>
+                            </div>
+                        </div>
+                        <!-- Dark Mode Toggle -->
+                        <button id="theme-toggle" class="text-gray-600 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors">
+                            <i class="fas fa-moon dark:hidden"></i>
+                            <i class="fas fa-sun hidden dark:block"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center space-x-3">
+                    <button id="theme-toggle-mobile" class="text-gray-600 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors">
+                        <i class="fas fa-moon dark:hidden"></i>
+                        <i class="fas fa-sun hidden dark:block"></i>
+                    </button>
+                    <button id="mobile-menu-button" class="text-gray-600 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- Mobile menu -->
+            <div id="mobile-menu" class="hidden md:hidden pb-4 space-y-2">
+                <div class="flex items-center justify-between px-3 py-2 border-b border-gray-200 dark:border-gray-700">
+                    <span class="text-lg font-bold text-gray-800 dark:text-gray-200">Menu</span>
+                    <button id="mobile-menu-close" class="text-2xl text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-100 focus:outline-none">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <a href="index.html" class="block py-3 px-2 rounded-lg nav-link text-base btn-animated nav-link-underline" data-en="Home" data-fr="Accueil" data-ar="الرئيسية">Home</a>
+                <a href="porduct.html" class="block py-3 px-2 rounded-lg nav-link text-base btn-animated nav-link-underline" data-en="Products" data-fr="Produits" data-ar="المنتجات">Products</a>
+                <a href="Contact.html" class="block py-3 px-2 rounded-lg nav-link text-base btn-animated nav-link-underline" data-en="Contact" data-fr="Contact" data-ar="اتصل بنا">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="py-8 md:py-16 lg:py-24 bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-slate-800 dark:to-slate-900">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight mb-4 md:mb-6" data-en="Discover DH Phone" data-fr="Découvrez DH Phone" data-ar="اكتشف DH Phone">Discover DH Phone</h1>
+            <p class="text-base md:text-lg lg:text-xl text-slate-600 dark:text-slate-300 mb-6 md:mb-8 max-w-3xl mx-auto" data-en="Your trusted partner for all mobile needs. Quality products, expert service, and unbeatable prices." data-fr="Votre partenaire de confiance pour tous vos besoins mobiles. Produits de qualité, service expert et prix imbattables." data-ar="شريكك الموثوق لجميع احتياجاتك من الهواتف. منتجات عالية الجودة وخدمة متخصصة وأسعار لا تقبل المنافسة.">Your trusted partner for all mobile needs. Quality products, expert service, and unbeatable prices.</p>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="py-8 md:py-16">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
+                <div class="animate-fade-in">
+                    <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold mb-6" data-en="About DH Phone" data-fr="À propos de DH Phone" data-ar="عن DH Phone">About DH Phone</h2>
+                    <p class="text-slate-600 dark:text-slate-300 mb-4" data-en="Founded with a passion for technology and customer satisfaction, DH Phone has been serving the mobile community with dedication and excellence." data-fr="Fondé avec une passion pour la technologie et la satisfaction client, DH Phone sert la communauté mobile avec dévouement et excellence." data-ar="تأسس DH Phone بشغف للتكنولوجيا ورضا العملاء، ويخدم مجتمع الهواتف المحمولة بإخلاص وتميز.">Founded with a passion for technology and customer satisfaction, DH Phone has been serving the mobile community with dedication and excellence.</p>
+                    <p class="text-slate-600 dark:text-slate-300 mb-6" data-en="We specialize in providing the latest smartphones, accessories, and mobile solutions to meet all your digital lifestyle needs." data-fr="Nous nous spécialisons dans la fourniture des derniers smartphones, accessoires et solutions mobiles pour répondre à tous vos besoins de style de vie numérique." data-ar="نتخصص في توفير أحدث الهواتف الذكية والملحقات والحلول المحمولة لتلبية جميع احتياجات نمط حياتك الرقمي.">We specialize in providing the latest smartphones, accessories, and mobile solutions to meet all your digital lifestyle needs.</p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="text-center p-4 bg-blue-50 dark:bg-slate-800 rounded-lg">
+                            <i class="fas fa-mobile-alt text-2xl text-primary-light dark:text-primary-dark mb-2"></i>
+                            <h3 class="font-semibold" data-en="Latest Phones" data-fr="Derniers Téléphones" data-ar="أحدث الهواتف">Latest Phones</h3>
+                        </div>
+                        <div class="text-center p-4 bg-blue-50 dark:bg-slate-800 rounded-lg">
+                            <i class="fas fa-headphones text-2xl text-primary-light dark:text-primary-dark mb-2"></i>
+                            <h3 class="font-semibold" data-en="Accessories" data-fr="Accessoires" data-ar="الملحقات">Accessories</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="animate-slide-up">
+                    <div class="phone-mockup relative">
+                        <div class="phone-screen bg-white dark:bg-slate-800 rounded-[30px] md:rounded-[40px] p-2 w-48 md:w-64 h-[400px] md:h-[500px] border-6 md:border-8 border-slate-900 dark:border-slate-700">
+                            <div class="h-full rounded-[24px] md:rounded-[32px] overflow-hidden bg-gradient-to-br from-blue-50 to-blue-100 dark:from-slate-700 dark:to-slate-900 flex items-center justify-center">
+                                <div class="text-center p-4 md:p-6">
+                                    <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-primary-light dark:bg-primary-dark flex items-center justify-center mx-auto mb-3 md:mb-4">
+                                        <span class="text-white text-lg md:text-2xl font-bold">DH</span>
+                                    </div>
+                                    <h3 class="text-lg md:text-xl font-bold mb-2" data-en="DH Phone" data-fr="DH Téléphone">DH Phone</h3>
+                                    <p class="text-xs md:text-sm opacity-80" data-en="Your phone shop" data-fr="Votre magasin de téléphones">Your phone shop</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="py-8 md:py-16 bg-slate-50 dark:bg-dark-800">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-8 md:mb-16">
+                <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4" data-en="Our Services" data-fr="Nos Services" data-ar="خدماتنا">Our Services</h2>
+                <p class="text-slate-600 dark:text-slate-300 max-w-2xl mx-auto" data-en="Comprehensive mobile solutions for every need" data-fr="Solutions mobiles complètes pour chaque besoin" data-ar="حلول محمولة شاملة لكل احتياج">Comprehensive mobile solutions for every need</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                <!-- Service 1 -->
+                <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <div class="w-12 h-12 bg-primary-light dark:bg-primary-dark rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-mobile-alt text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3" data-en="Phone Sales" data-fr="Vente de Téléphones" data-ar="بيع الهواتف">Phone Sales</h3>
+                    <p class="text-slate-600 dark:text-slate-300" data-en="Latest smartphones from top brands with competitive prices and warranty." data-fr="Derniers smartphones des meilleures marques avec des prix compétitifs et garantie." data-ar="أحدث الهواتف الذكية من أفضل العلامات التجارية بأسعار تنافسية وضمان.">Latest smartphones from top brands with competitive prices and warranty.</p>
+                </div>
+
+                <!-- Service 2 -->
+                <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <div class="w-12 h-12 bg-primary-light dark:bg-primary-dark rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-tools text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3" data-en="Repair Service" data-fr="Service de Réparation" data-ar="خدمة الإصلاح">Repair Service</h3>
+                    <p class="text-slate-600 dark:text-slate-300" data-en="Professional repair services for all mobile devices with quick turnaround." data-fr="Services de réparation professionnels pour tous les appareils mobiles avec un délai rapide." data-ar="خدمات إصلاح احترافية لجميع الأجهزة المحمولة مع وقت استجابة سريع.">Professional repair services for all mobile devices with quick turnaround.</p>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <div class="w-12 h-12 bg-primary-light dark:bg-primary-dark rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-headphones text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3" data-en="Accessories" data-fr="Accessoires" data-ar="الملحقات">Accessories</h3>
+                    <p class="text-slate-600 dark:text-slate-300" data-en="Wide range of mobile accessories including cases, chargers, and more." data-fr="Large gamme d'accessoires mobiles incluant coques, chargeurs et plus." data-ar="مجموعة واسعة من ملحقات الهواتف المحمولة بما في ذلك الأغلفة والشواحن والمزيد.">Wide range of mobile accessories including cases, chargers, and more.</p>
+                </div>
+
+                <!-- Service 4 -->
+                <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <div class="w-12 h-12 bg-primary-light dark:bg-primary-dark rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-shield-alt text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3" data-en="Warranty" data-fr="Garantie" data-ar="الضمان">Warranty</h3>
+                    <p class="text-slate-600 dark:text-slate-300" data-en="Comprehensive warranty coverage for all products with excellent support." data-fr="Couverture de garantie complète pour tous les produits avec un excellent support." data-ar="تغطية ضمان شاملة لجميع المنتجات مع دعم ممتاز.">Comprehensive warranty coverage for all products with excellent support.</p>
+                </div>
+
+                <!-- Service 5 -->
+                <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <div class="w-12 h-12 bg-primary-light dark:bg-primary-dark rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-shipping-fast text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3" data-en="Fast Delivery" data-fr="Livraison Rapide" data-ar="التوصيل السريع">Fast Delivery</h3>
+                    <p class="text-slate-600 dark:text-slate-300" data-en="Quick and reliable delivery service to your doorstep." data-fr="Service de livraison rapide et fiable à votre porte." data-ar="خدمة توصيل سريعة وموثوقة إلى باب منزلك.">Quick and reliable delivery service to your doorstep.</p>
+                </div>
+
+                <!-- Service 6 -->
+                <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <div class="w-12 h-12 bg-primary-light dark:bg-primary-dark rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-comments text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3" data-en="Expert Support" data-fr="Support Expert" data-ar="الدعم المتخصص">Expert Support</h3>
+                    <p class="text-slate-600 dark:text-slate-300" data-en="Professional technical support and consultation for all your mobile needs." data-fr="Support technique professionnel et consultation pour tous vos besoins mobiles." data-ar="دعم تقني احترافي واستشارات لجميع احتياجاتك من الهواتف المحمولة.">Professional technical support and consultation for all your mobile needs.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us Section -->
+    <section class="py-8 md:py-16">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-8 md:mb-16">
+                <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4" data-en="Why Choose DH Phone?" data-fr="Pourquoi Choisir DH Phone?" data-ar="لماذا تختار DH Phone؟">Why Choose DH Phone?</h2>
+                <p class="text-slate-600 dark:text-slate-300 max-w-2xl mx-auto" data-en="We stand out from the competition with our commitment to quality and customer satisfaction" data-fr="Nous nous distinguons de la concurrence par notre engagement envers la qualité et la satisfaction client" data-ar="نتميز عن المنافسة بتعهدنا بالجودة ورضا العملاء">We stand out from the competition with our commitment to quality and customer satisfaction</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+                <div class="space-y-6">
+                    <div class="flex items-start space-x-4">
+                        <div class="w-8 h-8 bg-primary-light dark:bg-primary-dark rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                            <i class="fas fa-check text-white text-sm"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold mb-2" data-en="Quality Products" data-fr="Produits de Qualité" data-ar="منتجات عالية الجودة">Quality Products</h3>
+                            <p class="text-slate-600 dark:text-slate-300" data-en="We only stock genuine products from reputable manufacturers." data-fr="Nous ne stockons que des produits authentiques de fabricants réputés." data-ar="نحتفظ فقط بالمنتجات الأصلية من الشركات المصنعة الموثوقة.">We only stock genuine products from reputable manufacturers.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-4">
+                        <div class="w-8 h-8 bg-primary-light dark:bg-primary-dark rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                            <i class="fas fa-check text-white text-sm"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold mb-2" data-en="Competitive Prices" data-fr="Prix Compétitifs" data-ar="أسعار تنافسية">Competitive Prices</h3>
+                            <p class="text-slate-600 dark:text-slate-300" data-en="Best prices guaranteed with regular promotions and discounts." data-fr="Meilleurs prix garantis avec des promotions et réductions régulières." data-ar="أفضل الأسعار مضمونة مع العروض والخصومات المنتظمة.">Best prices guaranteed with regular promotions and discounts.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-4">
+                        <div class="w-8 h-8 bg-primary-light dark:bg-primary-dark rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                            <i class="fas fa-check text-white text-sm"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold mb-2" data-en="Expert Service" data-fr="Service Expert" data-ar="خدمة متخصصة">Expert Service</h3>
+                            <p class="text-slate-600 dark:text-slate-300" data-en="Our team of experts provides personalized advice and support." data-fr="Notre équipe d'experts fournit des conseils et un support personnalisés." data-ar="فريقنا من المتخصصين يقدم نصائح ودعم مخصصين.">Our team of experts provides personalized advice and support.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="space-y-6">
+                    <div class="flex items-start space-x-4">
+                        <div class="w-8 h-8 bg-primary-light dark:bg-primary-dark rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                            <i class="fas fa-check text-white text-sm"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold mb-2" data-en="Fast Delivery" data-fr="Livraison Rapide" data-ar="التوصيل السريع">Fast Delivery</h3>
+                            <p class="text-slate-600 dark:text-slate-300" data-en="Quick and reliable delivery to your location." data-fr="Livraison rapide et fiable à votre emplacement." data-ar="توصيل سريع وموثوق إلى موقعك.">Quick and reliable delivery to your location.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-4">
+                        <div class="w-8 h-8 bg-primary-light dark:bg-primary-dark rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                            <i class="fas fa-check text-white text-sm"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold mb-2" data-en="After-Sales Support" data-fr="Support Après-Vente" data-ar="الدعم بعد البيع">After-Sales Support</h3>
+                            <p class="text-slate-600 dark:text-slate-300" data-en="Comprehensive warranty and repair services available." data-fr="Garantie complète et services de réparation disponibles." data-ar="ضمان شامل وخدمات إصلاح متاحة.">Comprehensive warranty and repair services available.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-4">
+                        <div class="w-8 h-8 bg-primary-light dark:bg-primary-dark rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                            <i class="fas fa-check text-white text-sm"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold mb-2" data-en="Customer Satisfaction" data-fr="Satisfaction Client" data-ar="رضا العملاء">Customer Satisfaction</h3>
+                            <p class="text-slate-600 dark:text-slate-300" data-en="Your satisfaction is our top priority with excellent customer service." data-fr="Votre satisfaction est notre priorité absolue avec un excellent service client." data-ar="رضاك هو أولويتنا القصوى مع خدمة عملاء ممتازة.">Your satisfaction is our top priority with excellent customer service.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-8 md:py-16 bg-gradient-to-r from-primary-light to-blue-600 dark:from-primary-dark dark:to-cyan-600 text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4" data-en="Ready to Experience DH Phone?" data-fr="Prêt à Découvrir DH Phone?" data-ar="هل أنت مستعد لتجربة DH Phone؟">Ready to Experience DH Phone?</h2>
+            <p class="text-sm md:text-base text-blue-100 dark:text-cyan-100 max-w-2xl mx-auto mb-6 md:mb-8" data-en="Visit our store or browse our products online to get started" data-fr="Visitez notre magasin ou parcourez nos produits en ligne pour commencer" data-ar="زر متجرنا أو تصفح منتجاتنا عبر الإنترنت للبدء">Visit our store or browse our products online to get started</p>
+            <div class="flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-4">
+                <a href="porduct.html" class="inline-block px-6 md:px-8 py-3 bg-white text-primary-light dark:bg-slate-900 dark:text-primary-dark rounded-full font-medium hover:bg-blue-50 dark:hover:bg-slate-800 transition shadow-lg btn-animated" data-en="Browse Products" data-fr="Parcourir les Produits" data-ar="تصفح المنتجات">
+                    Browse Products
+                </a>
+                <a href="Contact.html" class="inline-block px-6 md:px-8 py-3 border border-white text-white rounded-full font-medium hover:bg-white hover:text-primary-light dark:hover:bg-slate-900 dark:hover:text-primary-dark transition shadow-lg btn-animated" data-en="Contact Us" data-fr="Contactez-nous" data-ar="اتصل بنا">
+                    Contact Us
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white mt-8 md:mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8">
+                <!-- Company Info -->
+                <div class="col-span-1 md:col-span-2">
+                    <h3 class="text-lg md:text-xl font-bold mb-3 md:mb-4">🛍️ DH Phone</h3>
+                    <p class="text-sm md:text-base text-gray-300 mb-3 md:mb-4">Your trusted phone shop for all your mobile needs. Quality phones, accessories, excellent service, and unbeatable prices.</p>
+                    <div class="flex space-x-3 md:space-x-4">
+                        <!-- Facebook Icon -->
+                        <a href="https://www.facebook.com/profile.php?id=100058599200790" target="_blank" rel="noopener" class="text-gray-400 hover:text-white transition-colors duration-300" aria-label="Facebook">
+                            <i class="fab fa-facebook-f fa-lg"></i>
+                        </a>
+                        <!-- Instagram Icon -->
+                        <a href="coming-soon.html" class="text-gray-400 hover:text-white transition-colors duration-300" aria-label="Instagram">
+                            <i class="fab fa-instagram fa-lg"></i>
+                        </a>
+                        <!-- WhatsApp Icon -->
+                        <a href="https://api.whatsapp.com/message/UDDWXQWO7GXJC1?autoload=1&app_absent=0" target="_blank" rel="noopener" class="text-gray-400 hover:text-white transition-colors duration-300" aria-label="WhatsApp">
+                            <i class="fab fa-whatsapp fa-lg"></i>
+                        </a>
+                        <!-- TikTok Icon -->
+                        <a href="https://www.tiktok.com/@dh.phone2?_t=ZM-8yC4GUv4nyy&_r=1" target="_blank" rel="noopener" class="text-gray-400 hover:text-white transition-colors duration-300" aria-label="TikTok">
+                            <svg class="w-5 h-5 md:w-6 md:h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-.88-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-base md:text-lg font-semibold mb-3 md:mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-sm md:text-base text-gray-300 hover:text-white transition-colors duration-300">Home</a></li>
+                        <li><a href="porduct.html" class="text-sm md:text-base text-gray-300 hover:text-white transition-colors duration-300">Products</a></li>
+                        <li><a href="Contact.html" class="text-sm md:text-base text-gray-300 hover:text-white transition-colors duration-300">Contact</a></li>
+                    </ul>
+                </div>
+                <!-- Contact Info -->
+                <div>
+                    <h4 class="text-base md:text-lg font-semibold mb-3 md:mb-4">Contact Info</h4>
+                    <div class="space-y-2 text-sm md:text-base text-gray-300">
+                        <p>📞 0559364881</p>
+                        <p>📍 <a href="https://www.google.com/maps/place/DH+phone/@35.531125,-0.190004,144m/data=!3m1!1e3!4m6!3m5!1s0xd7e3d9d8913e5e9:0x463fa5ab4ea63ab3!8m2!3d35.5311248!4d-0.1900038!16s%2Fg%2F11tnyjcw86?hl=en&entry=ttu&g_ep=EgoyMDI1MDcyMy4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener">Our Location</a></p>
+                    </div>
+                </div>
+            </div>
+            <!-- Bottom Bar -->
+            <div class="border-t border-gray-800 mt-6 md:mt-8 pt-6 md:pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-xs md:text-sm text-gray-400 text-center md:text-left">
+                        © 2024 DH Phone. All rights reserved.
+                    </p>
+                    <div class="flex items-center space-x-2 mt-3 md:mt-0">
+                        <span class="text-xs md:text-sm text-gray-400">Made with</span>
+                        <svg class="w-3 h-3 md:w-4 md:h-4 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                        </svg>
+                        <span class="text-xs md:text-sm text-gray-400">by <a href="https://www.instagram.com/tayabe_doom_?igsh=c29raG8xMXA1cHV5" target="_blank" rel="noopener" class="text-blue-400 hover:text-blue-300 transition-colors duration-300">tayabedoom</a></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile menu overlay and drawer -->
+    <div id="mobile-menu-overlay" class="fixed inset-0 bg-black bg-opacity-40 z-40 hidden"></div>
+    <div id="mobile-menu" class="fixed top-0 right-0 w-64 h-full bg-white dark:bg-slate-900 shadow-lg z-50 transform translate-x-full transition-transform duration-300 md:hidden">
+        <div class="flex flex-col h-full">
+            <div class="flex items-center justify-between px-4 py-4 border-b border-slate-200 dark:border-slate-700">
+                <span class="text-xl font-bold bg-gradient-to-r from-primary-light to-blue-500 dark:from-primary-dark dark:to-blue-400 text-transparent bg-clip-text">DH Phone</span>
+                <button id="mobile-menu-close" class="text-2xl focus:outline-none text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-100">&times;</button>
+            </div>
+            <nav class="flex-1 flex flex-col space-y-2 px-4 py-6">
+                <a href="index.html" class="block py-3 px-2 rounded-lg nav-link text-base btn-animated nav-link-underline" data-en="Home" data-fr="Accueil" data-ar="الرئيسية">Home</a>
+                <a href="porduct.html" class="block py-3 px-2 rounded-lg nav-link text-base btn-animated nav-link-underline" data-en="Products" data-fr="Produits" data-ar="المنتجات">Products</a>
+                <a href="Contact.html" class="block py-3 px-2 rounded-lg nav-link text-base btn-animated" data-en="Contact" data-fr="Contact" data-ar="اتصل بنا">Contact</a>
+            </nav>
+        </div>
+    </div>
+
+    <script src="theme.js" defer></script>
+    <script src="lang.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,509 @@
+/* Hamburger Menu Styles */
+.hamburger-menu {
+    position: fixed;
+    top: 0;
+    right: -300px;
+    width: 300px;
+    height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    backdrop-filter: blur(10px);
+    z-index: 9999;
+    transition: right 0.3s ease-in-out;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    /* Ensure menu is always visible when created */
+    visibility: visible;
+    opacity: 1;
+}
+
+.hamburger-menu.open {
+    right: 0;
+}
+
+.hamburger-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(3px);
+    z-index: 9998;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease-in-out;
+}
+
+.hamburger-menu-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.hamburger-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background: #3b82f6;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+}
+
+.hamburger-button:hover {
+    background: #2563eb;
+    transform: scale(1.05);
+}
+
+/* Show hamburger button only on mobile */
+@media (max-width: 768px) {
+    .hamburger-button {
+        display: flex !important;
+        z-index: 10001;
+    }
+    
+    /* Ensure hamburger menu is visible on mobile */
+    .hamburger-menu {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    
+    .hamburger-menu-overlay {
+        display: block !important;
+        visibility: visible !important;
+    }
+    
+    /* Hide desktop navigation on mobile */
+    .hidden.md\\:flex {
+        display: none !important;
+    }
+}
+
+.hamburger-button .hamburger-icon {
+    width: 20px;
+    height: 2px;
+    background: white;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.hamburger-button .hamburger-icon::before,
+.hamburger-button .hamburger-icon::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 2px;
+    background: white;
+    transition: all 0.3s ease;
+}
+
+.hamburger-button .hamburger-icon::before {
+    top: -6px;
+}
+
+.hamburger-button .hamburger-icon::after {
+    bottom: -6px;
+}
+
+/* Active state - simple X */
+.hamburger-button.active .hamburger-icon {
+    background: transparent;
+}
+
+.hamburger-button.active .hamburger-icon::before {
+    top: 0;
+    transform: rotate(45deg);
+}
+
+.hamburger-button.active .hamburger-icon::after {
+    bottom: 0;
+    transform: rotate(-45deg);
+}
+
+.hamburger-menu-header {
+    padding: 30px 20px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+}
+
+.hamburger-menu-header h3 {
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+
+
+.hamburger-menu-nav {
+    padding: 20px;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.hamburger-menu-nav a {
+    display: block;
+    padding: 15px 20px;
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 500;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.hamburger-menu-nav a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.hamburger-menu-nav a:hover::before {
+    left: 100%;
+}
+
+.hamburger-menu-nav a:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateX(10px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.hamburger-menu-nav a.active {
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.hamburger-menu-footer {
+    padding: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    /* Ensure footer is always visible */
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.language-toggle {
+    width: 100%;
+    padding: 12px 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.3s ease;
+    /* Ensure language toggle is always visible */
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.language-toggle:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.language-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.language-dropdown.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.language-option {
+    display: block;
+    width: 100%;
+    padding: 10px 15px;
+    background: none;
+    border: none;
+    text-align: left;
+    font-size: 16px;
+    color: #333;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.language-option:hover {
+    background: rgba(102, 126, 234, 0.1);
+    color: #667eea;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .hamburger-menu {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    }
+    
+    .language-dropdown {
+        background: rgba(26, 26, 46, 0.95);
+    }
+    
+    .language-option {
+        color: white;
+    }
+    
+    .language-option:hover {
+        background: rgba(102, 126, 234, 0.2);
+        color: #667eea;
+    }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .hamburger-menu {
+        width: 280px;
+        right: -280px;
+        max-height: 100vh;
+        overflow-y: auto;
+    }
+    
+    .hamburger-button {
+        top: 15px;
+        right: 15px;
+        width: 45px;
+        height: 45px;
+    }
+    
+    .hamburger-button .hamburger-icon {
+        width: 18px;
+    }
+    
+    .hamburger-button .hamburger-icon::before,
+    .hamburger-button .hamburger-icon::after {
+        width: 18px;
+    }
+    
+    /* Mobile language toggle improvements */
+    .language-toggle {
+        width: 100%;
+        justify-content: space-between;
+        padding: 12px 16px;
+        margin-bottom: 8px;
+    }
+    
+    .language-dropdown {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        width: 100%;
+        margin-top: 4px;
+        z-index: 1000;
+    }
+    
+    .language-option {
+        padding: 12px 16px;
+        font-size: 14px;
+    }
+    
+    /* Mobile footer improvements */
+    .hamburger-menu-footer {
+        padding: 16px;
+        margin-top: auto;
+    }
+    
+    .mobile-dark-toggle {
+        width: 100%;
+        justify-content: center;
+        padding: 12px;
+        margin-top: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        transition: all 0.3s ease;
+        /* Ensure mobile dark toggle is always visible */
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    
+    .mobile-dark-toggle:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+    }
+}
+
+/* Animation for menu items */
+@keyframes slideInFromRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Ensure hamburger menu is properly responsive */
+@media (max-width: 480px) {
+    .hamburger-menu {
+        width: 100vw;
+        right: -100vw;
+    }
+    
+    .hamburger-button {
+        top: 10px;
+        right: 10px;
+        width: 40px;
+        height: 40px;
+    }
+    
+    .hamburger-button .hamburger-icon {
+        width: 16px;
+    }
+    
+    .hamburger-button .hamburger-icon::before,
+    .hamburger-button .hamburger-icon::after {
+        width: 16px;
+    }
+}
+
+
+
+.hamburger-menu-nav a {
+    animation: slideInFromRight 0.3s ease forwards;
+}
+
+.hamburger-menu-nav a:nth-child(1) { animation-delay: 0.1s; }
+.hamburger-menu-nav a:nth-child(2) { animation-delay: 0.2s; }
+.hamburger-menu-nav a:nth-child(3) { animation-delay: 0.3s; }
+
+/* Desktop navigation hover effects */
+.nav-link {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #3b82f6;
+    transition: width 0.3s ease;
+}
+
+.dark .nav-link::after {
+    background: #60a5fa;
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+.nav-link.active::after {
+    width: 100%;
+}
+
+.nav-link:hover {
+    color: #3b82f6 !important;
+    transform: translateY(-1px);
+}
+
+.dark .nav-link:hover {
+    color: #60a5fa !important;
+}
+
+/* Desktop language button hover effects */
+.desktop-language-toggle {
+    position: relative;
+    transition: all 0.3s ease;
+    border-radius: 6px;
+    padding: 8px 12px;
+}
+
+.desktop-language-toggle:hover {
+    background: rgba(59, 130, 246, 0.1);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+}
+
+.dark .desktop-language-toggle:hover {
+    background: rgba(96, 165, 250, 0.1);
+    box-shadow: 0 2px 8px rgba(96, 165, 250, 0.2);
+}
+
+.desktop-language-toggle::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #3b82f6;
+    transition: width 0.3s ease;
+}
+
+.dark .desktop-language-toggle::after {
+    background: #60a5fa;
+}
+
+.desktop-language-toggle:hover::after {
+    width: 100%;
+}
+
+/* Desktop language dropdown hover effects */
+.desktop-language-option {
+    transition: all 0.2s ease;
+    border-radius: 4px;
+    margin: 2px 4px;
+}
+
+.desktop-language-option:hover {
+    background: rgba(59, 130, 246, 0.1) !important;
+    transform: translateX(4px);
+    color: #3b82f6 !important;
+}
+
+.dark .desktop-language-option:hover {
+    background: rgba(96, 165, 250, 0.1) !important;
+    color: #60a5fa !important;
+} 

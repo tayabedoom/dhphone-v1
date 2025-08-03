@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اتصل بنا | DH Phone</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="Contact.css">
+    <script src="Contact.js" defer></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            200: '#c7d2fe',
+                            300: '#a5b4fc',
+                            400: '#818cf8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            800: '#3730a3',
+                            900: '#312e81',
+                        },
+                        secondary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.5s ease-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --primary-light: #3b82f6;
+            --primary-dark: #1d4ed8;
+            --dark-900: #0f172a;
+        }
+        
+        .primary-light { color: var(--primary-light); }
+        .primary-dark { color: var(--primary-dark); }
+        .bg-primary-light { background-color: var(--primary-light); }
+        .bg-primary-dark { background-color: var(--primary-dark); }
+        .bg-dark-900 { background-color: var(--dark-900); }
+        
+        .nav-link {
+            @apply text-slate-600 dark:text-slate-300 hover:text-primary-light dark:hover:text-primary-dark transition-colors duration-200 font-medium relative;
+        }
+        
+        .nav-link.active {
+            @apply text-primary-light dark:text-primary-dark;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(to right, var(--primary-light), var(--primary-dark));
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+        
+        /* Header glass effect */
+        .header-glass {
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        
+        /* Language dropdown styles */
+        .lang-dropdown-open {
+            opacity: 1 !important;
+            visibility: visible !important;
+            transform: scale(1) !important;
+        }
+        
+        #lang-dropdown {
+            z-index: 1000;
+        }
+        
+        .lang-option {
+            cursor: pointer;
+        }
+        
+        .lang-option .flag {
+            margin-right: 8px;
+        }
+        
+        /* Dark mode navbar improvements */
+        .dark .header-glass {
+            background: rgba(15, 23, 42, 0.9) !important;
+            border-color: rgba(51, 65, 85, 0.8) !important;
+        }
+        
+        .dark .nav-link {
+            color: #cbd5e1 !important;
+        }
+        
+        .dark .nav-link:hover {
+            color: #60a5fa !important;
+        }
+        
+        .dark .nav-link.active {
+            color: #3b82f6 !important;
+        }
+        
+        /* Mobile menu dark mode improvements */
+        .dark #mobile-menu {
+            background: rgba(15, 23, 42, 0.95);
+            border-top: 1px solid rgba(51, 65, 85, 0.8);
+        }
+        
+        .dark #mobile-menu a {
+            color: #cbd5e1 !important;
+        }
+        
+        .dark #mobile-menu a:hover {
+            background: rgba(51, 65, 85, 0.8) !important;
+        }
+        
+        /* Enhanced floating label styles */
+        .floating-label {
+            @apply absolute left-4 top-4 text-slate-500 dark:text-slate-400 transition-all duration-300 pointer-events-none transform origin-left;
+        }
+        
+        .floating-label.active,
+        .form-input:focus-within .floating-label,
+        .form-input input:not(:placeholder-shown) + .floating-label,
+        .form-input textarea:not(:placeholder-shown) + .floating-label,
+        .form-input select:focus + .floating-label,
+        .form-input select:not([value=""]) + .floating-label {
+            @apply -top-2 left-3 text-xs text-primary-light dark:text-primary-dark bg-white dark:bg-slate-900 px-2 transform scale-90;
+        }
+
+        /* Ensure floating labels work properly */
+        .form-input input:focus + .floating-label,
+        .form-input textarea:focus + .floating-label,
+        .form-input select:focus + .floating-label,
+        .form-input input:not(:placeholder-shown) + .floating-label,
+        .form-input textarea:not(:placeholder-shown) + .floating-label,
+        .form-input select:not([value=""]) + .floating-label {
+            transform: translateY(-1.5rem) scale(0.85) !important;
+            color: #3b82f6 !important;
+            z-index: 2 !important;
+        }
+        
+        .dark .form-input input:focus + .floating-label,
+        .dark .form-input textarea:focus + .floating-label,
+        .dark .form-input select:focus + .floating-label,
+        .dark .form-input input:not(:placeholder-shown) + .floating-label,
+        .dark .form-input textarea:not(:placeholder-shown) + .floating-label,
+        .dark .form-input select:not([value=""]) + .floating-label {
+            color: #6366f1 !important;
+        }
+
+        /* Override conflicting styles */
+        .form-input label.floating-label {
+            left: 1rem !important;
+            right: auto !important;
+            background: #fff !important;
+            padding: 0 0.25rem !important;
+            z-index: 2 !important;
+            pointer-events: none !important;
+            position: absolute !important;
+        }
+        
+        .dark .form-input label.floating-label {
+            background: #334155 !important;
+        }
+        
+        .form-input:focus-within label,
+        .form-input input:not(:placeholder-shown) + label,
+        .form-input textarea:not(:placeholder-shown) + label,
+        .form-input select:focus + label,
+        .form-input select:not([value=""]) + label {
+            transform: translateY(-1.5rem) scale(0.85) !important;
+            color: #4f46e5 !important;
+            z-index: 2 !important;
+        }
+        
+        .dark .form-input:focus-within label,
+        .dark .form-input input:not(:placeholder-shown) + label,
+        .dark .form-input textarea:not(:placeholder-shown) + label,
+        .dark .form-input select:focus + label,
+        .dark .form-input select:not([value=""]) + label {
+            color: #6366f1 !important;
+            z-index: 2 !important;
+        }
+        
+        .form-input input,
+        .form-input textarea,
+        .form-input select {
+            padding-top: 2.2rem !important;
+        }
+        
+        /* RTL support */
+        [dir="rtl"] .floating-label {
+            @apply right-3 left-auto;
+        }
+        
+        [dir="rtl"] .floating-label.active {
+            @apply -top-2 right-2 left-auto;
+        }
+        /* Custom styles for elements that need more precise control */
+        .contact-card {
+            transition: all 0.3s ease;
+        }
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .dark .contact-card:hover {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+        .form-input {
+            position: relative;
+        }
+        .floating-label {
+            transition: all 0.2s ease-out;
+        }
+        .map-container {
+            filter: grayscale(30%) contrast(90%);
+        }
+        .dark .map-container {
+            filter: grayscale(30%) contrast(90%) invert(90%);
+        }
+        /* RTL support for Arabic */
+        [dir="rtl"] .flex:not(.flex-col):not(.flex-row-reverse) {
+            flex-direction: row-reverse;
+        }
+        [dir="rtl"] .text-left {
+            text-align: right;
+        }
+        [dir="rtl"] .text-right {
+            text-align: left;
+        }
+        [dir="rtl"] .ml-2 {
+            margin-left: 0 !important;
+            margin-right: 0.5rem !important;
+        }
+        [dir="rtl"] .mr-2 {
+            margin-right: 0 !important;
+            margin-left: 0.5rem !important;
+        }
+        [dir="rtl"] .ml-auto {
+            margin-left: 0;
+            margin-right: auto;
+        }
+        [dir="rtl"] .space-x-4 > * + * {
+            margin-left: 0 !important;
+            margin-right: 1rem !important;
+        }
+        [dir="rtl"] .space-x-6 > * + * {
+            margin-left: 0 !important;
+            margin-right: 1.5rem !important;
+        }
+        [dir="rtl"] .space-x-8 > * + * {
+            margin-left: 0 !important;
+            margin-right: 2rem !important;
+        }
+        [dir="rtl"] .ml-1 { margin-left: 0 !important; margin-right: 0.25rem !important; }
+        [dir="rtl"] .mr-1 { margin-right: 0 !important; margin-left: 0.25rem !important; }
+        [dir="rtl"] .mx-2 { margin-left: 0.5rem !important; margin-right: 0.5rem !important; }
+        [dir="rtl"] .mx-4 { margin-left: 1rem !important; margin-right: 1rem !important; }
+        [dir="rtl"] .gap-8 { gap: 2rem !important; }
+        [dir="rtl"] .icon-rtl-margin {
+            margin-left: 0.5rem !important;
+            margin-right: 0 !important;
+        }
+        /* Add RTL utility for .rtl:mr-3 */
+        [dir="rtl"] .rtl\:mr-3 { margin-right: 0.75rem !important; }
+        [dir="rtl"] .rtl\:ml-0 { margin-left: 0 !important; }
+        .icon-gap { margin-left: 1.25rem; }
+        [dir="rtl"] .icon-gap { margin-left: 0; margin-right: 1.25rem; }
+        .form-input label.floating-label[for="subject"] {
+            right: 2.5rem; /* Make room for the dropdown arrow */
+        }
+        /* Fix select dropdown appearance in dark mode */
+        .form-input select {
+            background-color: #fff;
+            color: #1e293b;
+        }
+        .dark .form-input select {
+            background-color: #1e293b;
+            color: #e2e8f0;
+        }
+        /* Enhanced dropdown menu options */
+        .form-input select option {
+            background-color: #fff;
+            color: #1e293b;
+            padding: 8px 12px;
+        }
+        .dark .form-input select option {
+            background-color: #334155;
+            color: #e2e8f0;
+            padding: 8px 12px;
+        }
+        
+        /* Subject dropdown specific styling */
+        .form-input select#subject {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+        }
+        
+        .dark .form-input select#subject {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+        }
+
+        /* Enhanced form styles */
+        .form-input input:focus,
+        .form-input textarea:focus,
+        .form-input select:focus {
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+        }
+
+        /* Error state styles */
+        .border-red-500 {
+            border-color: #ef4444 !important;
+        }
+
+        .ring-red-200 {
+            box-shadow: 0 0 0 4px rgba(254, 202, 202, 0.3) !important;
+        }
+
+        /* Form input hover effects */
+        .form-input:hover input,
+        .form-input:hover textarea,
+        .form-input:hover select {
+            border-color: #cbd5e1;
+        }
+
+        .dark .form-input:hover input,
+        .dark .form-input:hover textarea,
+        .dark .form-input:hover select {
+            border-color: #475569;
+        }
+
+        /* Character counter styles */
+        .char-counter {
+            transition: color 0.3s ease;
+        }
+
+        .char-counter.warning {
+            color: #f59e0b;
+        }
+
+        .char-counter.danger {
+            color: #ef4444;
+        }
+
+        /* Success message animation */
+        @keyframes slideInFromTop {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .success-animation {
+            animation: slideInFromTop 0.5s ease-out;
+        }
+
+        /* Loading spinner */
+        .fa-spinner {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Mobile hamburger menu */
+        .hamburger-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 300px;
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: right 0.3s ease;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .hamburger-menu.open {
+            right: 0;
+        }
+        
+        .hamburger-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+        
+        .hamburger-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* Language toggle */
+        .language-toggle {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 16px;
+        }
+        
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: none;
+            z-index: 1001;
+        }
+        
+        .language-dropdown.active {
+            display: block;
+        }
+        
+        .language-option {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .language-option:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .hamburger-menu {
+                width: 100%;
+            }
+        }
+        
+        /* Modern gradient shimmer underline and glow for navbar links */
+        .nav-link-underline {
+            position: relative;
+            overflow: hidden;
+        }
+        .nav-link-underline::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, #2563eb 0%, #0ea5e9 50%, #6366f1 100%);
+            background-size: 200% 100%;
+            background-position: 0% 50%;
+            border-radius: 2px;
+            transition: width 0.35s cubic-bezier(0.4,0,0.2,1), background-position 0.7s cubic-bezier(0.4,0,0.2,1);
+        }
+        .nav-link-underline:hover::after, .nav-link-underline.active::after {
+            width: 100%;
+            background-position: 100% 50%;
+        }
+        .btn-animated {
+            transition: transform 0.22s cubic-bezier(0.4,0,0.2,1), box-shadow 0.22s cubic-bezier(0.4,0,0.2,1), background 0.18s cubic-bezier(0.4,0,0.2,1);
+        }
+        .btn-animated:hover, .btn-animated:focus {
+            transform: translateY(-4px) scale(1.11) rotate(-1deg);
+            box-shadow: 0 8px 32px 0 rgba(59,130,246,0.22), 0 2px 8px 0 rgba(99,102,241,0.13);
+            background: rgba(37,99,235,0.10);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 dark:bg-slate-900 dark:text-gray-200 transition-colors duration-300">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
+                    <a href="index.html" class="flex items-center space-x-2">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center">
+                            <span class="text-white font-bold text-xl">DH</span>
+                        </div>
+                        <span class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Phone</span>
+                    </a>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex items-center space-x-6">
+                    <a href="index.html" class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">الرئيسية</a>
+                    <a href="porduct.html" class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">المنتجات</a>
+                    <a href="Contact.html" class="text-blue-600 dark:text-blue-400 font-semibold px-3 py-2 rounded-lg bg-blue-50 dark:bg-blue-900/20">اتصل بنا</a>
+                    
+                    <!-- Desktop Language Toggle -->
+                    <div class="relative">
+                        <button id="desktop-language-toggle" class="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                            <span id="desktop-language-text">🌐 EN</span>
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </button>
+                        <div id="desktop-language-dropdown" class="absolute right-0 mt-2 w-32 bg-white dark:bg-gray-800 rounded-lg shadow-lg py-1 hidden z-50">
+                            <button class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" data-lang="en">🇺🇸 English</button>
+                            <button class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" data-lang="fr">🇫🇷 Français</button>
+                            <button class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" data-lang="ar">🇸🇦 العربية</button>
+                        </div>
+                    </div>
+                </nav>
+                
+                <!-- Mobile Menu Button -->
+                <button id="hamburger-btn" class="md:hidden w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="hamburger-overlay" class="hamburger-overlay"></div>
+    <div id="hamburger-menu" class="hamburger-menu">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-8">
+                <h3 class="text-white text-xl font-bold">DH Phone</h3>
+                <button id="close-menu" class="text-white text-2xl">&times;</button>
+            </div>
+            
+            <nav class="mb-8">
+                <a href="index.html" class="block text-white py-3 border-b border-white/20">🏠 الرئيسية</a>
+                <a href="porduct.html" class="block text-white py-3 border-b border-white/20">📱 المنتجات</a>
+                <a href="Contact.html" class="block text-white py-3">📞 اتصل بنا</a>
+            </nav>
+            
+            <div class="mt-auto">
+                <div class="relative mb-4">
+                    <button id="language-toggle" class="language-toggle">
+                        <span>🌐 English</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div id="language-dropdown" class="language-dropdown">
+                        <div class="language-option" data-lang="en">🇺🇸 English</div>
+                        <div class="language-option" data-lang="fr">🇫🇷 Français</div>
+                        <div class="language-option" data-lang="ar">🇸🇦 العربية</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Hero Section -->
+        <section class="text-center mb-16 animate-fade-in">
+            <div class="bg-gradient-to-br from-blue-50 via-purple-50 to-indigo-50 dark:from-slate-800 dark:via-slate-700 dark:to-slate-800 p-12 rounded-3xl shadow-xl border border-blue-200 dark:border-slate-600">
+                <h1 class="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">اتصل بنا</h1>
+                <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">نحن هنا لمساعدتك! تواصل مع فريقنا لأي استفسارات أو أسئلة حول منتجاتنا وخدماتنا.</p>
+                <div class="mt-8 flex justify-center">
+                    <div class="w-24 h-1 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 rounded-full"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Methods -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+            <!-- Phone -->
+            <div class="contact-card bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-slate-800 dark:to-slate-700 p-8 rounded-2xl shadow-lg border border-blue-200 dark:border-slate-600 hover:border-blue-400 dark:hover:border-blue-500 transition-all duration-300 animate-slide-up group hover:shadow-2xl hover:shadow-blue-500/20 dark:hover:shadow-blue-500/10">
+                <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-phone text-white text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-3 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">اتصل بنا</h3>
+                <p class="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">متاح على مدار الساعة لراحتك</p>
+                <a href="tel:0559364881" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                    <i class="fas fa-phone mr-2"></i>
+                    <span>0559364881</span>
+                </a>
+            </div>
+
+            <!-- Email -->
+            <div class="contact-card bg-gradient-to-br from-purple-50 to-pink-100 dark:from-slate-800 dark:to-slate-700 p-8 rounded-2xl shadow-lg border border-purple-200 dark:border-slate-600 hover:border-purple-400 dark:hover:border-purple-500 transition-all duration-300 animate-slide-up group hover:shadow-2xl hover:shadow-purple-500/20 dark:hover:shadow-purple-500/10" style="animation-delay: 0.1s;">
+                <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-envelope text-white text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-3 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">راسلنا عبر البريد</h3>
+                <p class="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">سوف نرد في غضون 24 ساعة</p>
+                <a href="email-coming-soon.html" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                    <i class="fas fa-envelope mr-2"></i>
+                    <span>contact@dhphone.com</span>
+                </a>
+            </div>
+
+            <!-- WhatsApp -->
+            <div class="contact-card bg-gradient-to-br from-green-50 to-emerald-100 dark:from-slate-800 dark:to-slate-700 p-8 rounded-2xl shadow-lg border border-green-200 dark:border-slate-600 hover:border-green-400 dark:hover:border-green-500 transition-all duration-300 animate-slide-up group hover:shadow-2xl hover:shadow-green-500/20 dark:hover:shadow-green-500/10" style="animation-delay: 0.2s;">
+                <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                    <i class="fab fa-whatsapp text-white text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-3 bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">محادثة عبر واتساب</h3>
+                <p class="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">دعم عبر المراسلة الفورية</p>
+                <a href="https://api.whatsapp.com/message/UDDWXQWO7GXJC1?autoload=1&app_absent=0" target="_blank" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                    <i class="fab fa-whatsapp mr-2"></i>
+                    <span data-en="Start Chat" data-fr="Commencer la discussion" data-ar="ابدأ المحادثة">Start Chat</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Contact Form -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+            <div class="animate-fade-in">
+                <div class="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-slate-800 dark:to-slate-700 p-8 rounded-3xl shadow-xl border border-blue-200 dark:border-slate-600">
+                    <h2 class="text-4xl font-bold mb-4 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">أرسل لنا رسالة</h2>
+                    <p class="text-gray-600 dark:text-gray-300 mb-8 text-lg leading-relaxed">املأ النموذج أدناه وسنرد عليك في أقرب وقت ممكن مع ضمان الرد خلال 24 ساعة.</p>
+                
+                <form class="space-y-6" id="contactForm">
+                    <!-- Name Input -->
+                    <div class="form-input relative group">
+                        <input type="text" id="name" name="name" class="block w-full px-4 py-4 pt-6 bg-white dark:bg-slate-700 border-2 border-gray-200 dark:border-slate-500 rounded-xl focus:ring-4 focus:ring-primary-light/20 dark:focus:ring-primary-dark/20 focus:border-primary-light dark:focus:border-primary-dark transition-all duration-300 peer placeholder-transparent" placeholder=" " required>
+                        <label for="name" class="floating-label absolute left-4 top-4 text-gray-500 dark:text-gray-300 pointer-events-none transition-all duration-300 group-focus-within:text-primary-light dark:group-focus-within:text-primary-dark">الاسم الكامل</label>
+                        <div class="absolute right-4 top-4 text-gray-400 dark:text-gray-400 group-focus-within:text-primary-light dark:group-focus-within:text-primary-dark transition-colors duration-300">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <p class="mt-2 text-sm text-red-600 hidden flex items-center gap-2" id="nameError">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span data-en="Please enter your full name" data-fr="Veuillez entrer votre nom complet" data-ar="يرجى إدخال اسمك الكامل">Please enter your full name</span>
+                        </p>
+                    </div>
+                    
+                    <!-- Email Input -->
+                    <div class="form-input relative group">
+                        <input type="email" id="email" name="email" class="block w-full px-4 py-4 pt-6 bg-white dark:bg-slate-700 border-2 border-gray-200 dark:border-slate-500 rounded-xl focus:ring-4 focus:ring-primary-light/20 dark:focus:ring-primary-dark/20 focus:border-primary-light dark:focus:border-primary-dark transition-all duration-300 peer placeholder-transparent" placeholder=" " required>
+                        <label for="email" class="floating-label absolute left-4 top-4 text-gray-500 dark:text-gray-300 pointer-events-none transition-all duration-300 group-focus-within:text-primary-light dark:group-focus-within:text-primary-dark">عنوان البريد الإلكتروني</label>
+                        <div class="absolute right-4 top-4 text-gray-400 dark:text-gray-400 group-focus-within:text-primary-light dark:group-focus-within:text-primary-dark transition-colors duration-300">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <p class="mt-2 text-sm text-red-600 hidden flex items-center gap-2" id="emailError">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span data-en="Please enter a valid email address" data-fr="Veuillez entrer une adresse e-mail valide" data-ar="يرجى إدخال عنوان بريد إلكتروني صحيح">Please enter a valid email address</span>
+                        </p>
+                    </div>
+                    
+                    <!-- Subject Dropdown -->
+                    <div class="form-input relative group">
+                        <select id="subject" name="subject" class="block w-full px-4 py-4 pt-6 bg-white dark:bg-slate-700 border-2 border-gray-200 dark:border-slate-500 rounded-xl focus:ring-4 focus:ring-primary-light/20 dark:focus:ring-primary-dark/20 focus:border-primary-light dark:focus:border-primary-dark transition-all duration-300 appearance-none cursor-pointer hover:border-gray-300 dark:hover:border-slate-400" required>
+                            <option value="" selected disabled hidden></option>
+                            <option value="support" data-en="🛠️ Technical Support" data-fr="🛠️ Support technique" data-ar="🛠️ الدعم التقني">🛠️ Technical Support</option>
+                            <option value="sales" data-en="💰 Sales Inquiry" data-fr="💰 Demande de vente" data-ar="💰 استفسار المبيعات">💰 Sales Inquiry</option>
+                            <option value="partnership" data-en="🤝 Partnership" data-fr="🤝 Partenariat" data-ar="🤝 شراكة">🤝 Partnership</option>
+                            <option value="feedback" data-en="💬 Feedback" data-fr="💬 Commentaires" data-ar="💬 ملاحظات">💬 Feedback</option>
+                            <option value="other" data-en="📝 Other" data-fr="📝 Autre" data-ar="📝 أخرى">📝 Other</option>
+                        </select>
+                        <label for="subject" class="floating-label absolute left-4 top-4 text-gray-500 dark:text-gray-300 pointer-events-none transition-all duration-300 group-focus-within:text-primary-light dark:group-focus-within:text-primary-dark" data-en="Subject" data-fr="Sujet" data-ar="الموضوع">Subject</label>
+                        <div class="absolute right-4 top-4 text-gray-400 dark:text-gray-400 group-focus-within:text-primary-light dark:group-focus-within:text-primary-dark transition-colors duration-300 pointer-events-none">
+                            <i class="fas fa-tag"></i>
+                        </div>
+                        <p class="mt-2 text-sm text-red-600 hidden flex items-center gap-2" id="subjectError">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span data-en="Please select a subject" data-fr="Veuillez sélectionner un sujet" data-ar="يرجى اختيار موضوع">Please select a subject</span>
+                        </p>
+                    </div>
+                    
+                    <!-- Message Textarea -->
+                    <div class="form-input relative group">
+                        <textarea id="message" name="message" rows="6" class="block w-full px-4 py-4 pt-6 bg-white dark:bg-slate-700 border-2 border-gray-200 dark:border-slate-500 rounded-xl focus:ring-4 focus:ring-primary-light/20 dark:focus:ring-primary-dark/20 focus:border-primary-light dark:focus:border-primary-dark transition-all duration-300 peer placeholder-transparent resize-none" placeholder=" " required></textarea>
+                        <label for="message" class="floating-label absolute left-4 top-4 text-gray-500 dark:text-gray-300 pointer-events-none transition-all duration-300 group-focus-within:text-primary-light dark:group-focus-within:text-primary-dark" data-en="Your Message" data-fr="Votre message" data-ar="رسالتك">Your Message</label>
+                        <div class="absolute right-4 top-4 text-gray-400 dark:text-gray-400 group-focus-within:text-primary-light dark:group-focus-within:text-primary-dark transition-colors duration-300">
+                            <i class="fas fa-comment-alt"></i>
+                        </div>
+                        <div class="absolute bottom-2 right-4 text-xs text-gray-400 dark:text-gray-400">
+                            <span id="charCount">0</span>/500
+                        </div>
+                        <p class="mt-2 text-sm text-red-600 hidden flex items-center gap-2" id="messageError">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span data-en="Please enter your message" data-fr="Veuillez entrer votre message" data-ar="يرجى إدخال رسالتك">Please enter your message</span>
+                        </p>
+                    </div>
+                    
+                    <!-- Submit Button -->
+                    <button type="submit" class="w-full bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 hover:from-blue-700 hover:via-purple-700 hover:to-indigo-700 text-white font-bold py-4 px-8 rounded-2xl shadow-xl hover:shadow-2xl hover:shadow-blue-500/30 transform hover:-translate-y-2 transition-all duration-300 flex items-center justify-center gap-3 group text-lg" data-en="Send Message" data-fr="Envoyer le message" data-ar="إرسال الرسالة">
+                        <i class="fas fa-paper-plane group-hover:translate-x-2 transition-transform duration-300 text-xl"></i>
+                        <span data-en="Send Message" data-fr="Envoyer le message" data-ar="إرسال الرسالة">Send Message</span>
+                    </button>
+                </form>
+                
+
+                </div>
+            </div>
+            
+            <!-- Map -->
+            <div class="animate-fade-in" style="animation-delay: 0.2s;">
+                <div class="bg-gradient-to-br from-gray-50 to-slate-100 dark:from-slate-800 dark:to-slate-700 p-8 rounded-3xl shadow-xl border border-gray-200 dark:border-slate-600">
+                    <h2 class="text-3xl font-bold mb-6 bg-gradient-to-r from-gray-700 to-slate-700 dark:from-gray-200 dark:to-slate-200 bg-clip-text text-transparent" data-en="Our Location" data-fr="Notre emplacement" data-ar="موقعنا">Our Location</h2>
+                    <div class="map-container h-[400px] w-full rounded-2xl overflow-hidden shadow-lg border border-gray-300 dark:border-slate-600 hover:shadow-2xl transition-all duration-300">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d388.72921044564526!2d-0.19041955354081444!3d35.53112886572843!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd7e3d9d8913e5e9%3A0x463fa5ab4ea63ab3!2sDH%20phone!5e1!3m2!1sen!2sdz!4v1753707929797!5m2!1sen!2sdz" width="100%" height="100%" style="border:0; display:block;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                    <div class="mt-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border border-blue-200 dark:border-blue-800">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
+                                <i class="fas fa-map-marker-alt text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-800 dark:text-gray-200">DH Phone Store</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">📍 Find us at our convenient location</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Success Alert Modal -->
+    <div id="success-alert" class="fixed inset-0 bg-black bg-opacity-50 z-[60] hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-sm w-full transform transition-all duration-300 scale-95 opacity-0" id="success-alert-content">
+            <div class="p-6 text-center">
+                <!-- Success Icon -->
+                <div class="w-16 h-16 bg-gradient-to-r from-green-400 to-green-600 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
+                    <i class="fas fa-check text-white text-2xl"></i>
+                </div>
+                
+                <!-- Success Title -->
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Message Sent Successfully!</h3>
+                
+                <!-- Success Message -->
+                <p class="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+                    Thank you for your message! We have received your inquiry and will contact you soon via Telegram to provide assistance.
+                </p>
+                
+                <!-- Message Details -->
+                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-4 mb-6 border border-blue-200 dark:border-blue-800">
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-600 dark:text-gray-400">Message Status:</span>
+                        <span class="text-green-600 dark:text-green-400 font-semibold">Sent Successfully</span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm mt-2">
+                        <span class="text-gray-600 dark:text-gray-400">Response Time:</span>
+                        <span class="text-blue-600 dark:text-blue-400 font-semibold">Within 24 hours</span>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="flex space-x-3">
+                    <button onclick="closeSuccessAlert()" class="flex-1 px-4 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors font-medium">
+                        Close
+                    </button>
+                    <a href="https://api.whatsapp.com/message/UDDWXQWO7GXJC1?autoload=1&app_absent=0" target="_blank" class="flex-1 px-4 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl hover:from-green-700 hover:to-green-800 transition-all duration-300 font-medium text-center">
+                        <i class="fab fa-whatsapp mr-2"></i>WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+                </div>
+            </div>
+            
+            <!-- Map -->
+            <div class="animate-fade-in" style="animation-delay: 0.2s;">
+                <div class="bg-gradient-to-br from-gray-50 to-slate-100 dark:from-slate-800 dark:to-slate-700 p-8 rounded-3xl shadow-xl border border-gray-200 dark:border-slate-600">
+                    <h2 class="text-3xl font-bold mb-6 bg-gradient-to-r from-gray-700 to-slate-700 dark:from-gray-200 dark:to-slate-200 bg-clip-text text-transparent" data-en="Our Location" data-fr="Notre emplacement" data-ar="موقعنا">Our Location</h2>
+                    <div class="map-container h-[400px] w-full rounded-2xl overflow-hidden shadow-lg border border-gray-300 dark:border-slate-600 hover:shadow-2xl transition-all duration-300">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d388.72921044564526!2d-0.19041955354081444!3d35.53112886572843!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd7e3d9d8913e5e9%3A0x463fa5ab4ea63ab3!2sDH%20phone!5e1!3m2!1sen!2sdz!4v1753707929797!5m2!1sen!2sdz" width="100%" height="100%" style="border:0; display:block;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                    <div class="mt-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border border-blue-200 dark:border-blue-800">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
+                                <i class="fas fa-map-marker-alt text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-800 dark:text-gray-200">DH Phone Store</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">📍 Find us at our convenient location</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white mt-8 md:mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8">
+                <!-- Company Info -->
+                <div class="col-span-1 md:col-span-2">
+                    <h3 class="text-lg md:text-xl font-bold mb-3 md:mb-4">🛍️ DH Phone</h3>
+                    <p class="text-sm md:text-base text-gray-300 mb-3 md:mb-4">شريكك الموثوق لجميع احتياجاتك من الهواتف. منتجات عالية الجودة وخدمة ممتازة وأسعار لا تقبل المنافسة مع ضمان الجودة وخدمة ما بعد البيع.</p>
+                    <div class="flex space-x-3 md:space-x-4">
+                        <!-- Facebook Icon -->
+                        <a href="https://www.facebook.com/profile.php?id=100058599200790" target="_blank" rel="noopener" class="text-gray-400 hover:text-white transition-colors duration-300" aria-label="Facebook">
+                            <i class="fab fa-facebook-f fa-lg"></i>
+                        </a>
+                        <!-- Instagram Icon -->
+                        <a href="coming-soon.html" class="text-gray-400 hover:text-white transition-colors duration-300" aria-label="Instagram">
+                            <i class="fab fa-instagram fa-lg"></i>
+                        </a>
+                        <!-- WhatsApp Icon -->
+                        <a href="https://api.whatsapp.com/message/UDDWXQWO7GXJC1?autoload=1&app_absent=0" target="_blank" rel="noopener" class="text-gray-400 hover:text-white transition-colors duration-300" aria-label="WhatsApp">
+                            <i class="fab fa-whatsapp fa-lg"></i>
+                        </a>
+                        <!-- TikTok Icon -->
+                        <a href="https://www.tiktok.com/@dh.phone2?_t=ZM-8yC4GUv4nyy&_r=1" target="_blank" rel="noopener" class="text-gray-400 hover:text-white transition-colors duration-300" aria-label="TikTok">
+                            <svg class="w-5 h-5 md:w-6 md:h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-.88-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-base md:text-lg font-semibold mb-3 md:mb-4">روابط سريعة</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-sm md:text-base text-gray-300 hover:text-white transition-colors duration-300">الرئيسية</a></li>
+                        <li><a href="porduct.html" class="text-sm md:text-base text-gray-300 hover:text-white transition-colors duration-300">المنتجات</a></li>
+                        <li><a href="Contact.html" class="text-sm md:text-base text-gray-300 hover:text-white transition-colors duration-300">اتصل بنا</a></li>
+                    </ul>
+                </div>
+                <!-- Contact Info -->
+                <div>
+                    <h4 class="text-base md:text-lg font-semibold mb-3 md:mb-4">معلومات الاتصال</h4>
+                    <div class="space-y-2 text-sm md:text-base text-gray-300">
+                        <p>📞 0559364881</p>
+                        <p>📍 <a href="https://www.google.com/maps/place/DH+phone/@35.531125,-0.190004,144m/data=!3m1!1e3!4m6!3m5!1s0xd7e3d9d8913e5e9:0x463fa5ab4ea63ab3!8m2!3d35.5311248!4d-0.1900038!16s%2Fg%2F11tnyjcw86?hl=en&entry=ttu&g_ep=EgoyMDI1MDcyMy4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener">موقعنا</a></p>
+                    </div>
+                </div>
+            </div>
+            <!-- Bottom Bar -->
+            <div class="border-t border-gray-800 mt-6 md:mt-8 pt-6 md:pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                                            <p class="text-xs md:text-sm text-gray-400 text-center md:text-left">
+                            © 2025 DH Phone. جميع الحقوق محفوظة.
+                        </p>
+                    <div class="flex items-center space-x-2 mt-3 md:mt-0">
+                        <span class="text-xs md:text-sm text-gray-400">صنع بـ</span>
+                        <svg class="w-3 h-3 md:w-4 md:h-4 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                        </svg>
+                        <span class="text-xs md:text-sm text-gray-400">بواسطة <a href="https://www.instagram.com/tayabe_doom_?igsh=c29raG8xMXA1cHV5" target="_blank" rel="noopener" class="text-blue-400 hover:text-blue-300 transition-colors duration-300">tayabedoom</a></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Telegram Bot Configuration
+        const TELEGRAM_BOT_TOKEN = '7933495075:AAH2tvwxLUsSXtM4UzkSgSq4cb65k6qhSEI';
+        const TELEGRAM_CHAT_ID = '-1002894581286';
+
+        // Simple and working contact form with Telegram integration
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Contact page loaded successfully');
+            
+            const contactForm = document.getElementById('contactForm');
+            
+            // Initialize floating labels
+            initializeFloatingLabels();
+            
+            // Character counter
+            const messageTextarea = document.getElementById('message');
+            const charCount = document.getElementById('charCount');
+            
+            if (messageTextarea && charCount) {
+                messageTextarea.addEventListener('input', function() {
+                    const length = this.value.length;
+                    charCount.textContent = length;
+                    
+                    // Update counter color based on length
+                    charCount.className = 'char-counter';
+                    if (length > 400) {
+                        charCount.classList.add('danger');
+                    } else if (length > 300) {
+                        charCount.classList.add('warning');
+                    }
+                });
+            }
+            
+            // Form submission
+            if (contactForm) {
+                contactForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    console.log('Form submitted');
+                    
+                    // Get form data
+                    const name = document.getElementById('name').value.trim();
+                    const email = document.getElementById('email').value.trim();
+                    const subject = document.getElementById('subject').value;
+                    const message = document.getElementById('message').value.trim();
+                    
+                    // Simple validation
+                    if (!name) {
+                        showError('name', 'Please enter your full name');
+                        return;
+                    }
+                    
+                    if (!email) {
+                        showError('email', 'Please enter your email address');
+                        return;
+                    }
+                    
+                    if (!email.includes('@')) {
+                        showError('email', 'Please enter a valid email address');
+                        return;
+                    }
+                    
+                    if (!subject) {
+                        showError('subject', 'Please select a subject');
+                        return;
+                    }
+                    
+                    if (!message || message.length < 10) {
+                        showError('message', 'Please enter a message (at least 10 characters)');
+                        return;
+                    }
+                    
+                    // Clear all errors
+                    clearAllErrors();
+                    
+                    // Show loading state
+                    const submitBtn = contactForm.querySelector('button[type="submit"]');
+                    const originalText = submitBtn.innerHTML;
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Sending...</span>';
+                    
+                    // Prepare Telegram message
+                    const telegramMessage = `📧 *New Contact Form Submission*
+
+👤 *Name:* ${name}
+📧 *Email:* ${email}
+📋 *Subject:* ${subject}
+💬 *Message:* ${message}
+
+⏰ *Time:* ${new Date().toLocaleString()}
+🌐 *User Agent:* ${navigator.userAgent}`;
+                    
+                    // Send message to Telegram
+                    sendTelegramMessage(telegramMessage)
+                        .then(function(response) {
+                            console.log('Telegram message sent successfully:', response);
+                            
+                            // Reset form
+                            contactForm.reset();
+                            
+                            // Reset floating labels
+                            contactForm.querySelectorAll('.floating-label').forEach(label => {
+                                label.classList.remove('active');
+                            });
+                            
+                            // Reset character counter
+                            if (charCount) charCount.textContent = '0';
+                            
+                            // Show success alert
+                            showSuccessAlert();
+                            
+                            // Show SweetAlert success
+                            if (typeof Swal !== 'undefined') {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Message Sent Successfully!',
+                                    text: 'Thank you for contacting us. We will get back to you soon via Telegram.',
+                                    confirmButtonColor: '#3b82f6',
+                                    timer: 3000,
+                                    timerProgressBar: true
+                                });
+                            }
+                            
+                            // Reset button
+                            submitBtn.disabled = false;
+                            submitBtn.innerHTML = originalText;
+                        })
+                        .catch(function(error) {
+                            console.error('Telegram send failed:', error);
+                            
+                            // Reset button
+                            submitBtn.disabled = false;
+                            submitBtn.innerHTML = originalText;
+                            
+                            // Show error message
+                            if (typeof Swal !== 'undefined') {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Message Send Failed',
+                                    text: 'Sorry, there was an error sending your message. Please try again or contact us directly via WhatsApp.',
+                                    confirmButtonColor: '#3b82f6'
+                                });
+                            }
+                        });
+                });
+                
+                console.log('Contact form event listener added successfully');
+            } else {
+                console.error('Contact form not found');
+            }
+            
+            // Function to send message to Telegram
+            async function sendTelegramMessage(message) {
+                const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+                
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        chat_id: TELEGRAM_CHAT_ID,
+                        text: message,
+                        parse_mode: 'Markdown'
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                return await response.json();
+            }
+
+            // Success Alert Functions
+            function showSuccessAlert() {
+                const successAlert = document.getElementById('success-alert');
+                const successContent = document.getElementById('success-alert-content');
+                
+                if (successAlert && successContent) {
+                    successAlert.classList.remove('hidden');
+                    successAlert.classList.add('flex');
+                    
+                    // Animate in
+                    setTimeout(() => {
+                        successContent.classList.remove('scale-95', 'opacity-0');
+                        successContent.classList.add('scale-100', 'opacity-100');
+                    }, 10);
+                }
+            }
+
+            function closeSuccessAlert() {
+                const successAlert = document.getElementById('success-alert');
+                const successContent = document.getElementById('success-alert-content');
+                
+                if (successAlert && successContent) {
+                    // Animate out
+                    successContent.classList.remove('scale-100', 'opacity-100');
+                    successContent.classList.add('scale-95', 'opacity-0');
+                    
+                    setTimeout(() => {
+                        successAlert.classList.add('hidden');
+                        successAlert.classList.remove('flex');
+                    }, 300);
+                }
+            }
+
+            // Close success alert when clicking outside
+            document.addEventListener('click', function(e) {
+                const successAlert = document.getElementById('success-alert');
+                const successContent = document.getElementById('success-alert-content');
+                
+                if (successAlert && successContent && e.target === successAlert) {
+                    closeSuccessAlert();
+                }
+            });
+            
+            // Helper functions
+            function showError(fieldId, message) {
+                const errorElement = document.getElementById(`${fieldId}Error`);
+                const inputElement = document.getElementById(fieldId);
+                
+                if (errorElement && inputElement) {
+                    const span = errorElement.querySelector('span');
+                    if (span) span.textContent = message;
+                    errorElement.classList.remove('hidden');
+                    inputElement.classList.add('border-red-500', 'ring-2', 'ring-red-200');
+                    inputElement.focus();
+                }
+            }
+            
+            function clearAllErrors() {
+                document.querySelectorAll('[id$="Error"]').forEach(el => {
+                    el.classList.add('hidden');
+                });
+                
+                contactForm.querySelectorAll('input, textarea, select').forEach(el => {
+                    el.classList.remove('border-red-500', 'ring-2', 'ring-red-200');
+                });
+            }
+            
+            function initializeFloatingLabels() {
+                const formInputs = document.querySelectorAll('.form-input input, .form-input textarea, .form-input select');
+                
+                formInputs.forEach(input => {
+                    const label = input.nextElementSibling;
+                    if (label && label.classList.contains('floating-label')) {
+                        // Add event listeners
+                        input.addEventListener('focus', () => {
+                            label.classList.add('active');
+                        });
+                        
+                        input.addEventListener('blur', () => {
+                            if (!input.value || (input.tagName === 'SELECT' && input.value === '')) {
+                                label.classList.remove('active');
+                            }
+                        });
+                        
+                        input.addEventListener('input', () => {
+                            if (input.value || (input.tagName === 'SELECT' && input.value !== '')) {
+                                label.classList.add('active');
+                            } else {
+                                label.classList.remove('active');
+                            }
+                        });
+                    }
+                });
+            }
+        });
+        
+        // Mobile menu functionality
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const hamburgerMenu = document.getElementById('hamburger-menu');
+        const hamburgerOverlay = document.getElementById('hamburger-overlay');
+        const closeMenu = document.getElementById('close-menu');
+        
+        function openMenu() {
+            hamburgerMenu.classList.add('open');
+            hamburgerOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeMenuFunc() {
+            hamburgerMenu.classList.remove('open');
+            hamburgerOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        hamburgerBtn.addEventListener('click', openMenu);
+        closeMenu.addEventListener('click', closeMenuFunc);
+        hamburgerOverlay.addEventListener('click', closeMenuFunc);
+        
+        // Language toggle
+        const languageToggle = document.getElementById('language-toggle');
+        const languageDropdown = document.getElementById('language-dropdown');
+        const languageOptions = document.querySelectorAll('.language-option');
+        
+        languageToggle.addEventListener('click', () => {
+            languageDropdown.classList.toggle('active');
+        });
+        
+        languageOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                const lang = option.dataset.lang;
+                const langText = option.textContent.split(' ')[1];
+                languageToggle.querySelector('span').textContent = `🌐 ${langText}`;
+                languageDropdown.classList.remove('active');
+                localStorage.setItem('lang', lang);
+            });
+        });
+        
+        // Desktop language toggle
+        const desktopLanguageToggle = document.getElementById('desktop-language-toggle');
+        const desktopLanguageDropdown = document.getElementById('desktop-language-dropdown');
+        const desktopLanguageText = document.getElementById('desktop-language-text');
+        const desktopLanguageOptions = document.querySelectorAll('#desktop-language-dropdown button');
+        
+        desktopLanguageToggle.addEventListener('click', () => {
+            desktopLanguageDropdown.classList.toggle('hidden');
+        });
+        
+        desktopLanguageOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                const lang = option.dataset.lang;
+                const langText = option.textContent.split(' ')[1];
+                desktopLanguageText.textContent = `🌐 ${langText}`;
+                desktopLanguageDropdown.classList.add('hidden');
+                localStorage.setItem('lang', lang);
+            });
+        });
+        
+        // Load saved language
+        const savedLang = localStorage.getItem('lang');
+        
+        if (savedLang) {
+            const option = document.querySelector(`[data-lang="${savedLang}"]`);
+            if (option) {
+                const langText = option.textContent.split(' ')[1];
+                languageToggle.querySelector('span').textContent = `🌐 ${langText}`;
+                desktopLanguageText.textContent = `🌐 ${langText}`;
+            }
+        }
+
+        // Set dark mode as default
+        const html = document.documentElement;
+        const savedTheme = localStorage.getItem('theme');
+        
+        // If no theme is saved, default to dark mode
+        if (!savedTheme) {
+            html.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
+        } else if (savedTheme === 'dark') {
+            html.classList.add('dark');
+        } else {
+            html.classList.remove('dark');
+        }
+        
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!languageToggle.contains(e.target) && !languageDropdown.contains(e.target)) {
+                languageDropdown.classList.remove('active');
+            }
+            if (!desktopLanguageToggle.contains(e.target) && !desktopLanguageDropdown.contains(e.target)) {
+                desktopLanguageDropdown.classList.add('hidden');
+            }
+        });
+    </script>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+  const themeToggle = document.getElementById('dark-mode-toggle');
+  const html = document.documentElement;
+  const moonIcon = document.getElementById('moon-icon');
+  const sunIcon = document.getElementById('sun-icon');
+
+  function updateIcons() {
+    if (html.classList.contains('dark')) {
+      moonIcon.classList.add('hidden');
+      sunIcon.classList.remove('hidden');
+    } else {
+      moonIcon.classList.remove('hidden');
+      sunIcon.classList.add('hidden');
+    }
+  }
+
+  function toggleTheme() {
+    html.classList.toggle('dark');
+    localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    updateIcons();
+  }
+
+  if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
+
+  // On page load, set theme and icon
+  if (localStorage.getItem('theme') === 'dark') {
+    html.classList.add('dark');
+  } else {
+    html.classList.remove('dark');
+  }
+  updateIcons();
+});
+</script>
+</body>
+</html>

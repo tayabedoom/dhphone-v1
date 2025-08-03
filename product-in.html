@@ -1,0 +1,2281 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفاصيل المنتج | DH Phone</title>
+    
+    <!-- Tailwind CSS CDN - Development only -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {}
+            }
+        }
+        
+        // Test dark mode configuration
+        console.log('Tailwind config loaded with darkMode:', tailwind.config.darkMode);
+    </script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="hamburger-menu.css">
+    
+    <!-- Custom CSS -->
+    <style>
+        /* Product image gallery */
+        .product-gallery {
+            position: relative;
+        }
+        
+        .main-image {
+            transition: opacity 0.3s ease;
+        }
+        
+        .thumbnail {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .thumbnail:hover {
+            transform: scale(1.05);
+        }
+        
+        .thumbnail.active {
+            border-color: #3b82f6;
+            transform: scale(1.05);
+        }
+        
+        /* Skeleton loading */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        /* Fade in animation */
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Tab styles */
+        .tab-btn.active {
+            border-color: #3b82f6;
+            color: #3b82f6;
+        }
+        
+        .tab-content {
+            transition: opacity 0.3s ease;
+        }
+        
+        /* Language dropdown */
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            z-index: 50;
+            min-width: 150px;
+            margin-top: 8px;
+        }
+        
+        /* Dark mode support for language dropdown */
+        .dark .language-dropdown {
+            background: #1f2937;
+            border-color: #374151;
+        }
+        
+        /* Tab styling */
+        .tab-btn.active {
+            border-bottom-color: #3b82f6 !important;
+            color: #2563eb !important;
+        }
+        
+        .dark .tab-btn.active {
+            color: #60a5fa !important;
+        }
+        
+        .tab-content {
+            display: block;
+        }
+        
+        .tab-content.hidden {
+            display: none;
+        }
+        
+        /* Hide status messages */
+        #shopify-status, #algeria-status {
+            display: none !important;
+        }
+        
+        /* Mobile hamburger menu */
+        .hamburger-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 300px;
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: right 0.3s ease;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .hamburger-menu.open {
+            right: 0;
+        }
+        
+        .hamburger-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+        
+        .hamburger-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* Language toggle */
+        .language-toggle {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 16px;
+        }
+        
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: none;
+            z-index: 1001;
+        }
+        
+        .language-dropdown.active {
+            display: block;
+        }
+        
+        .language-option {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .language-option:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .hamburger-menu {
+                width: 85vw;
+                max-width: 320px;
+            }
+        }
+        
+        /* Hide scrollbar for mobile */
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        
+        /* Mobile-specific improvements */
+        @media (max-width: 640px) {
+            /* Better touch targets */
+            button, a {
+                min-height: 44px;
+                min-width: 44px;
+            }
+            
+            /* Improved spacing */
+            .product-container {
+                gap: 16px;
+            }
+            
+            /* Better text readability */
+            .text-sm {
+                font-size: 14px;
+                line-height: 20px;
+            }
+            
+            /* Better modal on mobile */
+            .modal-content {
+                margin: 16px;
+                border-radius: 16px;
+                padding: 16px;
+            }
+            
+            /* Better form inputs on mobile */
+            input, select, textarea {
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+        }
+        
+        /* Product card link styling */
+        .product-card {
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        .product-card:hover .text-blue-600 {
+            color: #1d4ed8 !important;
+        }
+        
+        .dark .product-card:hover .text-blue-400 {
+            color: #60a5fa !important;
+        }
+        
+        /* Touch-friendly improvements */
+        @media (hover: none) and (pointer: coarse) {
+            /* Larger touch targets */
+            .tab-btn {
+                padding: 12px 16px;
+            }
+            
+            /* Better hover states for touch */
+            .product-card:hover {
+                transform: none;
+            }
+            
+            .product-card:active {
+                transform: scale(0.98);
+            }
+        }
+    </style>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Config -->
+    <script src="shopify-config.js"></script>
+    <script src="config.js"></script>
+    <script src="wilaya-data.js"></script>
+    
+    <!-- JavaScript -->
+    <script>
+        // Initialize Firebase
+        console.log('🔥 Firebase config:', window.config);
+        if (!firebase.apps.length) {
+            firebase.initializeApp(window.config.firebase);
+        }
+        const db = firebase.firestore();
+        
+        // Enable offline persistence
+        db.settings({
+            cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED
+        });
+        db.enablePersistence()
+            .catch((err) => {
+                if (err.code == 'failed-precondition') {
+                    console.warn('Persistence failed - multiple tabs open');
+                } else if (err.code == 'unimplemented') {
+                    console.warn('Persistence not available');
+                }
+            });
+        
+        // Shopify configuration
+        const shopifyConfig = {
+            domain: window.config?.shopify?.domain || 'kwr3tv-ax.myshopify.com',
+            accessToken: window.config?.shopify?.accessToken || 'e318cfe2b56703f779f113ed17e8459c'
+        };
+
+
+
+        // Global variables
+        let currentProduct = null;
+        let currentImageIndex = 0;
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Initializing product details page...');
+            
+            // Test Shopify connection first
+            testShopifyConnection();
+            
+            // Get product handle from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const productHandle = urlParams.get('product');
+            
+            // Load specific product from Shopify
+            if (productHandle) {
+                console.log('🔍 Loading product from Shopify:', productHandle);
+                    loadSpecificProduct(productHandle);
+            } else {
+                console.log('⚠️ No product handle provided');
+                // Show loading state or redirect back to products page
+                window.location.href = 'porduct.html';
+            }
+            
+
+            
+            // Initialize dark mode
+            initializeDarkMode();
+            
+            // Related products will be loaded from displayProduct function
+            
+
+            
+            // Order form submission
+            const orderForm = document.getElementById('order-form');
+            if (orderForm) {
+                orderForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    const formData = new FormData(this);
+                    const orderData = {
+                        firstName: formData.get('firstName'),
+                        lastName: formData.get('lastName'),
+                        phone: formData.get('phone'),
+                        wilaya: formData.get('wilaya'),
+                        daira: formData.get('daira'),
+                        product: formData.get('product') || currentProduct?.title || 'Unknown Product'
+                    };
+
+                    // Send to Telegram
+                    try {
+                        const telegramBotToken = '7933495075:AAH2tvwxLUsSXtM4UzkSgSq4cb65k6qhSEI';
+                        const chatId = '-1002894581286';
+                        
+                        const message = `🛍️ *NEW ORDER*\n\n👤 *Customer:* ${orderData.firstName} ${orderData.lastName}\n📱 *Phone:* ${orderData.phone}\n📍 *Location:* ${orderData.wilaya}, ${orderData.daira}\n📦 *Product:* ${orderData.product}\n\n⏰ *Time:* ${new Date().toLocaleString('en-US', { timeZone: 'Africa/Algiers' })}`;
+                        
+                        const response = await fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                chat_id: chatId,
+                                text: message,
+                                parse_mode: 'Markdown'
+                            })
+                        });
+
+                        if (response.ok) {
+                            closeOrderForm();
+                            this.reset();
+                            showSuccessAlert();
+                        } else {
+                            throw new Error('Failed to send order');
+                        }
+                    } catch (error) {
+                        console.error('Error sending order:', error);
+                        alert('Error sending order. Please try again or contact us directly.');
+                    }
+                });
+            }
+        });
+
+        // Check Shopify configuration
+        function checkShopifyConfiguration() {
+            // Check localStorage first for user-configured settings
+            const savedConfig = localStorage.getItem('dhPhoneConfig');
+            if (savedConfig) {
+                try {
+                    const parsedConfig = JSON.parse(savedConfig);
+                    if (parsedConfig.shopify && parsedConfig.shopify.domain && parsedConfig.shopify.accessToken) {
+                        // Update window.config with saved settings
+                        window.config = { ...window.config, ...parsedConfig };
+                        shopifyConfig.domain = parsedConfig.shopify.domain;
+                        shopifyConfig.accessToken = parsedConfig.shopify.accessToken;
+                        console.log('✅ Loaded Shopify configuration from localStorage');
+                    }
+                } catch (error) {
+                    console.error('Error loading saved config:', error);
+                }
+            }
+            
+            const isConfigured = shopifyConfig.domain && 
+                                shopifyConfig.domain !== "YOUR_SHOPIFY_DOMAIN" &&
+                                shopifyConfig.accessToken && 
+                                shopifyConfig.accessToken !== "YOUR_SHOPIFY_STOREFRONT_ACCESS_TOKEN";
+            
+            const warningElement = document.getElementById('shopify-warning');
+            
+            if (!isConfigured) {
+                console.warn('⚠️ Shopify not configured. Please use the setup page to configure your Shopify credentials.');
+                console.warn('Current config:', {
+                    domain: shopifyConfig.domain,
+                    hasToken: !!shopifyConfig.accessToken,
+                    isPlaceholder: shopifyConfig.domain === "YOUR_SHOPIFY_DOMAIN"
+                });
+                
+                // Show warning on page
+                if (warningElement) {
+                    warningElement.classList.remove('hidden');
+                }
+                
+                // Show a user-friendly message in the console
+                console.log(`
+🔧 SETUP REQUIRED:
+To load real Shopify products, please configure your Shopify credentials:
+
+1. Go to setup.html to configure your settings
+2. Or update config.js with your Shopify credentials
+3. Refresh this page
+
+Current status: Using demo data
+                `);
+            } else {
+                console.log('✅ Shopify configured properly');
+                // Hide warning if configured
+                if (warningElement) {
+                    warningElement.classList.add('hidden');
+                }
+            }
+        }
+
+
+
+        // Test Shopify connection
+        async function testShopifyConnection() {
+            try {
+                console.log('🔧 Testing Shopify connection...');
+                const response = await fetch(`https://${shopifyConfig.domain}/api/2023-10/graphql.json`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Shopify-Storefront-Access-Token': shopifyConfig.accessToken
+                    },
+                    body: JSON.stringify({
+                        query: `query { shop { name } }`
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                if (data.errors) {
+                    throw new Error(data.errors[0].message);
+                }
+                
+                console.log('✅ Shopify connection successful:', data.data.shop.name);
+            } catch (error) {
+                console.error('❌ Shopify connection failed:', error);
+                alert(`Shopify connection failed: ${error.message}. Please check your configuration.`);
+            }
+        }
+
+        // Load specific product from Shopify only
+        async function loadSpecificProduct(productHandle) {
+            try {
+                console.log(`🔍 Loading product from Shopify: ${productHandle}`);
+                console.log('🔧 Shopify config:', { domain: shopifyConfig.domain, hasToken: !!shopifyConfig.accessToken });
+                
+                const shopifyProduct = await loadFromShopify(productHandle);
+                if (shopifyProduct) {
+                    console.log('✅ Product loaded successfully:', shopifyProduct.title);
+                    displayProduct(shopifyProduct);
+                } else {
+                    console.error('❌ Product not found in Shopify:', productHandle);
+                    // Show more specific error message
+                    alert(`Product "${productHandle}" not found in Shopify store. Please check if the product exists.`);
+                    window.location.href = 'porduct.html';
+                }
+            } catch (error) {
+                console.error('❌ Error loading product from Shopify:', error);
+                // Show more specific error message
+                alert(`Error loading product: ${error.message}. Please check your Shopify configuration.`);
+                window.location.href = 'porduct.html';
+            }
+        }
+
+        // Load from Shopify
+        async function loadFromShopify(productHandle) {
+            if (!shopifyConfig.domain || shopifyConfig.domain === "YOUR_SHOPIFY_DOMAIN" || 
+                !shopifyConfig.accessToken || shopifyConfig.accessToken === "YOUR_SHOPIFY_STOREFRONT_ACCESS_TOKEN") {
+                console.log('⚠️ Shopify not configured properly. Please update config.js with your Shopify credentials.');
+                console.log('Current config:', { domain: shopifyConfig.domain, hasToken: !!shopifyConfig.accessToken });
+                return null;
+            }
+
+            try {
+                console.log(`🛍️ Loading product from Shopify: ${productHandle}`);
+                
+                const query = `query getProduct($handle: String!) {
+                    product(handle: $handle) {
+                        id
+                        title
+                        handle
+                        description
+                        productType
+                        tags
+                        priceRange {
+                            minVariantPrice {
+                                amount
+                                currencyCode
+                            }
+                        }
+                        images(first: 10) {
+                            edges {
+                                node {
+                                    url
+                                    altText
+                                }
+                            }
+                        }
+                        variants(first: 5) {
+                            edges {
+                                node {
+                                    id
+                                    title
+                                    price {
+                                        amount
+                                        currencyCode
+                                    }
+                                    availableForSale
+                                    quantityAvailable
+                                }
+                            }
+                        }
+                        options {
+                            name
+                            values
+                        }
+                    }
+                }`;
+
+                const response = await Promise.race([
+                    fetch(`https://${shopifyConfig.domain}/api/2023-10/graphql.json`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Shopify-Storefront-Access-Token': shopifyConfig.accessToken
+                        },
+                        body: JSON.stringify({
+                            query: query,
+                            variables: { handle: productHandle }
+                        })
+                    }),
+                    new Promise((_, reject) => 
+                        setTimeout(() => reject(new Error('Shopify request timeout')), 10000)
+                    )
+                ]);
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error(`❌ Shopify API error: ${response.status} - ${errorText}`);
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                if (data.errors) {
+                    console.error('❌ Shopify GraphQL errors:', data.errors);
+                    return null;
+                }
+                
+                if (data.data?.product) {
+                    const product = data.data.product;
+                    console.log('✅ Shopify product loaded successfully:', product.title);
+                    
+                    // Get the best price (first available variant or price range)
+                    let price = '0';
+                    if (product.variants?.edges?.length > 0) {
+                        const availableVariant = product.variants.edges.find(v => v.node.availableForSale);
+                        if (availableVariant) {
+                            price = availableVariant.node.price.amount;
+                        } else {
+                            price = product.variants.edges[0].node.price.amount;
+                        }
+                    } else if (product.priceRange?.minVariantPrice) {
+                        price = product.priceRange.minVariantPrice.amount;
+                    }
+                    
+                    // Calculate stock status
+                    let stockStatus = 'unknown';
+                    let stockQuantity = 0;
+                    let availableVariants = 0;
+                    
+                    if (product.variants?.edges?.length > 0) {
+                        availableVariants = product.variants.edges.filter(v => v.node.availableForSale).length;
+                        stockQuantity = product.variants.edges.reduce((total, v) => {
+                            return total + (v.node.quantityAvailable || 0);
+                        }, 0);
+                        
+                        if (availableVariants > 0 && stockQuantity > 0) {
+                            stockStatus = 'in_stock';
+                        } else if (availableVariants > 0) {
+                            stockStatus = 'available';
+                        } else {
+                            stockStatus = 'out_of_stock';
+                        }
+                    }
+                    
+                    return {
+                        id: product.id,
+                        handle: product.handle,
+                        title: product.title,
+                        description: product.description || '',
+                        price: price,
+                        images: product.images?.edges?.map(edge => edge.node.url) || [],
+                        productType: product.productType || 'Phone',
+                        tags: product.tags || [],
+                        variants: product.variants?.edges?.map(edge => edge.node) || [],
+                        options: product.options || [],
+                        stockStatus: stockStatus,
+                        stockQuantity: stockQuantity,
+                        availableVariants: availableVariants
+                    };
+                } else {
+                    console.log('❌ Product not found in Shopify:', productHandle);
+                    return null;
+                }
+                
+            } catch (error) {
+                console.error('❌ Shopify error:', error);
+                return null;
+            }
+        }
+
+
+
+
+
+        // Load dynamic features and specifications from Firebase
+        async function loadDynamicProductData(productHandle) {
+            try {
+                console.log('🔥 Loading dynamic product data for:', productHandle);
+                console.log('🔥 Firebase db object:', db);
+                
+                if (!db) {
+                    console.log('❌ Firebase not available');
+                    return;
+                }
+
+                // Load features from productFeatures collection
+                console.log('🔥 Loading features for product handle:', productHandle);
+                const featuresDocRef = db.collection('productFeatures').doc(productHandle);
+                const featuresDoc = await featuresDocRef.get();
+                console.log('🔥 Features doc exists:', featuresDoc.exists);
+                
+                // Load specifications from productSpecs collection
+                console.log('🔥 Loading specifications for product handle:', productHandle);
+                const specsDocRef = db.collection('productSpecs').doc(productHandle);
+                const specsDoc = await specsDocRef.get();
+                console.log('🔥 Specs doc exists:', specsDoc.exists);
+
+                // Process features
+                if (featuresDoc.exists) {
+                    const featuresData = featuresDoc.data();
+                    const features = featuresData.features || [];
+                    console.log('✅ Loaded features from Firebase:', features.length);
+                    
+                    currentFeatures = features;
+                    displayFeatures(features.map(f => f.text || f));
+                } else {
+                    console.log('⚠️ No features found in Firebase');
+                    currentFeatures = [];
+                    displayFeatures([]);
+                }
+
+                // Process specifications
+                if (specsDoc.exists) {
+                    const specsData = specsDoc.data();
+                    const specifications = specsData.specifications || [];
+                    console.log('✅ Loaded specifications from Firebase:', specifications.length);
+                    
+                    // Convert array format to object format for display
+                    const specsObject = {};
+                    specifications.forEach(spec => {
+                        if (spec.category && spec.value) {
+                            specsObject[spec.category] = spec.value;
+                        }
+                    });
+                    
+                    currentSpecifications = specsObject;
+                    displaySpecifications(specsObject);
+                } else {
+                    console.log('⚠️ No specifications found in Firebase');
+                    currentSpecifications = {};
+                    displaySpecifications({});
+                }
+
+            } catch (error) {
+                console.error('❌ Error loading dynamic product data:', error);
+                // Show empty states on error
+                currentFeatures = [];
+                currentSpecifications = {};
+                displayFeatures([]);
+                displaySpecifications({});
+            }
+        }
+
+        // Load Firebase product data (features and specifications) - Legacy function
+        async function loadFirebaseProductData(productHandle) {
+            try {
+                if (!db) {
+                    console.log('Firebase not available, using sample data');
+                    return null;
+                }
+
+                console.log('Loading Firebase data for handle:', productHandle);
+
+                // Load from separate collections like admin page
+                const featuresDocRef = db.collection('productFeatures').doc(productHandle);
+                const specsDocRef = db.collection('productSpecs').doc(productHandle);
+                
+                const featuresDoc = await featuresDocRef.get();
+                const specsDoc = await specsDocRef.get();
+
+                const features = featuresDoc.exists ? featuresDoc.data().features || [] : [];
+                const specifications = specsDoc.exists ? specsDoc.data().specifications || [] : [];
+
+                const rawData = {
+                    featuresDoc: featuresDoc.exists ? featuresDoc.data() : null,
+                    specsDoc: specsDoc.exists ? specsDoc.data() : null
+                };
+
+                console.log('Firebase product data loaded:', { 
+                    productHandle,
+                    featuresExists: featuresDoc.exists,
+                    specsExists: specsDoc.exists,
+                    features: features,
+                    specifications: specifications
+                });
+
+
+                
+                return {
+                    features: features.map(f => f.text || f),
+                    specifications: specifications.reduce((acc, spec) => {
+                        acc[spec.category] = spec.value;
+                        return acc;
+                    }, {})
+                };
+            } catch (error) {
+                console.error('Error loading Firebase product data:', error);
+                return null;
+            }
+        }
+
+        // Load related products from Shopify only
+        async function loadRelatedProducts(currentProductHandle) {
+            try {
+                console.log('🔄 Starting loadRelatedProducts for:', currentProductHandle);
+                const shopifyRelatedProducts = await loadRelatedProductsFromShopify(currentProductHandle);
+                console.log('📦 Received related products:', shopifyRelatedProducts);
+                
+                if (shopifyRelatedProducts && shopifyRelatedProducts.length > 0) {
+                    console.log('✅ Related products loaded from Shopify:', shopifyRelatedProducts.length);
+                    displayRelatedProducts(shopifyRelatedProducts);
+                } else {
+                    console.log('⚠️ No related products found in Shopify, showing fallback');
+                    // Show fallback related products
+                    const fallbackProducts = [
+                        {
+                            id: 'fallback-1',
+                            handle: 'iphone-15-pro',
+                            title: 'iPhone 15 Pro',
+                            description: 'Latest iPhone with advanced features',
+                            price: '1,250,000',
+                            images: ['https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400'],
+                            productType: 'Phone'
+                        },
+                        {
+                            id: 'fallback-2',
+                            handle: 'samsung-galaxy-s24',
+                            title: 'Samsung Galaxy S24',
+                            description: 'Premium Android smartphone',
+                            price: '1,100,000',
+                            images: ['https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400'],
+                            productType: 'Phone'
+                        },
+                        {
+                            id: 'fallback-3',
+                            handle: 'macbook-air-m2',
+                            title: 'MacBook Air M2',
+                            description: 'Lightweight laptop with powerful M2 chip',
+                            price: '2,500,000',
+                            images: ['https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400'],
+                            productType: 'Laptop'
+                        },
+                        {
+                            id: 'fallback-4',
+                            handle: 'airpods-pro',
+                            title: 'AirPods Pro',
+                            description: 'Wireless earbuds with noise cancellation',
+                            price: '450,000',
+                            images: ['https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400'],
+                            productType: 'Accessories'
+                        }
+                    ];
+                    displayRelatedProducts(fallbackProducts);
+                }
+            } catch (error) {
+                console.error('❌ Error loading related products from Shopify:', error);
+                console.log('🔄 Showing fallback products due to error');
+                // Show fallback related products
+                const fallbackProducts = [
+                    {
+                        id: 'fallback-1',
+                        handle: 'iphone-15-pro',
+                        title: 'iPhone 15 Pro',
+                        description: 'Latest iPhone with advanced features',
+                        price: '1,250,000',
+                        images: ['https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400'],
+                        productType: 'Phone'
+                    },
+                    {
+                        id: 'fallback-2',
+                        handle: 'samsung-galaxy-s24',
+                        title: 'Samsung Galaxy S24',
+                        description: 'Premium Android smartphone',
+                        price: '1,100,000',
+                        images: ['https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400'],
+                        productType: 'Phone'
+                    },
+                    {
+                        id: 'fallback-3',
+                        handle: 'macbook-air-m2',
+                        title: 'MacBook Air M2',
+                        description: 'Lightweight laptop with powerful M2 chip',
+                        price: '2,500,000',
+                        images: ['https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400'],
+                        productType: 'Laptop'
+                    },
+                    {
+                        id: 'fallback-4',
+                        handle: 'airpods-pro',
+                        title: 'AirPods Pro',
+                        description: 'Wireless earbuds with noise cancellation',
+                        price: '450,000',
+                        images: ['https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400'],
+                        productType: 'Accessories'
+                    }
+                ];
+                displayRelatedProducts(fallbackProducts);
+            }
+        }
+
+        // Load related products from Shopify - Simplified version
+        async function loadRelatedProductsFromShopify(currentProductHandle) {
+            if (!shopifyConfig.domain || !shopifyConfig.accessToken) {
+                console.log('Shopify not configured for related products');
+                return null;
+            }
+
+            try {
+                console.log('🔍 Loading related products for:', currentProductHandle);
+                
+                // Simple query to get all available products
+                const query = `query getRelatedProducts {
+                    products(first: 10) {
+                        edges {
+                            node {
+                                id
+                                title
+                                handle
+                                description
+                                productType
+                                priceRange {
+                                    minVariantPrice {
+                                        amount
+                                        currencyCode
+                                    }
+                                }
+                                images(first: 1) {
+                                    edges {
+                                        node {
+                                            url
+                                            altText
+                                        }
+                                    }
+                                }
+                                variants(first: 1) {
+                                    edges {
+                                        node {
+                                            price {
+                                                amount
+                                                currencyCode
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }`;
+
+                const response = await fetch(`https://${shopifyConfig.domain}/api/2023-10/graphql.json`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Shopify-Storefront-Access-Token': shopifyConfig.accessToken
+                    },
+                    body: JSON.stringify({
+                        query: query
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                if (data.errors) {
+                    console.error('GraphQL errors:', data.errors);
+                    return null;
+                }
+
+                const products = data.data?.products?.edges || [];
+                console.log('📊 Found products:', products.length);
+
+                // Filter out the current product and transform data
+                const relatedProducts = products
+                    .filter(edge => edge.node.handle !== currentProductHandle)
+                    .map(edge => {
+                    const product = edge.node;
+                    const price = product.priceRange?.minVariantPrice?.amount || 
+                                 product.variants?.edges?.[0]?.node?.price?.amount || '0';
+                    
+                    return {
+                        id: product.id,
+                        handle: product.handle,
+                        title: product.title,
+                        description: product.description || '',
+                        price: price,
+                        images: product.images?.edges?.map(img => img.node.url) || [],
+                        productType: product.productType || 'Phone'
+                    };
+                    })
+                    .slice(0, 4); // Limit to exactly 4 products
+
+                console.log('✅ Related products prepared:', relatedProducts.length);
+                return relatedProducts;
+
+            } catch (error) {
+                console.error('❌ Error loading related products from Shopify:', error);
+                return null;
+            }
+        }
+
+        // Display stock indicator
+        function displayStockIndicator(product) {
+            const stockIndicator = document.getElementById('stock-indicator');
+            if (!stockIndicator) return;
+            
+            let stockText = '';
+            let stockClass = '';
+            let iconClass = '';
+            
+            switch (product.stockStatus) {
+                case 'in_stock':
+                    stockText = `In Stock (${product.stockQuantity} available)`;
+                    stockClass = 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300';
+                    iconClass = 'text-green-500';
+                    break;
+                case 'available':
+                    stockText = 'Available';
+                    stockClass = 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300';
+                    iconClass = 'text-blue-500';
+                    break;
+                case 'out_of_stock':
+                    stockText = 'Out of Stock';
+                    stockClass = 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300';
+                    iconClass = 'text-red-500';
+                    break;
+                default:
+                    stockText = 'Stock Unknown';
+                    stockClass = 'bg-gray-50 dark:bg-gray-900/20 text-gray-700 dark:text-gray-300';
+                    iconClass = 'text-gray-500';
+            }
+            
+            stockIndicator.className = `flex items-center px-3 py-1 rounded-full ${stockClass}`;
+            stockIndicator.innerHTML = `
+                <i class="fas fa-circle text-xs mr-2 ${iconClass}"></i>
+                <span class="text-sm font-medium">${stockText}</span>
+            `;
+        }
+
+        // Display product
+        async function displayProduct(product) {
+            console.log('🎯 Displaying product:', product);
+            currentProduct = product;
+            
+            // Update page title
+            document.title = `${product.title} | DH Phone`;
+            
+            // Display product info
+            const titleEl = document.getElementById('product-title');
+            const priceEl = document.getElementById('product-price');
+            const descTabEl = document.getElementById('description-content');
+            
+            if (titleEl) titleEl.textContent = product.title;
+            if (descTabEl) descTabEl.textContent = product.description;
+            if (priceEl) priceEl.textContent = `DZD ${product.price}`;
+            
+            // Display stock indicator
+            displayStockIndicator(product);
+            
+            // Display images
+            if (product.images && product.images.length > 0) {
+                displayImages(product.images);
+            }
+            
+            // Hide loading skeleton
+            document.querySelectorAll('.skeleton').forEach(el => {
+                el.classList.remove('skeleton');
+            });
+            
+            // Show content
+            document.querySelectorAll('.animate-fade-in').forEach(el => {
+                el.style.opacity = '1';
+            });
+            
+            // Load dynamic features and specifications from Firebase
+            const urlParams = new URLSearchParams(window.location.search);
+            const productHandle = urlParams.get('product');
+            if (productHandle) {
+                loadDynamicProductData(productHandle);
+            }
+            
+            // Load related products
+            if (productHandle) {
+                console.log('🔄 Loading related products for:', productHandle);
+                loadRelatedProducts(productHandle);
+            }
+        }
+
+        // Display images
+        function displayImages(images) {
+            console.log('🖼️ Displaying images:', images);
+            const mainImage = document.getElementById('main-image');
+            const thumbnails = document.getElementById('thumbnails');
+            
+            if (mainImage && images.length > 0) {
+                mainImage.src = images[0];
+                mainImage.alt = 'Product Image';
+                console.log('🖼️ Setting main image:', images[0]);
+            }
+            
+            if (thumbnails) {
+                thumbnails.innerHTML = '';
+                images.forEach((image, index) => {
+                    const thumb = document.createElement('img');
+                    thumb.src = image;
+                    thumb.alt = `Product Image ${index + 1}`;
+                    thumb.className = `thumbnail w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg border-2 flex-shrink-0 ${index === 0 ? 'active border-blue-500' : 'border-gray-300'}`;
+                    thumb.onclick = () => changeImage(index, images);
+                    thumbnails.appendChild(thumb);
+                });
+            }
+        }
+
+        // Change main image
+        function changeImage(index, images) {
+            const mainImage = document.getElementById('main-image');
+            const thumbnails = document.querySelectorAll('.thumbnail');
+            
+            if (mainImage && images[index]) {
+                mainImage.src = images[index];
+                currentImageIndex = index;
+            }
+            
+            // Update thumbnail states
+            thumbnails.forEach((thumb, i) => {
+                thumb.classList.toggle('active', i === index);
+            });
+        }
+
+        // Display features
+        function displayFeatures(features) {
+            const featuresContainer = document.getElementById('features-content');
+            if (featuresContainer && features && features.length > 0) {
+                console.log('Displaying features:', features);
+                featuresContainer.innerHTML = features.map(feature => {
+                    const featureText = typeof feature === 'string' ? feature : feature.text;
+                    const featureIcon = typeof feature === 'string' ? 'fa-check' : (feature.icon || 'fa-check');
+                    return `<li class="flex items-start space-x-4">
+                        <i class="fas ${featureIcon} text-blue-500 mt-1 flex-shrink-0"></i>
+                        <span class="text-gray-700 dark:text-gray-300">${featureText}</span>
+                    </li>`;
+                }).join('');
+            } else if (featuresContainer) {
+                console.log('No features to display');
+                featuresContainer.innerHTML = '<p class="text-gray-500 dark:text-gray-400">No features available</p>';
+            }
+        }
+
+        // Display specifications
+        function displaySpecifications(specs) {
+            const specsContainer = document.getElementById('specifications-content');
+            if (specsContainer && specs && Object.keys(specs).length > 0) {
+                console.log('Displaying specifications:', specs);
+                specsContainer.innerHTML = Object.entries(specs).map(([key, value]) => 
+                    `<div class="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
+                        <span class="font-medium text-gray-700 dark:text-gray-300">${key}</span>
+                        <span class="text-gray-400 dark:text-gray-400">${value}</span>
+                    </div>`
+                ).join('');
+            } else if (specsContainer) {
+                console.log('No specifications to display');
+                specsContainer.innerHTML = '<p class="text-gray-500 dark:text-gray-400">No specifications available</p>';
+            }
+        }
+
+        // Display related products
+        function displayRelatedProducts(products) {
+            console.log('🎯 displayRelatedProducts called with:', products);
+            const relatedContainer = document.querySelector('.grid.grid-cols-1.sm\\:grid-cols-2.lg\\:grid-cols-4.gap-4.sm\\:gap-6');
+            console.log('🔍 Looking for related products container:', relatedContainer);
+            console.log('📦 Products to display:', products);
+            
+            if (relatedContainer && products && products.length > 0) {
+                console.log('✅ Found container and products, displaying...');
+                relatedContainer.innerHTML = products.map(product => {
+                    // Use handle for Shopify products, fallback to id for Firebase/sample products
+                    const productIdentifier = product.handle || product.id;
+                    
+                    // Stock indicator for related products
+                    let stockBadge = '';
+                    if (product.stockStatus === 'in_stock') {
+                        stockBadge = `<div class="absolute top-2 left-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
+                            <i class="fas fa-check-circle mr-1"></i>In Stock
+                        </div>`;
+                    } else if (product.stockStatus === 'available') {
+                        stockBadge = `<div class="absolute top-2 left-2 bg-blue-500 text-white text-xs px-2 py-1 rounded-full">
+                            <i class="fas fa-circle mr-1"></i>Available
+                        </div>`;
+                    } else if (product.stockStatus === 'out_of_stock') {
+                        stockBadge = `<div class="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                            <i class="fas fa-times-circle mr-1"></i>Out of Stock
+                        </div>`;
+                    }
+                    
+                    return `
+                    <a href="product-in.html?product=${productIdentifier}" class="product-card bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 block">
+                        <div class="relative">
+                            <img src="${product.images?.[0] || 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400'}" 
+                                 alt="${product.title}" 
+                                 class="w-full h-48 object-cover">
+                            ${stockBadge}
+                        </div>
+                        <div class="p-6">
+                            <h4 class="font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2">${product.title}</h4>
+                            <div class="flex items-center justify-between">
+                                <span class="text-lg font-bold text-blue-600 dark:text-blue-400">DZD ${product.price}</span>
+                                <span class="text-blue-600 dark:text-blue-400 text-sm font-medium">
+                                    View Details →
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                `;
+                }).join('');
+                console.log('✅ Related products displayed successfully');
+            } else if (relatedContainer) {
+                console.log('⚠️ No products to display, showing empty state');
+                relatedContainer.innerHTML = `
+                    <div class="col-span-full text-center py-8">
+                        <i class="fas fa-box-open text-4xl text-gray-400 mb-4"></i>
+                        <p class="text-gray-500 dark:text-gray-400">No related products available</p>
+                    </div>
+                `;
+            } else {
+                console.error('❌ Related products container not found!');
+            }
+        }
+
+        // Dynamic editing variables
+        let currentFeatures = [];
+        let currentSpecifications = {};
+        let selectedIcon = null;
+
+        // Feature modal functions
+        function openFeatureModal() {
+            const modal = document.getElementById('feature-modal');
+            const modalContent = document.getElementById('feature-modal-content');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95', 'opacity-0');
+                modalContent.classList.add('scale-100', 'opacity-100');
+            }, 10);
+            document.getElementById('feature-input').focus();
+            selectedIcon = null;
+            document.getElementById('selected-icon-display').textContent = 'None';
+            // Reset icon selection
+            document.querySelectorAll('.icon-option').forEach(btn => {
+                btn.classList.remove('bg-blue-100', 'border-blue-500');
+            });
+        }
+
+        function closeFeatureModal() {
+            const modal = document.getElementById('feature-modal');
+            const modalContent = document.getElementById('feature-modal-content');
+            modalContent.classList.remove('scale-100', 'opacity-100');
+            modalContent.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+            document.getElementById('feature-input').value = '';
+            selectedIcon = null;
+            document.getElementById('selected-icon-display').textContent = 'None';
+        }
+
+        function saveFeature() {
+            const input = document.getElementById('feature-input');
+            const featureText = input.value.trim();
+            
+            if (featureText) {
+                currentFeatures.push({ 
+                    text: featureText,
+                    icon: selectedIcon || 'fa-check'
+                });
+                displayFeatures(currentFeatures.map(f => f.text));
+                saveToFirebase();
+                input.value = '';
+                selectedIcon = null;
+                document.getElementById('selected-icon-display').textContent = 'None';
+                closeFeatureModal();
+            }
+        }
+
+        // Specification modal functions
+        function openSpecModal() {
+            const modal = document.getElementById('spec-modal');
+            const modalContent = document.getElementById('spec-modal-content');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95', 'opacity-0');
+                modalContent.classList.add('scale-100', 'opacity-100');
+            }, 10);
+            document.getElementById('spec-category').focus();
+        }
+
+        function closeSpecModal() {
+            const modal = document.getElementById('spec-modal');
+            const modalContent = document.getElementById('spec-modal-content');
+            modalContent.classList.remove('scale-100', 'opacity-100');
+            modalContent.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+            document.getElementById('spec-category').value = '';
+            document.getElementById('spec-value').value = '';
+        }
+
+        function saveSpec() {
+            const categoryInput = document.getElementById('spec-category');
+            const valueInput = document.getElementById('spec-value');
+            const category = categoryInput.value.trim();
+            const value = valueInput.value.trim();
+            
+            if (category && value) {
+                currentSpecifications[category] = value;
+                displaySpecifications(currentSpecifications);
+                saveToFirebase();
+                categoryInput.value = '';
+                valueInput.value = '';
+                closeSpecModal();
+            }
+        }
+
+        // Save to Firebase
+        async function saveToFirebase() {
+            if (!currentProduct || !db) {
+                console.log('No product selected or Firebase not available');
+                return;
+            }
+
+            try {
+                // Save features to productFeatures collection
+                const featuresDocRef = db.collection('productFeatures').doc(currentProduct.id);
+                await featuresDocRef.set({
+                    features: currentFeatures,
+                    productId: currentProduct.id,
+                    productTitle: currentProduct.title,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+
+                // Save specifications to productSpecs collection
+                const specsArray = Object.entries(currentSpecifications).map(([category, value]) => ({
+                    category,
+                    value
+                }));
+                
+                const specsDocRef = db.collection('productSpecs').doc(currentProduct.id);
+                await specsDocRef.set({
+                    specifications: specsArray,
+                    productId: currentProduct.id,
+                    productTitle: currentProduct.title,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+
+                console.log('Saved to Firebase successfully');
+            } catch (error) {
+                console.error('Error saving to Firebase:', error);
+            }
+        }
+
+
+
+        // Icon selection
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.icon-option').forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove previous selection
+                    document.querySelectorAll('.icon-option').forEach(btn => {
+                        btn.classList.remove('bg-blue-100', 'border-blue-500');
+                    });
+                    
+                    // Add selection to clicked button
+                    button.classList.add('bg-blue-100', 'border-blue-500');
+                    selectedIcon = button.dataset.icon;
+                    document.getElementById('selected-icon-display').textContent = selectedIcon;
+                });
+            });
+        });
+
+        // Tab functionality
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+            
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            document.getElementById(tabName).classList.remove('hidden');
+        }
+
+        // Language functionality
+        function initializeLanguage() {
+            const savedLang = localStorage.getItem('language') || 'en';
+            changeLanguage(savedLang);
+            
+            // Add event listeners for language dropdowns
+            setupLanguageDropdowns();
+        }
+
+        function setupLanguageDropdowns() {
+            // Desktop language toggle
+            const desktopToggle = document.getElementById('desktop-language-toggle');
+            const desktopDropdown = document.getElementById('desktop-language-dropdown');
+            
+            if (desktopToggle && desktopDropdown) {
+                desktopToggle.addEventListener('click', () => {
+                    desktopDropdown.classList.toggle('hidden');
+                });
+                
+                // Close dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!desktopToggle.contains(e.target) && !desktopDropdown.contains(e.target)) {
+                        desktopDropdown.classList.add('hidden');
+                    }
+                });
+                
+                // Language option clicks
+                desktopDropdown.querySelectorAll('button').forEach(button => {
+                    button.addEventListener('click', () => {
+                        const lang = button.getAttribute('data-lang');
+                        changeLanguage(lang);
+                        desktopDropdown.classList.add('hidden');
+                    });
+                });
+            }
+            
+            // Wait for hamburger menu to be created, then set up mobile language
+            setTimeout(() => {
+                const mobileToggle = document.querySelector('.language-toggle');
+                const mobileDropdown = document.querySelector('.language-dropdown');
+                
+                if (mobileToggle && mobileDropdown) {
+                    mobileToggle.addEventListener('click', () => {
+                        mobileDropdown.classList.toggle('hidden');
+                    });
+                    
+                    // Language option clicks
+                    mobileDropdown.querySelectorAll('.language-option').forEach(option => {
+                        option.addEventListener('click', () => {
+                            const lang = option.getAttribute('data-lang');
+                            changeLanguage(lang);
+                            mobileDropdown.classList.add('hidden');
+                        });
+                    });
+                }
+            }, 100);
+        }
+
+        function changeLanguage(lang) {
+            document.documentElement.lang = lang;
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            localStorage.setItem('language', lang);
+            
+            // Update language text
+            const desktopLangText = document.getElementById('desktop-language-text');
+            const mobileLangText = document.querySelector('.language-text');
+            
+            const langMap = { 
+                en: '🌐 EN', 
+                fr: '🌐 FR', 
+                ar: '🌐 AR' 
+            };
+            
+            if (desktopLangText) {
+                desktopLangText.textContent = langMap[lang] || '🌐 EN';
+            }
+            
+            if (mobileLangText) {
+                const mobileLangMap = { 
+                    en: 'EN', 
+                    fr: 'FR', 
+                    ar: 'AR' 
+                };
+                mobileLangText.textContent = mobileLangMap[lang] || 'EN';
+            }
+        }
+
+        // Dark mode functionality
+        function initializeDarkMode() {
+            const darkModeToggle = document.getElementById('dark-mode-toggle');
+            if (darkModeToggle) {
+                darkModeToggle.addEventListener('click', toggleDarkMode);
+            }
+            
+            // Set dark mode as default
+            const savedTheme = localStorage.getItem('theme');
+            
+            // If no theme is saved, default to dark mode
+            if (!savedTheme) {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            } else if (savedTheme === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const isDark = html.classList.contains('dark');
+            
+            if (isDark) {
+                html.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+
+
+
+
+
+
+        // Order form functionality
+
+        function openOrderForm() {
+            const modal = document.getElementById('order-modal');
+            const modalContent = document.getElementById('modal-content');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95', 'opacity-0');
+                modalContent.classList.add('scale-100', 'opacity-100');
+            }, 10);
+            if (currentProduct) {
+                document.getElementById('product-name').value = currentProduct.title;
+            }
+            loadWilayas();
+        }
+
+        function closeOrderForm() {
+            const modal = document.getElementById('order-modal');
+            const modalContent = document.getElementById('modal-content');
+            modalContent.classList.remove('scale-100', 'opacity-100');
+            modalContent.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        // Use external wilaya data from wilaya-data.js
+        const wilayaData = window.wilayaData;
+
+        function loadWilayas() {
+            const wilayaSelect = document.getElementById('wilaya-select');
+            wilayaSelect.innerHTML = '<option value="">Select Wilaya</option>';
+            
+            Object.keys(wilayaData).forEach(wilaya => {
+                const option = document.createElement('option');
+                option.value = wilaya;
+                option.textContent = wilaya;
+                wilayaSelect.appendChild(option);
+            });
+        }
+
+        function loadDairas(wilaya) {
+            const dairaSelect = document.getElementById('daira-select');
+            dairaSelect.innerHTML = '<option value="">Select Daïra</option>';
+            
+            if (wilaya && wilayaData[wilaya]) {
+                wilayaData[wilaya].forEach(daira => {
+                    const option = document.createElement('option');
+                    option.value = daira;
+                    option.textContent = daira;
+                    dairaSelect.appendChild(option);
+                });
+            }
+        }
+
+        // Wilaya change event
+        document.addEventListener('DOMContentLoaded', function() {
+            const wilayaSelect = document.getElementById('wilaya-select');
+            if (wilayaSelect) {
+                wilayaSelect.addEventListener('change', function() {
+                    loadDairas(this.value);
+                });
+            }
+        });
+
+        // Success Alert Functions
+        function showSuccessAlert() {
+            const successAlert = document.getElementById('success-alert');
+            const successContent = document.getElementById('success-alert-content');
+            
+            if (successAlert && successContent) {
+                successAlert.classList.remove('hidden');
+                successAlert.classList.add('flex');
+                
+                // Animate in
+                setTimeout(() => {
+                    successContent.classList.remove('scale-95', 'opacity-0');
+                    successContent.classList.add('scale-100', 'opacity-100');
+                }, 10);
+            }
+        }
+
+        function closeSuccessAlert() {
+            const successAlert = document.getElementById('success-alert');
+            const successContent = document.getElementById('success-alert-content');
+            
+            if (successAlert && successContent) {
+                // Animate out
+                successContent.classList.remove('scale-100', 'opacity-100');
+                successContent.classList.add('scale-95', 'opacity-0');
+                
+                setTimeout(() => {
+                    successAlert.classList.add('hidden');
+                    successAlert.classList.remove('flex');
+                }, 300);
+            }
+        }
+
+        // Close success alert when clicking outside
+        document.addEventListener('click', function(e) {
+            const successAlert = document.getElementById('success-alert');
+            const successContent = document.getElementById('success-alert-content');
+            
+            if (successAlert && successContent && e.target === successAlert) {
+                closeSuccessAlert();
+            }
+        });
+
+
+
+
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-200">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm shadow-sm">
+        <div class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
+            <div class="flex justify-between items-center h-14 sm:h-16">
+                <!-- Left Logo -->
+                <div class="flex items-center space-x-2">
+                    <a href="index.html" class="flex items-center space-x-2">
+                        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center">
+                            <span class="text-white font-bold text-lg sm:text-xl">DH</span>
+                        </div>
+                        <span class="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Phone</span>
+                    </a>
+                </div>
+                
+                <!-- Right Navigation -->
+                <div class="flex items-center space-x-2 sm:space-x-4">
+                    <!-- Desktop Navigation -->
+                    <nav class="hidden md:flex items-center space-x-6">
+                        <a href="index.html" class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">الرئيسية</a>
+                        <a href="porduct.html" class="text-blue-600 dark:text-blue-400 font-semibold px-3 py-2 rounded-lg bg-blue-50 dark:bg-blue-900/20">المنتجات</a>
+                        <a href="Contact.html" class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">اتصل بنا</a>
+                    </nav>
+                    
+                    <!-- Dark Mode Toggle -->
+                    <button id="dark-mode-toggle" class="p-1.5 sm:p-2 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+                        <i class="fas fa-moon dark:hidden text-sm sm:text-base"></i>
+                        <i class="fas fa-sun hidden dark:block text-sm sm:text-base"></i>
+                    </button>
+                    
+                    <!-- Mobile Menu Button -->
+                    <button id="hamburger-btn" class="md:hidden w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-blue-600 text-white flex items-center justify-center">
+                        <i class="fas fa-bars text-sm sm:text-base"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="hamburger-overlay" class="hamburger-overlay"></div>
+    <div id="hamburger-menu" class="hamburger-menu">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-8">
+                <h3 class="text-white text-xl font-bold">DH Phone</h3>
+                <button id="close-menu" class="text-white text-2xl">&times;</button>
+            </div>
+            
+            <nav class="mb-8">
+                <a href="index.html" class="block text-white py-3 border-b border-white/20">🏠 الرئيسية</a>
+                <a href="porduct.html" class="block text-white py-3 border-b border-white/20">📱 المنتجات</a>
+                <a href="Contact.html" class="block text-white py-3">📞 اتصل بنا</a>
+            </nav>
+            
+
+        </div>
+    </div>
+
+
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-4 sm:py-8 lg:py-16">
+
+        
+        <!-- Product Container -->
+        <div id="product-container" class="grid lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-16">
+            <!-- Product Gallery -->
+            <div class="product-gallery">
+                <div class="main-image-container mb-3 sm:mb-4 lg:mb-6">
+                    <div class="relative group">
+                        <img id="main-image" src="" alt="Product Image" class="w-full h-64 sm:h-80 lg:h-96 xl:h-[500px] object-cover rounded-xl sm:rounded-2xl shadow-lg skeleton transition-transform duration-300 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-xl sm:rounded-2xl"></div>
+                    </div>
+                </div>
+                <div id="thumbnails" class="thumbnails flex space-x-2 sm:space-x-3 overflow-x-auto pb-2 scrollbar-hide">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 skeleton rounded-lg sm:rounded-xl flex-shrink-0"></div>
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 skeleton rounded-lg sm:rounded-xl flex-shrink-0"></div>
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 skeleton rounded-lg sm:rounded-xl flex-shrink-0"></div>
+                </div>
+            </div>
+
+            <!-- Product Info -->
+            <div class="animate-fade-in" style="animation-delay: 0.2s;">
+                <div class="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100 dark:border-gray-700">
+                    <h1 id="product-title" class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4 skeleton bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">iPhone 15 Pro</h1>
+                    
+                    <!-- Price, Rating, and Stock Section -->
+                    <div class="flex flex-col space-y-3 mb-4 sm:mb-6">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
+                            <div class="flex flex-wrap items-center gap-2 sm:gap-4">
+                                <div class="flex items-center bg-yellow-50 dark:bg-yellow-900/20 px-2 sm:px-3 py-1 rounded-full">
+                                    <div class="flex text-yellow-400 mr-2">
+                                        <i class="fas fa-star text-xs sm:text-sm"></i>
+                                        <i class="fas fa-star text-xs sm:text-sm"></i>
+                                        <i class="fas fa-star text-xs sm:text-sm"></i>
+                                        <i class="fas fa-star text-xs sm:text-sm"></i>
+                                        <i class="fas fa-star text-xs sm:text-sm"></i>
+                                    </div>
+                                    <span class="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 skeleton">4.8 (124 reviews)</span>
+                                </div>
+                                
+                                <!-- Stock Indicator -->
+                                <div id="stock-indicator" class="flex items-center px-2 sm:px-3 py-1 rounded-full skeleton">
+                                    <i class="fas fa-circle text-xs mr-2"></i>
+                                    <span class="text-xs sm:text-sm font-medium">Stock: Loading...</span>
+                                </div>
+                            </div>
+                            <div class="text-left sm:text-right">
+                                <span id="product-price" class="text-2xl sm:text-3xl lg:text-4xl font-bold text-blue-600 dark:text-blue-400 skeleton">DZD 1,250,000</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Key Features Section -->
+                    <div class="mb-6 sm:mb-8">
+                        <h4 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-4 sm:mb-6 flex items-center">
+                            <i class="fas fa-star text-yellow-500 mr-3"></i>
+                            Key Features
+                        </h4>
+                        <ul id="features-content" class="space-y-3 sm:space-y-4">
+                            <!-- Features will be loaded here -->
+                        </ul>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex flex-col space-y-3 sm:space-y-0 sm:space-x-4 sm:flex-row">
+                        <button onclick="openOrderForm()" class="w-full sm:flex-1 bg-gradient-to-r from-blue-600 to-blue-700 text-white py-3 sm:py-4 rounded-lg sm:rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-300 font-semibold text-base sm:text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 active:scale-95">
+                            <i class="fas fa-shopping-cart mr-2"></i>
+                            Order Now
+                        </button>
+                        <a href="Contact.html" class="w-full sm:flex-1 border-2 border-blue-600 text-blue-600 dark:text-blue-400 py-3 sm:py-4 rounded-lg sm:rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-300 font-semibold text-base sm:text-lg text-center flex items-center justify-center transform hover:-translate-y-1 active:scale-95">
+                            <i class="fas fa-phone mr-2"></i>
+                            Contact Seller
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Product Details Tabs -->
+        <div class="mt-8 sm:mt-12 lg:mt-20 animate-fade-in" style="animation-delay: 0.4s;">
+            <div class="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden">
+                <div class="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">
+                    <div class="flex space-x-1 p-1 sm:p-2">
+                        <button onclick="switchTab('specifications')" class="tab-btn flex-1 py-3 sm:py-4 px-3 sm:px-6 border-b-2 border-transparent text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 font-medium active border-blue-500 text-blue-600 dark:text-blue-400 bg-white dark:bg-gray-800 rounded-t-lg transition-all duration-300 text-sm sm:text-base" data-tab="specifications">
+                            <i class="fas fa-cogs mr-1 sm:mr-2"></i>
+                            <span class="hidden sm:inline">Technical Specifications</span>
+                            <span class="sm:hidden">Specs</span>
+                        </button>
+                        <button onclick="switchTab('description')" class="tab-btn flex-1 py-3 sm:py-4 px-3 sm:px-6 border-b-2 border-transparent text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 font-medium transition-all duration-300 text-sm sm:text-base" data-tab="description">
+                            <i class="fas fa-info-circle mr-1 sm:mr-2"></i>
+                            <span class="hidden sm:inline">Description</span>
+                            <span class="sm:hidden">Info</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="p-4 sm:p-6 lg:p-8">
+                    <div id="specifications" class="tab-content">
+                        <h4 class="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-4 sm:mb-6 flex items-center">
+                            <i class="fas fa-cogs text-blue-600 mr-2 sm:mr-3"></i>
+                            Technical Specifications
+                        </h4>
+                        <div id="specifications-content" class="space-y-3 sm:space-y-4">
+                            <!-- Specifications will be loaded here -->
+                        </div>
+                    </div>
+                    
+                    <div id="description" class="tab-content hidden">
+                        <h4 class="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-4 sm:mb-6 flex items-center">
+                            <i class="fas fa-info-circle text-blue-600 mr-2 sm:mr-3"></i>
+                            Product Description
+                        </h4>
+                        <div id="description-content" class="text-gray-700 dark:text-gray-300 leading-relaxed text-base sm:text-lg">
+                            <!-- Description will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Related Products -->
+        <div class="mt-8 sm:mt-12 lg:mt-20 animate-fade-in" style="animation-delay: 0.6s;">
+            <div class="text-center mb-6 sm:mb-8">
+                <h3 class="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white mb-2">Related Products</h3>
+                <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">Discover more amazing products</p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                <div class="product-card bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="h-48 skeleton"></div>
+                    <div class="p-6">
+                        <div class="h-6 skeleton rounded mb-3"></div>
+                        <div class="h-4 skeleton rounded mb-3 w-3/4"></div>
+                        <div class="flex items-center justify-between">
+                            <div class="h-6 skeleton rounded w-1/3"></div>
+                            <div class="h-10 skeleton rounded w-1/3"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-card bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="h-48 skeleton"></div>
+                    <div class="p-6">
+                        <div class="h-6 skeleton rounded mb-3"></div>
+                        <div class="h-4 skeleton rounded mb-3 w-3/4"></div>
+                        <div class="flex items-center justify-between">
+                            <div class="h-6 skeleton rounded w-1/3"></div>
+                            <div class="h-10 skeleton rounded w-1/3"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-card bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="h-48 skeleton"></div>
+                    <div class="p-6">
+                        <div class="h-6 skeleton rounded mb-3"></div>
+                        <div class="h-4 skeleton rounded mb-3 w-3/4"></div>
+                        <div class="flex items-center justify-between">
+                            <div class="h-6 skeleton rounded w-1/3"></div>
+                            <div class="h-10 skeleton rounded w-1/3"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-card bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="h-48 skeleton"></div>
+                    <div class="p-6">
+                        <div class="h-6 skeleton rounded mb-3"></div>
+                        <div class="h-4 skeleton rounded mb-3 w-3/4"></div>
+                        <div class="flex items-center justify-between">
+                            <div class="h-6 skeleton rounded w-1/3"></div>
+                            <div class="h-10 skeleton rounded w-1/3"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+
+
+
+
+    
+    <!-- Feature Modal -->
+    <div id="feature-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md transform transition-all duration-300 scale-95 opacity-0" id="feature-modal-content">
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white">Add Feature</h3>
+                        <button onclick="closeFeatureModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Feature Text</label>
+                            <input type="text" id="feature-input" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-colors" placeholder="Enter feature description">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Icon (Optional)</label>
+                            <div class="grid grid-cols-6 gap-2 max-h-60 overflow-y-auto">
+                                <!-- CPU & Processing -->
+                                <button class="icon-option p-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700" data-icon="fa-microchip">
+                                    <i class="fas fa-microchip text-gray-600 dark:text-gray-400"></i>
+                                </button>
+                                <button class="icon-option p-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700" data-icon="fa-server">
+                                    <i class="fas fa-server text-gray-600 dark:text-gray-400"></i>
+                                </button>
+                                <button class="icon-option p-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700" data-icon="fa-cogs">
+                                    <i class="fas fa-cogs text-gray-600 dark:text-gray-400"></i>
+                                </button>
+                                
+                                <!-- Memory & Storage -->
+                                <button class="icon-option p-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700" data-icon="fa-memory">
+                                    <i class="fas fa-memory text-gray-600 dark:text-gray-400"></i>
+                                </button>
+                                <button class="icon-option p-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700" data-icon="fa-hdd">
+                                    <i class="fas fa-hdd text-gray-600 dark:text-gray-400"></i>
+                                </button>
+                                <button class="icon-option p-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700" data-icon="fa-database">
+                                    <i class="fas fa-database text-gray-600 dark:text-gray-400"></i>
+                                </button>
+                                
+                                <!-- Battery & Power -->
+                                <button class="icon-option p-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700" data-icon="fa-battery-full">
+                                    <i class="fas fa-battery-full text-gray-600 dark:text-gray-400"></i>
+                                </button>
+                                <button class="icon-option p-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700" data-icon="fa-bolt">
+                                    <i class="fas fa-bolt text-gray-600 dark:text-gray-400"></i>
+                                </button>
+                                <button class="icon-option p-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700" data-icon="fa-plug">
+                                    <i class="fas fa-plug text-gray-600 dark:text-gray-400"></i>
+                                </button>
+                                
+                                <!-- Connectivity -->
+                                <button class="icon-option p-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700" data-icon="fa-wifi">
+                                    <i class="fas fa-wifi text-gray-600 dark:text-gray-400"></i>
+                                </button>
+                                <button class="icon-option p-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700" data-icon="fa-bluetooth">
+                                    <i class="fas fa-bluetooth text-gray-600 dark:text-gray-400"></i>
+                                </button>
+                                <button class="icon-option p-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700" data-icon="fa-satellite">
+                                    <i class="fas fa-satellite text-gray-600 dark:text-gray-400"></i>
+                                </button>
+                                
+                                <!-- Display & Screen -->
+                                <button class="icon-option p-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700" data-icon="fa-mobile-alt">
+                                    <i class="fas fa-mobile-alt text-gray-600 dark:text-gray-400"></i>
+                                </button>
+                                <button class="icon-option p-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700" data-icon="fa-tv">
+                                    <i class="fas fa-tv text-gray-600 dark:text-gray-400"></i>
+                                </button>
+                                <button class="icon-option p-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700" data-icon="fa-desktop">
+                                    <i class="fas fa-desktop text-gray-600 dark:text-gray-400"></i>
+                                </button>
+                                
+                                <!-- Camera & Media -->
+                                <button class="icon-option p-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700" data-icon="fa-camera">
+                                    <i class="fas fa-camera text-gray-600 dark:text-gray-400"></i>
+                                </button>
+                                <button class="icon-option p-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700" data-icon="fa-video">
+                                    <i class="fas fa-video text-gray-600 dark:text-gray-400"></i>
+                                </button>
+                                <button class="icon-option p-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700" data-icon="fa-headphones">
+                                    <i class="fas fa-headphones text-gray-600 dark:text-gray-400"></i>
+                                </button>
+                                
+                                <!-- Performance & Speed -->
+                                <button class="icon-option p-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700" data-icon="fa-tachometer-alt">
+                                    <i class="fas fa-tachometer-alt text-gray-600 dark:text-gray-400"></i>
+                                </button>
+                                <button class="icon-option p-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700" data-icon="fa-rocket">
+                                    <i class="fas fa-rocket text-gray-600 dark:text-gray-400"></i>
+                                </button>
+                                <button class="icon-option p-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700" data-icon="fa-sync">
+                                    <i class="fas fa-sync text-gray-600 dark:text-gray-400"></i>
+                                </button>
+                                
+                                <!-- Security & Protection -->
+                                <button class="icon-option p-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700" data-icon="fa-shield-alt">
+                                    <i class="fas fa-shield-alt text-gray-600 dark:text-gray-400"></i>
+                                </button>
+                                <button class="icon-option p-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700" data-icon="fa-lock">
+                                    <i class="fas fa-lock text-gray-600 dark:text-gray-400"></i>
+                                </button>
+                                <button class="icon-option p-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700" data-icon="fa-fingerprint">
+                                    <i class="fas fa-fingerprint text-gray-600 dark:text-gray-400"></i>
+                                </button>
+                                
+                                <!-- General -->
+                                <button class="icon-option p-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700" data-icon="fa-check">
+                                    <i class="fas fa-check text-gray-600 dark:text-gray-400"></i>
+                                </button>
+                                <button class="icon-option p-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700" data-icon="fa-star">
+                                    <i class="fas fa-star text-gray-600 dark:text-gray-400"></i>
+                                </button>
+                                <button class="icon-option p-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700" data-icon="fa-heart">
+                                    <i class="fas fa-heart text-gray-600 dark:text-gray-400"></i>
+                                </button>
+                            </div>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">Selected: <span id="selected-icon-display">None</span></p>
+                        </div>
+                        
+                        <div class="flex space-x-3 pt-4">
+                            <button onclick="closeFeatureModal()" class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                Cancel
+                            </button>
+                            <button onclick="saveFeature()" class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold">
+                                Add Feature
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Specification Modal -->
+    <div id="spec-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md transform transition-all duration-300 scale-95 opacity-0" id="spec-modal-content">
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white">Add Specification</h3>
+                        <button onclick="closeSpecModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Category</label>
+                            <input type="text" id="spec-category" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-colors" placeholder="e.g., Display, Chip, Camera">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Value</label>
+                            <input type="text" id="spec-value" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-colors" placeholder="e.g., 6.1-inch Super Retina XDR display">
+                        </div>
+                        
+                        <div class="flex space-x-3 pt-4">
+                            <button onclick="closeSpecModal()" class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                Cancel
+                            </button>
+                            <button onclick="saveSpec()" class="flex-1 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-semibold">
+                                Add Specification
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Form Modal -->
+    <div id="order-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-2 sm:p-4">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md max-h-[95vh] sm:max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-95 opacity-0" id="modal-content">
+                <div class="p-3 sm:p-6">
+                    <div class="flex justify-between items-center mb-3 sm:mb-6">
+                        <h3 class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">Order Form</h3>
+                        <button onclick="closeOrderForm()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                    </div>
+                    
+                    <form id="order-form" class="space-y-1 sm:space-y-3">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 sm:gap-3">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">First Name</label>
+                                <input type="text" name="firstName" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-colors">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Last Name</label>
+                                <input type="text" name="lastName" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-colors">
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Phone Number</label>
+                            <input type="tel" name="phone" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-colors" placeholder="+213 123 456 789">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Wilaya</label>
+                            <select name="wilaya" id="wilaya-select" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-colors">
+                                <option value="">Select Wilaya</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Daïra</label>
+                            <select name="daira" id="daira-select" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-colors">
+                                <option value="">Select Daïra</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Product</label>
+                            <input type="text" id="product-name" readonly class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-600 dark:text-white">
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row space-y-1 sm:space-y-0 sm:space-x-3 pt-1 sm:pt-3 sticky bottom-0 bg-white dark:bg-gray-800 py-2">
+                            <button type="button" onclick="closeOrderForm()" class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                Cancel
+                            </button>
+                            <button type="submit" class="flex-1 px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300 font-semibold">
+                                <i class="fas fa-shopping-cart mr-2"></i>Place Order
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Alert Modal -->
+    <div id="success-alert" class="fixed inset-0 bg-black bg-opacity-50 z-[60] hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-sm w-full transform transition-all duration-300 scale-95 opacity-0" id="success-alert-content">
+            <div class="p-6 text-center">
+                <!-- Success Icon -->
+                <div class="w-16 h-16 bg-gradient-to-r from-green-400 to-green-600 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
+                    <i class="fas fa-check text-white text-2xl"></i>
+                </div>
+                
+                <!-- Success Title -->
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Order Submitted Successfully!</h3>
+                
+                <!-- Success Message -->
+                <p class="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+                    Thank you for your order! We have received your request and will contact you soon via Telegram to confirm your order details.
+                </p>
+                
+                <!-- Order Details -->
+                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-4 mb-6 border border-blue-200 dark:border-blue-800">
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-600 dark:text-gray-400">Order Status:</span>
+                        <span class="text-green-600 dark:text-green-400 font-semibold">Pending Confirmation</span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm mt-2">
+                        <span class="text-gray-600 dark:text-gray-400">Response Time:</span>
+                        <span class="text-blue-600 dark:text-blue-400 font-semibold">Within 24 hours</span>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="flex space-x-3">
+                    <button onclick="closeSuccessAlert()" class="flex-1 px-4 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors font-medium">
+                        Close
+                    </button>
+                    <a href="Contact.html" class="flex-1 px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-300 font-medium text-center">
+                        Contact Us
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white mt-8 md:mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8">
+                <!-- Company Info -->
+                <div class="col-span-1 md:col-span-2">
+                    <h3 class="text-lg md:text-xl font-bold mb-3 md:mb-4">🛍️ DH Phone</h3>
+                    <p class="text-sm md:text-base text-gray-300 mb-3 md:mb-4">شريكك الموثوق لجميع احتياجاتك من الهواتف. منتجات عالية الجودة وخدمة ممتازة وأسعار لا تقبل المنافسة مع ضمان الجودة.</p>
+                    <div class="flex space-x-3 md:space-x-4">
+                        <!-- Facebook Icon -->
+                        <a href="https://www.facebook.com/profile.php?id=100058599200790" target="_blank" rel="noopener" class="text-gray-400 hover:text-white transition-colors duration-300" aria-label="Facebook">
+                            <i class="fab fa-facebook-f fa-lg"></i>
+                        </a>
+                        <!-- Instagram Icon -->
+                        <a href="coming-soon.html" class="text-gray-400 hover:text-white transition-colors duration-300" aria-label="Instagram">
+                            <i class="fab fa-instagram fa-lg"></i>
+                        </a>
+                        <!-- WhatsApp Icon -->
+                        <a href="https://api.whatsapp.com/message/UDDWXQWO7GXJC1?autoload=1&app_absent=0" target="_blank" rel="noopener" class="text-gray-400 hover:text-white transition-colors duration-300" aria-label="WhatsApp">
+                            <i class="fab fa-whatsapp fa-lg"></i>
+                        </a>
+                        <!-- TikTok Icon -->
+                        <a href="https://www.tiktok.com/@dh.phone2?_t=ZM-8yC4GUv4nyy&_r=1" target="_blank" rel="noopener" class="text-gray-400 hover:text-white transition-colors duration-300" aria-label="TikTok">
+                            <svg class="w-5 h-5 md:w-6 md:h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-.88-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-base md:text-lg font-semibold mb-3 md:mb-4">روابط سريعة</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-sm md:text-base text-gray-300 hover:text-white transition-colors duration-300">الرئيسية</a></li>
+                        <li><a href="porduct.html" class="text-sm md:text-base text-gray-300 hover:text-white transition-colors duration-300">المنتجات</a></li>
+                        <li><a href="Contact.html" class="text-sm md:text-base text-gray-300 hover:text-white transition-colors duration-300">اتصل بنا</a></li>
+                    </ul>
+                </div>
+                <!-- Contact Info -->
+                <div>
+                    <h4 class="text-base md:text-lg font-semibold mb-3 md:mb-4">معلومات الاتصال</h4>
+                    <div class="space-y-2 text-sm md:text-base text-gray-300">
+                        <p>📞 0559364881</p>
+                        <p>📍 <a href="https://www.google.com/maps/place/DH+phone/@35.531125,-0.190004,144m/data=!3m1!1e3!4m6!3m5!1s0xd7e3d9d8913e5e9:0x463fa5ab4ea63ab3!8m2!3d35.5311248!4d-0.1900038!16s%2Fg%2F11tnyjcw86?hl=en&entry=ttu&g_ep=EgoyMDI1MDcyMy4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener">موقعنا</a></p>
+                    </div>
+                </div>
+            </div>
+            <!-- Bottom Bar -->
+            <div class="border-t border-gray-800 mt-6 md:mt-8 pt-6 md:pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-xs md:text-sm text-gray-400 text-center md:text-left">
+                        © 2025 DH Phone. جميع الحقوق محفوظة.
+                    </p>
+                    <div class="flex items-center space-x-2 mt-3 md:mt-0">
+                        <span class="text-xs md:text-sm text-gray-400">صنع بـ</span>
+                        <svg class="w-3 h-3 md:w-4 md:h-4 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                        </svg>
+                        <span class="text-xs md:text-sm text-gray-400">بواسطة <a href="https://www.instagram.com/tayabe_doom_?igsh=c29raG8xMXA1cHV5" target="_blank" rel="noopener" class="text-blue-400 hover:text-blue-300 transition-colors duration-300">tayabedoom</a></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Product Display Script -->
+    <script>
+        // Display product info when loaded
+        function displayProductInfo() {
+            const productTitle = document.getElementById('product-title');
+            const productPrice = document.getElementById('product-price');
+            
+            if (productTitle) productTitle.textContent = 'iPhone 15 Pro';
+            if (productPrice) productPrice.textContent = 'DZD 1,250,000';
+        }
+        
+        // Mobile menu functionality
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const hamburgerMenu = document.getElementById('hamburger-menu');
+        const hamburgerOverlay = document.getElementById('hamburger-overlay');
+        const closeMenu = document.getElementById('close-menu');
+        
+        function openMenu() {
+            hamburgerMenu.classList.add('open');
+            hamburgerOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeMenuFunc() {
+            hamburgerMenu.classList.remove('open');
+            hamburgerOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        hamburgerBtn.addEventListener('click', openMenu);
+        closeMenu.addEventListener('click', closeMenuFunc);
+        hamburgerOverlay.addEventListener('click', closeMenuFunc);
+        
+        // Language toggle
+        const languageToggle = document.getElementById('language-toggle');
+        const languageDropdown = document.getElementById('language-dropdown');
+        const languageOptions = document.querySelectorAll('.language-option');
+        
+        languageToggle.addEventListener('click', () => {
+            languageDropdown.classList.toggle('active');
+        });
+        
+        languageOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                const lang = option.dataset.lang;
+                const langText = option.textContent.split(' ')[1];
+                languageToggle.querySelector('span').textContent = `🌐 ${langText}`;
+                languageDropdown.classList.remove('active');
+                localStorage.setItem('lang', lang);
+            });
+        });
+        
+        // Load saved language
+        const savedLang = localStorage.getItem('lang');
+        if (savedLang) {
+            const option = document.querySelector(`[data-lang="${savedLang}"]`);
+            if (option) {
+                const langText = option.textContent.split(' ')[1];
+                languageToggle.querySelector('span').textContent = `🌐 ${langText}`;
+            }
+        }
+        
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!languageToggle.contains(e.target) && !languageDropdown.contains(e.target)) {
+                languageDropdown.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html> 
