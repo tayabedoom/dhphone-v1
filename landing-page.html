@@ -16,11 +16,28 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="config.js"></script>
     <script>
-        // Initialize Firebase
+        // Initialize Firebase with optimized settings
         if (!firebase.apps.length) {
             firebase.initializeApp(window.config.firebase);
         }
         window.db = firebase.firestore();
+        
+        // Optimize Firestore settings for faster loading
+        window.db.settings({
+            cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED,
+            ignoreUndefinedProperties: true
+        });
+        
+        // Enable offline persistence for faster subsequent loads (with better error handling)
+        window.db.enablePersistence({
+            synchronizeTabs: true
+        }).catch((err) => {
+            if (err.code == 'failed-precondition') {
+                console.warn('Persistence failed - multiple tabs open');
+            } else if (err.code == 'unimplemented') {
+                console.warn('Persistence not available');
+            }
+        });
     </script>
     
     <!-- Facebook Pixel Code -->
@@ -63,17 +80,6 @@
         .product-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-        
-        /* Category slider */
-        .category-slider {
-            overflow-x: auto;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
-        
-        .category-slider::-webkit-scrollbar {
-            display: none;
         }
         
         /* Mobile hamburger menu */
@@ -139,10 +145,10 @@
                 <!-- Logo -->
                 <div class="flex items-center space-x-2">
                     <a href="index.html" class="flex items-center space-x-2">
-                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center">
-                            <span class="text-white font-bold text-xl">DH</span>
+                        <span class="text-lg sm:text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Phone</span>
+                        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center">
+                            <span class="text-white font-bold text-sm sm:text-base">DH</span>
                         </div>
-                        <span class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Phone</span>
                     </a>
                 </div>
                 
@@ -202,13 +208,6 @@
                         class="w-full p-4 pr-12 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:text-white dark:placeholder-gray-400"
                     >
                     <i class="fas fa-search absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-                </div>
-            </div>
-
-            <!-- Category Filter -->
-            <div class="category-slider pb-4">
-                <div class="flex space-x-3" id="category-buttons">
-                    <!-- Categories will be populated dynamically -->
                 </div>
             </div>
         </div>
@@ -380,7 +379,6 @@
 
         let products = [...featuredProducts];
         let filteredProducts = [...featuredProducts];
-        let currentCategory = 'الكل';
         let searchQuery = '';
 
         // Initialize page
@@ -390,15 +388,22 @@
             // Show loading placeholders immediately
             showLoadingPlaceholders();
             
-            // Load landing page configuration
+            // Load landing page configuration immediately
             loadLandingPageConfig();
             
-            // Show products after 1 second (reduced from 2 seconds)
-            setTimeout(() => {
+            // Show default products immediately if no landing page is specified
+            if (!window.location.search.includes('page=')) {
                 displayProducts(products);
-                initializeCategories();
                 initializeSearch();
-            }, 1000);
+            } else {
+                // Add fallback timeout for landing pages
+                setTimeout(() => {
+                    if (products.length === 0) {
+                        console.log('Fallback: Showing default products after timeout');
+                        showDefaultProducts();
+                    }
+                }, 5000); // 5 second timeout
+            }
         });
 
         // Show loading placeholders
@@ -518,11 +523,8 @@
             if (!landingPageSlug) {
                 console.log('No landing page specified, using default featured products');
                 // Show products immediately for default page
-                setTimeout(() => {
-                    displayProducts(products);
-                    initializeCategories();
-                    initializeSearch();
-                }, 500); // Reduced delay for default page
+                displayProducts(products);
+                initializeSearch();
                 return;
             }
 
@@ -550,6 +552,13 @@
             }
         }
 
+        // Add fallback to show default products if landing page fails
+        function showDefaultProducts() {
+            console.log('Showing default products as fallback');
+            displayProducts(products);
+            initializeSearch();
+        }
+
         // Load landing page from Firebase
         async function loadLandingPageFromFirebase(slug) {
             try {
@@ -561,17 +570,22 @@
                 }
 
                 console.log('Loading from Firebase...');
-                const landingPagesRef = window.db.collection('landingPages');
-                const querySnapshot = await landingPagesRef.where('slug', '==', slug).get();
                 
-                if (!querySnapshot.empty) {
-                    const landingPageDoc = querySnapshot.docs[0];
-                    const landingPage = {
-                        id: landingPageDoc.id,
-                        ...landingPageDoc.data()
-                    };
-                    
-                    console.log('Found landing page in Firebase:', landingPage);
+                // Use a more efficient query with limit
+                const landingPagesRef = window.db.collection('landingPages');
+                const querySnapshot = await landingPagesRef
+                    .where('slug', '==', slug)
+                    .limit(1) // Only get 1 result since slug should be unique
+                    .get();
+                        
+                        if (!querySnapshot.empty) {
+                            const landingPageDoc = querySnapshot.docs[0];
+                            const landingPage = {
+                                id: landingPageDoc.id,
+                                ...landingPageDoc.data()
+                            };
+                            
+                            console.log('Found landing page in Firebase:', landingPage);
                     await updatePageWithLandingData(landingPage);
                     return;
                 }
@@ -588,22 +602,22 @@
 
         // Update page with landing page data
         async function updatePageWithLandingData(landingPage) {
-            // Update page title
-            document.title = `${landingPage.name} | DH Phone`;
-            const pageTitle = document.querySelector('h1');
-            if (pageTitle) {
-                pageTitle.textContent = landingPage.name;
-            }
+                            // Update page title
+                            document.title = `${landingPage.name} | DH Phone`;
+                            const pageTitle = document.querySelector('h1');
+                            if (pageTitle) {
+                                pageTitle.textContent = landingPage.name;
+                            }
             
             // Update page description if available
             const pageDescription = document.querySelector('p.text-lg.text-gray-600');
             if (pageDescription && landingPage.description) {
                 pageDescription.textContent = landingPage.description;
-            }
-            
-            // Load products from Shopify based on selected handles
+                            }
+                            
+                            // Load products from Shopify based on selected handles
             if (landingPage.products && landingPage.products.length > 0) {
-                await loadProductsForLandingPage(landingPage.products);
+                            await loadProductsForLandingPage(landingPage.products);
             } else {
                 console.log('No products selected for this landing page');
                 showNoProductsMessage();
@@ -654,15 +668,17 @@
         async function loadProductsForLandingPage(selectedHandles) {
             if (!selectedHandles || selectedHandles.length === 0) {
                 console.log('No products selected for this landing page');
+                showNoProductsMessage();
                 return;
             }
 
             console.log('Loading products for landing page:', selectedHandles);
             
             try {
+                // Optimize query to only fetch what we need
                 const query = `
                     query {
-                        products(first: 100) {
+                        products(first: 50) {
                             edges {
                                 node {
                                     id
@@ -725,15 +741,17 @@
                     
                     if (filteredProducts.length > 0) {
                         products = filteredProducts;
-                        filteredProducts = [...filteredProducts];
+                        let filteredProductsForDisplay = [...filteredProducts];
                         // Show products immediately when loaded
-                        displayProducts(filteredProducts);
-                        initializeCategories();
+                        displayProducts(filteredProductsForDisplay);
                         initializeSearch();
+                        console.log('✅ Products displayed successfully');
                     } else {
                         console.log('No products found for selected handles');
                         showNoProductsMessage();
                     }
+                } else {
+                    throw new Error('No products data received from Shopify');
                 }
             } catch (error) {
                 console.error('Error loading products for landing page:', error);
@@ -768,7 +786,10 @@
                     return;
                 }
 
-                grid.innerHTML = productsToShow.map(product => {
+                // Use DocumentFragment for better performance
+                const fragment = document.createDocumentFragment();
+                
+                productsToShow.forEach(product => {
                     // Get image URL with fallback
                     let imageUrl = '';
                     let imageAlt = product.title;
@@ -786,8 +807,9 @@
                     const price = product.priceRange?.minVariantPrice?.amount || '0';
                     const currency = product.priceRange?.minVariantPrice?.currencyCode || 'DZD';
                     
-                    return `
-                        <div class="product-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg">
+                    const productElement = document.createElement('div');
+                    productElement.className = 'product-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg';
+                    productElement.innerHTML = `
                             <div class="relative">
                                 <div class="h-48 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-slate-700 dark:to-slate-600 flex items-center justify-center">
                                     ${imageUrl ? 
@@ -817,11 +839,17 @@
                                     <button onclick="viewProduct('${product.handle}')" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
                                         عرض التفاصيل
                                     </button>
-                                </div>
                             </div>
                         </div>
                     `;
-                }).join('');
+                    
+                    fragment.appendChild(productElement);
+                });
+                
+                // Clear grid and append all products at once
+                grid.innerHTML = '';
+                grid.appendChild(fragment);
+                
             } catch (error) {
                 console.error('❌ Error in displayProducts:', error);
                 const grid = document.getElementById('products-grid');
@@ -839,37 +867,6 @@
             }
         }
 
-        // Initialize categories
-        function initializeCategories() {
-            const categories = ['الكل', ...new Set(products.map(p => p.category))];
-            const container = document.getElementById('category-buttons');
-            
-            container.innerHTML = categories.map(category => `
-                <button 
-                    onclick="filterByCategory('${category}')" 
-                    class="category-btn px-4 py-2 rounded-full border-2 border-gray-200 text-sm font-medium transition-all ${category === 'الكل' ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-600 hover:border-blue-500'}"
-                >
-                    ${category}
-                </button>
-            `).join('');
-        }
-
-        // Filter by category
-        function filterByCategory(category) {
-            currentCategory = category;
-            
-            // Update category buttons
-            document.querySelectorAll('.category-btn').forEach(btn => {
-                btn.classList.remove('bg-blue-600', 'text-white', 'border-blue-600');
-                btn.classList.add('bg-white', 'text-gray-600');
-            });
-            
-            event.target.classList.remove('bg-white', 'text-gray-600');
-            event.target.classList.add('bg-blue-600', 'text-white', 'border-blue-600');
-            
-            filterProducts();
-        }
-
         // Initialize search
         function initializeSearch() {
             const searchInput = document.getElementById('search-input');
@@ -883,8 +880,7 @@
         function filterProducts() {
             filteredProducts = products.filter(product => {
                 const matchesSearch = product.title.toLowerCase().includes(searchQuery);
-                const matchesCategory = currentCategory === 'الكل' || product.category === currentCategory;
-                return matchesSearch && matchesCategory;
+                return matchesSearch;
             });
             
             displayProducts(filteredProducts);
@@ -918,7 +914,6 @@
         hamburgerOverlay.addEventListener('click', closeMenuFunc);
     </script>
     
-    <!-- Facebook Pixel Tracking -->
-    <script src="facebook-pixel.js"></script>
+
 </body>
 </html>
