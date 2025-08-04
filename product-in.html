@@ -23,6 +23,25 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="hamburger-menu.css">
     
+    <!-- Facebook Pixel Code -->
+    <script>
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '1088401762837358');
+        fbq('track', 'PageView');
+    </script>
+    <noscript>
+        <img height="1" width="1" style="display:none"
+        src="https://www.facebook.com/tr?id=1088401762837358&ev=PageView&noscript=1"/>
+    </noscript>
+    <!-- End Facebook Pixel Code -->
+
     <!-- Custom CSS -->
     <style>
         /* Product image gallery */
@@ -702,11 +721,18 @@ Current status: Using demo data
                     console.log('✅ Loaded features from Firebase:', features.length);
                     
                     currentFeatures = features;
-                    displayFeatures(features.map(f => f.text || f));
+                    displayFeatures(features); // Pass the full feature objects with icons
                 } else {
                     console.log('⚠️ No features found in Firebase');
                     currentFeatures = [];
-                    displayFeatures([]);
+                    // Show sample features for testing
+                    const sampleFeatures = [
+                        { text: 'High Performance Processor', icon: 'fa-microchip' },
+                        { text: 'Long Battery Life', icon: 'fa-battery-full' },
+                        { text: 'Advanced Camera System', icon: 'fa-camera' },
+                        { text: 'Fast Charging Support', icon: 'fa-bolt' }
+                    ];
+                    displayFeatures(sampleFeatures);
                 }
 
                 // Process specifications
@@ -1068,7 +1094,18 @@ Current status: Using demo data
             const urlParams = new URLSearchParams(window.location.search);
             const productHandle = urlParams.get('product');
             if (productHandle) {
+                console.log('🔄 Loading dynamic data for product:', productHandle);
                 loadDynamicProductData(productHandle);
+            } else {
+                console.log('⚠️ No product handle found, showing sample features');
+                // Show sample features for testing
+                const sampleFeatures = [
+                    { text: 'High Performance Processor', icon: 'fa-microchip' },
+                    { text: 'Long Battery Life', icon: 'fa-battery-full' },
+                    { text: 'Advanced Camera System', icon: 'fa-camera' },
+                    { text: 'Fast Charging Support', icon: 'fa-bolt' }
+                ];
+                displayFeatures(sampleFeatures);
             }
             
             // Load related products
@@ -1125,11 +1162,17 @@ Current status: Using demo data
             if (featuresContainer && features && features.length > 0) {
                 console.log('Displaying features:', features);
                 featuresContainer.innerHTML = features.map(feature => {
-                    const featureText = typeof feature === 'string' ? feature : feature.text;
+                    // Handle both string features and object features with icons
+                    const featureText = typeof feature === 'string' ? feature : (feature.text || feature);
                     const featureIcon = typeof feature === 'string' ? 'fa-check' : (feature.icon || 'fa-check');
-                    return `<li class="flex items-start space-x-4">
-                        <i class="fas ${featureIcon} text-blue-500 mt-1 flex-shrink-0"></i>
-                        <span class="text-gray-700 dark:text-gray-300">${featureText}</span>
+                    
+                    console.log('Feature:', { text: featureText, icon: featureIcon });
+                    
+                    return `<li class="flex items-start space-x-6 rtl:space-x-reverse p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-200">
+                        <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center flex-shrink-0 ml-3 rtl:ml-0 rtl:mr-3">
+                            <i class="fas ${featureIcon} text-white text-base"></i>
+                        </div>
+                        <span class="text-gray-700 dark:text-gray-300 text-base font-medium">${featureText}</span>
                     </li>`;
                 }).join('');
             } else if (featuresContainer) {
@@ -1631,10 +1674,10 @@ Current status: Using demo data
                 <!-- Left Logo -->
                 <div class="flex items-center space-x-2">
                     <a href="index.html" class="flex items-center space-x-2">
+                        <span class="text-lg sm:text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Phone</span>
                         <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center">
-                            <span class="text-white font-bold text-lg sm:text-xl">DH</span>
+                            <span class="text-white font-bold text-sm sm:text-base">DH</span>
                         </div>
-                        <span class="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Phone</span>
                     </a>
                 </div>
                 
@@ -1738,13 +1781,17 @@ Current status: Using demo data
 
                     <!-- Key Features Section -->
                     <div class="mb-6 sm:mb-8">
-                        <h4 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-4 sm:mb-6 flex items-center">
-                            <i class="fas fa-star text-yellow-500 mr-3"></i>
-                            Key Features
-                        </h4>
-                        <ul id="features-content" class="space-y-3 sm:space-y-4">
-                            <!-- Features will be loaded here -->
-                        </ul>
+                        <div class="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-xl p-4 sm:p-6 border border-blue-100 dark:border-blue-800">
+                            <h4 class="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6 flex items-center space-x-4 rtl:space-x-reverse">
+                                <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center ml-3 rtl:ml-0 rtl:mr-3">
+                                    <i class="fas fa-star text-white text-xl"></i>
+                                </div>
+                                Key Features
+                            </h4>
+                            <ul id="features-content" class="space-y-3 sm:space-y-4">
+                                <!-- Features will be loaded here -->
+                            </ul>
+                        </div>
                     </div>
 
                     <!-- Action Buttons -->
@@ -2276,6 +2323,51 @@ Current status: Using demo data
                 languageDropdown.classList.remove('active');
             }
         });
+
+        // Facebook Pixel Product Page Tracking
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get product information from URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const productHandle = urlParams.get('product');
+            
+            if (productHandle) {
+                console.log('📊 Tracking product page view for:', productHandle);
+                
+                // Track product page view with Facebook Pixel
+                if (window.FacebookPixel && window.FacebookPixel.trackProductView) {
+                    // You can enhance this by fetching product details from Shopify API
+                    window.FacebookPixel.trackProductView(productHandle, 'Product', 0);
+                }
+            }
+
+            // Track WhatsApp contact button clicks
+            const whatsappButtons = document.querySelectorAll('a[href*="whatsapp"]');
+            whatsappButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    console.log('📊 Tracking WhatsApp contact from product page');
+                    if (window.FacebookPixel && window.FacebookPixel.trackWhatsAppClick) {
+                        window.FacebookPixel.trackWhatsAppClick();
+                    }
+                });
+            });
+
+            // Track contact form submissions
+            const contactForms = document.querySelectorAll('form');
+            contactForms.forEach(form => {
+                form.addEventListener('submit', function() {
+                    console.log('📊 Tracking contact form submission from product page');
+                    if (window.FacebookPixel && window.FacebookPixel.trackContactForm) {
+                        window.FacebookPixel.trackContactForm();
+                    }
+                });
+            });
+        });
     </script>
+    
+    <!-- Facebook Pixel Tracking -->
+    <script src="facebook-pixel.js"></script>
+    
+    <!-- Shopify Product Tracking -->
+    <script src="shopify-tracking.js"></script>
 </body>
 </html> 

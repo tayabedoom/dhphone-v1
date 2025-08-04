@@ -254,9 +254,17 @@ function displayProducts(products) {
         const currency = product.priceRange?.minVariantPrice?.currencyCode || 'USD';
         const image = product.images?.edges[0]?.node || { url: 'https://placehold.co/400x300', altText: product.title };
         const isAvailable = product.variants?.edges[0]?.node?.availableForSale || false;
+        const productType = product.productType || 'General';
         
         return `
-            <div class="product-card bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
+            <div class="product-card bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300"
+                 data-product-id="${product.id}"
+                 data-product-handle="${product.handle}"
+                 data-product-title="${product.title}"
+                 data-product-type="${productType}"
+                 data-product-price="${price}"
+                 data-product-currency="${currency}"
+                 data-product-available="${isAvailable}">
                 <div class="relative overflow-hidden">
                     <img src="${image.url}" alt="${image.altText || product.title}" 
                          class="product-image w-full h-48 object-cover transition-transform duration-300"
@@ -273,7 +281,7 @@ function displayProducts(products) {
                     <div class="flex justify-between items-center">
                         <div class="price-tag">${currency} ${price}</div>
                         <button class="btn-primary px-4 py-2 rounded-lg text-white font-medium transition-all duration-200 hover:scale-105" 
-                                ${isAvailable ? `onclick="viewProduct('${product.handle}')"` : `onclick="window.location.href='Contact.html'"`} 
+                                ${isAvailable ? `onclick="viewProductWithTracking('${product.handle}', '${product.title}', '${productType}', ${price}, '${currency}')"` : `onclick="contactForProduct('${product.title}', '${productType}', ${price}, '${currency}')"`} 
                                 ${!isAvailable ? 'disabled' : ''}>
                             ${isAvailable ? 'View Details' : 'Contact Us'}
                         </button>
@@ -282,6 +290,9 @@ function displayProducts(products) {
             </div>
         `;
     }).join('');
+
+    // Add click tracking for product cards
+    addProductCardTracking();
 }
 
 // Initialize search functionality
@@ -352,6 +363,11 @@ function selectCategory(category) {
     currentCategory = category;
     console.log('📂 Selected category:', category);
     
+    // Track category selection with Facebook Pixel
+    if (window.FacebookPixel && window.FacebookPixel.trackCategoryFilter) {
+        window.FacebookPixel.trackCategoryFilter(category);
+    }
+    
     // Update active state
     document.querySelectorAll('.category-item').forEach(btn => {
         btn.classList.remove('active');
@@ -414,3 +430,107 @@ if (mobileMenuButton && mobileMenu) {
         mobileMenu.classList.toggle('hidden');
     });
 }
+
+// Facebook Pixel Tracking Functions for Shopify Products
+
+// Track product view with detailed information
+function viewProductWithTracking(handle, productTitle, productType, price, currency) {
+    console.log('📊 Tracking product view:', productTitle);
+    
+    // Track with Facebook Pixel
+    if (window.FacebookPixel && window.FacebookPixel.trackProductView) {
+        window.FacebookPixel.trackProductView(productTitle, productType, parseFloat(price));
+    }
+    
+    // Navigate to product page
+    viewProduct(handle);
+}
+
+// Track contact form submission for out-of-stock products
+function contactForProduct(productTitle, productType, price, currency) {
+    console.log('📊 Tracking contact for out-of-stock product:', productTitle);
+    
+    // Track with Facebook Pixel
+    if (window.FacebookPixel && window.FacebookPixel.trackContactForm) {
+        window.FacebookPixel.trackContactForm();
+    }
+    
+    // Navigate to contact page
+    window.location.href = 'Contact.html';
+}
+
+// Add click tracking for product cards
+function addProductCardTracking() {
+    const productCards = document.querySelectorAll('.product-card');
+    
+    productCards.forEach(card => {
+        card.addEventListener('click', function(e) {
+            // Don't track if clicking on the button (already handled)
+            if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+                return;
+            }
+            
+            const productTitle = this.getAttribute('data-product-title');
+            const productType = this.getAttribute('data-product-type');
+            const productPrice = this.getAttribute('data-product-price');
+            const productCurrency = this.getAttribute('data-product-currency');
+            const productHandle = this.getAttribute('data-product-handle');
+            const isAvailable = this.getAttribute('data-product-available') === 'true';
+            
+            console.log('📊 Tracking product card click:', productTitle);
+            
+            // Track with Facebook Pixel
+            if (window.FacebookPixel && window.FacebookPixel.trackProductView) {
+                window.FacebookPixel.trackProductView(productTitle, productType, parseFloat(productPrice));
+            }
+            
+            // Navigate to product page if available
+            if (isAvailable) {
+                viewProduct(productHandle);
+            } else {
+                contactForProduct(productTitle, productType, productPrice, productCurrency);
+            }
+        });
+    });
+}
+
+// Track search functionality
+function trackSearchEvent(searchTerm) {
+    console.log('📊 Tracking search:', searchTerm);
+    
+    if (window.FacebookPixel && window.FacebookPixel.trackSearch) {
+        window.FacebookPixel.trackSearch(searchTerm);
+    }
+}
+
+// Enhanced search with tracking
+function initializeSearchWithTracking() {
+    const searchInput = document.getElementById('search-input');
+    if (!searchInput) {
+        console.warn('⚠️ Search input not found');
+        return;
+    }
+
+    let searchTimeout;
+    let lastSearchTerm = '';
+    
+    searchInput.addEventListener('input', function() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            const currentSearchTerm = this.value.toLowerCase().trim();
+            searchQuery = currentSearchTerm;
+            
+            // Track search only if term changed and is not empty
+            if (currentSearchTerm !== lastSearchTerm && currentSearchTerm.length > 0) {
+                trackSearchEvent(currentSearchTerm);
+                lastSearchTerm = currentSearchTerm;
+            }
+            
+            console.log('🔍 Searching for:', searchQuery);
+            filterProducts();
+        }, 300);
+    });
+}
+
+// Initialize search with tracking
+initializeSearchWithTracking();
