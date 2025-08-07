@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار نموذج الطلب</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="delivery-pricing.js"></script>
+    <script src="wilaya-data.js"></script>
+</head>
+<body class="bg-gray-50 p-8">
+    <div class="max-w-md mx-auto bg-white rounded-lg shadow-lg p-6">
+        <h1 class="text-2xl font-bold mb-6 text-center">اختبار نموذج الطلب</h1>
+        
+        <form class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">الاسم الأول</label>
+                <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg" placeholder="الاسم الأول">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">اسم العائلة</label>
+                <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg" placeholder="اسم العائلة">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">رقم الهاتف</label>
+                <input type="tel" class="w-full px-3 py-2 border border-gray-300 rounded-lg" placeholder="+213 123 456 789">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">الولاية</label>
+                <select id="test-wilaya" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                    <option value="">اختر الولاية</option>
+                </select>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">الدائرة</label>
+                <select id="test-daira" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                    <option value="">اختر الدائرة</option>
+                </select>
+            </div>
+            
+            <!-- Delivery Pricing Section -->
+            <div id="test-delivery-section" class="hidden">
+                <label class="block text-sm font-medium text-gray-700 mb-2">معلومات التوصيل</label>
+                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 border border-blue-200">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center space-x-2 rtl:space-x-reverse">
+                            <i class="fas fa-truck text-blue-600 text-lg"></i>
+                            <span class="font-semibold text-gray-900">التوصيل إلى مكتب البريد</span>
+                        </div>
+                        <div id="test-delivery-status" class="flex items-center space-x-1 rtl:space-x-reverse">
+                            <i class="fas fa-circle text-xs"></i>
+                            <span class="text-xs font-medium"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">الولاية:</span>
+                            <span id="test-selected-wilaya" class="text-sm font-medium text-gray-900"></span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">رسوم التوصيل:</span>
+                            <span id="test-delivery-price" class="text-lg font-bold text-blue-600"></span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">وقت التوصيل:</span>
+                            <span class="text-sm font-medium text-gray-900">2-4 أيام عمل</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Load wilayas
+        function loadTestWilayas() {
+            const wilayaSelect = document.getElementById('test-wilaya');
+            wilayaSelect.innerHTML = '<option value="">اختر الولاية</option>';
+            
+            if (window.wilayaData) {
+                Object.keys(window.wilayaData).forEach(wilaya => {
+                    const option = document.createElement('option');
+                    option.value = wilaya;
+                    option.textContent = wilaya;
+                    wilayaSelect.appendChild(option);
+                });
+            }
+        }
+        
+        // Load dairas
+        function loadTestDairas(wilaya) {
+            const dairaSelect = document.getElementById('test-daira');
+            dairaSelect.innerHTML = '<option value="">اختر الدائرة</option>';
+            
+            if (wilaya && window.wilayaData && window.wilayaData[wilaya]) {
+                window.wilayaData[wilaya].forEach(daira => {
+                    const option = document.createElement('option');
+                    option.value = daira;
+                    option.textContent = daira;
+                    dairaSelect.appendChild(option);
+                });
+            }
+        }
+        
+        // Update delivery pricing
+        function updateTestDeliveryPricing(selectedWilaya) {
+            const deliverySection = document.getElementById('test-delivery-section');
+            const deliveryStatus = document.getElementById('test-delivery-status');
+            const deliveryStatusIcon = deliveryStatus.querySelector('i');
+            const deliveryStatusText = deliveryStatus.querySelector('span');
+            const selectedWilayaSpan = document.getElementById('test-selected-wilaya');
+            const deliveryPriceSpan = document.getElementById('test-delivery-price');
+            
+            if (!selectedWilaya) {
+                deliverySection.classList.add('hidden');
+                return;
+            }
+            
+            const deliveryInfo = getDeliveryPrice(selectedWilaya);
+            
+            deliverySection.classList.remove('hidden');
+            selectedWilayaSpan.textContent = deliveryInfo.wilayaName || selectedWilaya;
+            
+            if (deliveryInfo.isAvailable) {
+                deliveryStatusIcon.className = 'fas fa-circle text-xs text-green-500';
+                deliveryStatusText.textContent = 'متوفر';
+                deliveryStatusText.className = 'text-xs font-medium text-green-600';
+                deliveryPriceSpan.textContent = formatDeliveryPrice(deliveryInfo.price);
+                deliveryPriceSpan.className = 'text-lg font-bold text-green-600';
+            } else {
+                deliveryStatusIcon.className = 'fas fa-circle text-xs text-red-500';
+                deliveryStatusText.textContent = 'غير متوفر';
+                deliveryStatusText.className = 'text-xs font-medium text-red-600';
+                deliveryPriceSpan.textContent = 'غير متوفر';
+                deliveryPriceSpan.className = 'text-lg font-bold text-red-600';
+            }
+        }
+        
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTestWilayas();
+            
+            const wilayaSelect = document.getElementById('test-wilaya');
+            wilayaSelect.addEventListener('change', function() {
+                loadTestDairas(this.value);
+                updateTestDeliveryPricing(this.value);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Pricing Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="delivery-pricing.js"></script>
+</head>
+<body class="bg-gray-50 p-8">
+    <div class="max-w-md mx-auto bg-white rounded-lg shadow-lg p-6">
+        <h1 class="text-2xl font-bold mb-6 text-center">Delivery Pricing Test</h1>
+        
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Select Wilaya</label>
+            <select id="test-wilaya" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                <option value="">Select Wilaya</option>
+                <option value="Adrar">Adrar</option>
+                <option value="Chlef">Chlef</option>
+                <option value="Alger (Oued Smar, Kouba, etc.)">Alger</option>
+                <option value="Tamarrasset">Tamarrasset</option>
+                <option value="Timimoun">Timimoun</option>
+            </select>
+        </div>
+        
+        <div id="test-result" class="hidden bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <h3 class="font-semibold text-blue-900 mb-2">Delivery Information</h3>
+            <div id="result-content"></div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('test-wilaya').addEventListener('change', function() {
+            const selectedWilaya = this.value;
+            const resultDiv = document.getElementById('test-result');
+            const resultContent = document.getElementById('result-content');
+            
+            if (!selectedWilaya) {
+                resultDiv.classList.add('hidden');
+                return;
+            }
+            
+            const deliveryInfo = getDeliveryPrice(selectedWilaya);
+            
+            let html = `
+                <div class="space-y-2">
+                    <div class="flex justify-between">
+                        <span class="text-sm text-gray-600">Wilaya:</span>
+                        <span class="font-medium">${deliveryInfo.wilayaName || selectedWilaya}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-sm text-gray-600">Available:</span>
+                        <span class="font-medium ${deliveryInfo.isAvailable ? 'text-green-600' : 'text-red-600'}">
+                            ${deliveryInfo.isAvailable ? 'Yes' : 'No'}
+                        </span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-sm text-gray-600">Price:</span>
+                        <span class="font-bold ${deliveryInfo.isAvailable ? 'text-green-600' : 'text-red-600'}">
+                            ${formatDeliveryPrice(deliveryInfo.price)}
+                        </span>
+                    </div>
+                </div>
+            `;
+            
+            resultContent.innerHTML = html;
+            resultDiv.classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>
