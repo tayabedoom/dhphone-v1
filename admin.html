@@ -608,6 +608,184 @@
         </div>
     </div>
 
+    <!-- Edit Feature Modal -->
+    <div id="edit-feature-modal" class="modal hidden">
+        <div class="modal-content">
+            <h3 class="text-lg font-semibold mb-4">Edit Feature</h3>
+            <input type="text" id="edit-feature-input" placeholder="Enter feature description" class="w-full p-3 border border-gray-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white mb-3">
+            
+            <!-- Icon Selection -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Select Icon:</label>
+                <div class="grid grid-cols-6 gap-2 max-h-60 overflow-y-auto border border-gray-300 dark:border-slate-600 rounded-lg p-2">
+                    <!-- CPU & Processing -->
+                    <button type="button" class="edit-icon-option p-2 text-center border border-gray-200 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" data-icon="fa-microchip">
+                        <i class="fas fa-microchip text-lg"></i>
+                    </button>
+                    <button type="button" class="edit-icon-option p-2 text-center border border-gray-200 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" data-icon="fa-server">
+                        <i class="fas fa-server text-lg"></i>
+                    </button>
+                    <button type="button" class="edit-icon-option p-2 text-center border border-gray-200 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" data-icon="fa-cogs">
+                        <i class="fas fa-cogs text-lg"></i>
+                    </button>
+                    
+                    <!-- Memory & Storage -->
+                    <button type="button" class="edit-icon-option p-2 text-center border border-gray-200 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" data-icon="fa-memory">
+                        <i class="fas fa-memory text-lg"></i>
+                    </button>
+                    <button type="button" class="edit-icon-option p-2 text-center border border-gray-200 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" data-icon="fa-hdd">
+                        <i class="fas fa-hdd text-lg"></i>
+                    </button>
+                    <button type="button" class="edit-icon-option p-2 text-center border border-gray-200 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" data-icon="fa-database">
+                        <i class="fas fa-database text-lg"></i>
+                    </button>
+                    
+                    <!-- Battery & Power -->
+                    <button type="button" class="edit-icon-option p-2 text-center border border-gray-200 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" data-icon="fa-battery-full">
+                        <i class="fas fa-battery-full text-lg"></i>
+                    </button>
+                    <button type="button" class="edit-icon-option p-2 text-center border border-gray-200 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" data-icon="fa-bolt">
+                        <i class="fas fa-bolt text-lg"></i>
+                    </button>
+                    <button type="button" class="edit-icon-option p-2 text-center border border-gray-200 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" data-icon="fa-plug">
+                        <i class="fas fa-plug text-lg"></i>
+                    </button>
+                    
+                    <!-- Connectivity -->
+                    <button type="button" class="edit-icon-option p-2 text-center border border-gray-200 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" data-icon="fa-wifi">
+                        <i class="fas fa-wifi text-lg"></i>
+                    </button>
+                    <button type="button" class="edit-icon-option p-2 text-center border border-gray-200 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" data-icon="fa-bluetooth">
+                        <i class="fas fa-bluetooth text-lg"></i>
+                    </button>
+                    <button type="button" class="edit-icon-option p-2 text-center border border-gray-200 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" data-icon="fa-satellite">
+                        <i class="fas fa-satellite text-lg"></i>
+                    </button>
+                    
+                    <!-- Display & Screen -->
+                    <button type="button" class="edit-icon-option p-2 text-center border border-gray-200 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" data-icon="fa-mobile-alt">
+                        <i class="fas fa-mobile-alt text-lg"></i>
+                    </button>
+                    <button type="button" class="edit-icon-option p-2 text-center border border-gray-200 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" data-icon="fa-tv">
+                        <i class="fas fa-tv text-lg"></i>
+                    </button>
+                    <button type="button" class="edit-icon-option p-2 text-center border border-gray-200 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" data-icon="fa-desktop">
+                        <i class="fas fa-desktop text-lg"></i>
+                    </button>
+                    
+                    <!-- Camera & Media -->
+                    <button type="button" class="edit-icon-option p-2 text-center border border-gray-200 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" data-icon="fa-camera">
+                        <i class="fas fa-camera text-lg"></i>
+                    </button>
+                    <button type="button" class="edit-icon-option p-2 text-center border border-gray-200 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" data-icon="fa-video">
+                        <i class="fas fa-video text-lg"></i>
+                    </button>
+                    <button type="button" class="edit-icon-option p-2 text-center border border-gray-200 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" data-icon="fa-headphones">
+                        <i class="fas fa-headphones text-lg"></i>
+                    </button>
+                    
+                    <!-- Performance & Speed -->
+                    <button type="button" class="edit-icon-option p-2 text-center border border-gray-200 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" data-icon="fa-tachometer-alt">
+                        <i class="fas fa-tachometer-alt text-lg"></i>
+                    </button>
+                    <button type="button" class="edit-icon-option p-2 text-center border border-gray-200 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" data-icon="fa-rocket">
+                        <i class="fas fa-rocket text-lg"></i>
+                    </button>
+                    <button type="button" class="edit-icon-option p-2 text-center border border-gray-200 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" data-icon="fa-sync">
+                        <i class="fas fa-sync text-lg"></i>
+                    </button>
+                    
+                    <!-- Security & Protection -->
+                    <button type="button" class="edit-icon-option p-2 text-center border border-gray-200 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" data-icon="fa-shield-alt">
+                        <i class="fas fa-shield-alt text-lg"></i>
+                    </button>
+                    <button type="button" class="edit-icon-option p-2 text-center border border-gray-200 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" data-icon="fa-lock">
+                        <i class="fas fa-lock text-lg"></i>
+                    </button>
+                    <button type="button" class="edit-icon-option p-2 text-center border border-gray-200 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" data-icon="fa-fingerprint">
+                        <i class="fas fa-fingerprint text-lg"></i>
+                    </button>
+                    
+                    <!-- Quality & Premium -->
+                    <button type="button" class="edit-icon-option p-2 text-center border border-gray-200 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" data-icon="fa-star">
+                        <i class="fas fa-star text-lg"></i>
+                    </button>
+                    <button type="button" class="edit-icon-option p-2 text-center border border-gray-200 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" data-icon="fa-gem">
+                        <i class="fas fa-gem text-lg"></i>
+                    </button>
+                    <button type="button" class="edit-icon-option p-2 text-center border border-gray-200 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" data-icon="fa-crown">
+                        <i class="fas fa-crown text-lg"></i>
+                    </button>
+                    
+                    <!-- Cooling & Temperature -->
+                    <button type="button" class="edit-icon-option p-2 text-center border border-gray-200 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" data-icon="fa-snowflake">
+                        <i class="fas fa-snowflake text-lg"></i>
+                    </button>
+                    <button type="button" class="edit-icon-option p-2 text-center border border-gray-200 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" data-icon="fa-thermometer-half">
+                        <i class="fas fa-thermometer-half text-lg"></i>
+                    </button>
+                    <button type="button" class="edit-icon-option p-2 text-center border border-gray-200 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" data-icon="fa-fan">
+                        <i class="fas fa-fan text-lg"></i>
+                    </button>
+                    
+                    <!-- Gaming & Entertainment -->
+                    <button type="button" class="edit-icon-option p-2 text-center border border-gray-200 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" data-icon="fa-gamepad">
+                        <i class="fas fa-gamepad text-lg"></i>
+                    </button>
+                    <button type="button" class="edit-icon-option p-2 text-center border border-gray-200 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" data-icon="fa-play">
+                        <i class="fas fa-play text-lg"></i>
+                    </button>
+                    <button type="button" class="edit-icon-option p-2 text-center border border-gray-200 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" data-icon="fa-music">
+                        <i class="fas fa-music text-lg"></i>
+                    </button>
+                    
+                    <!-- AI & Smart Features -->
+                    <button type="button" class="edit-icon-option p-2 text-center border border-gray-200 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" data-icon="fa-brain">
+                        <i class="fas fa-brain text-lg"></i>
+                    </button>
+                    <button type="button" class="edit-icon-option p-2 text-center border border-gray-200 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" data-icon="fa-robot">
+                        <i class="fas fa-robot text-lg"></i>
+                    </button>
+                    <button type="button" class="edit-icon-option p-2 text-center border border-gray-200 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" data-icon="fa-magic">
+                        <i class="fas fa-magic text-lg"></i>
+                    </button>
+                    
+                    <!-- Build Quality -->
+                    <button type="button" class="edit-icon-option p-2 text-center border border-gray-200 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" data-icon="fa-hammer">
+                        <i class="fas fa-hammer text-lg"></i>
+                    </button>
+                    <button type="button" class="edit-icon-option p-2 text-center border border-gray-200 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" data-icon="fa-cube">
+                        <i class="fas fa-cube text-lg"></i>
+                    </button>
+                    <button type="button" class="edit-icon-option p-2 text-center border border-gray-200 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" data-icon="fa-diamond">
+                        <i class="fas fa-diamond text-lg"></i>
+                    </button>
+                </div>
+                <div class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                    Selected: <span id="edit-selected-icon-display">None</span>
+                </div>
+            </div>
+            
+            <div class="flex justify-end space-x-2">
+                <button id="cancel-edit-feature" class="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors">Cancel</button>
+                <button id="save-edit-feature" class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">Update Feature</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Specification Modal -->
+    <div id="edit-spec-modal" class="modal hidden">
+        <div class="modal-content">
+            <h3 class="text-lg font-semibold mb-4">Edit Specification</h3>
+            <input type="text" id="edit-spec-category" placeholder="Category (e.g., Display, Processor)" class="w-full p-3 border border-gray-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white mb-3">
+            <input type="text" id="edit-spec-value" placeholder="Value (e.g., 6.7-inch OLED)" class="w-full p-3 border border-gray-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white mb-4">
+            <div class="flex justify-end space-x-2">
+                <button id="cancel-edit-spec" class="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors">Cancel</button>
+                <button id="save-edit-spec" class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">Update Specification</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Shopify Configuration
         const SHOPIFY_CONFIG = {
@@ -907,6 +1085,77 @@
             document.getElementById('spec-modal').classList.add('hidden');
         });
 
+        // Edit feature modal event listeners
+        document.querySelectorAll('.edit-icon-option').forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove previous selection
+                document.querySelectorAll('.edit-icon-option').forEach(btn => {
+                    btn.classList.remove('bg-primary-100', 'border-primary-500');
+                });
+                
+                // Add selection to clicked button
+                button.classList.add('bg-primary-100', 'border-primary-500');
+                editSelectedIcon = button.dataset.icon;
+                document.getElementById('edit-selected-icon-display').textContent = editSelectedIcon;
+            });
+        });
+
+        document.getElementById('save-edit-feature').addEventListener('click', () => {
+            const input = document.getElementById('edit-feature-input');
+            const featureText = input.value.trim();
+            
+            if (featureText && editingFeatureIndex >= 0) {
+                features[editingFeatureIndex] = { 
+                    text: featureText,
+                    icon: editSelectedIcon || 'fa-star'
+                };
+                renderFeatures();
+                renderPreview();
+                
+                // Reset and close modal
+                input.value = '';
+                editSelectedIcon = null;
+                document.getElementById('edit-selected-icon-display').textContent = 'None';
+                document.getElementById('edit-feature-modal').classList.add('hidden');
+                editingFeatureIndex = -1;
+            }
+        });
+
+        document.getElementById('cancel-edit-feature').addEventListener('click', () => {
+            document.getElementById('edit-feature-input').value = '';
+            editSelectedIcon = null;
+            document.getElementById('edit-selected-icon-display').textContent = 'None';
+            document.getElementById('edit-feature-modal').classList.add('hidden');
+            editingFeatureIndex = -1;
+        });
+
+        // Edit specification modal event listeners
+        document.getElementById('save-edit-spec').addEventListener('click', () => {
+            const categoryInput = document.getElementById('edit-spec-category');
+            const valueInput = document.getElementById('edit-spec-value');
+            const category = categoryInput.value.trim();
+            const value = valueInput.value.trim();
+            
+            if (category && value && editingSpecIndex >= 0) {
+                specifications[editingSpecIndex] = { category, value };
+                renderSpecifications();
+                renderPreview();
+                
+                // Reset and close modal
+                categoryInput.value = '';
+                valueInput.value = '';
+                document.getElementById('edit-spec-modal').classList.add('hidden');
+                editingSpecIndex = -1;
+            }
+        });
+
+        document.getElementById('cancel-edit-spec').addEventListener('click', () => {
+            document.getElementById('edit-spec-category').value = '';
+            document.getElementById('edit-spec-value').value = '';
+            document.getElementById('edit-spec-modal').classList.add('hidden');
+            editingSpecIndex = -1;
+        });
+
         // Save features to Firestore
         document.getElementById('save-features').addEventListener('click', async () => {
             if (!selectedProduct) {
@@ -1024,9 +1273,14 @@
                             </div>
                             <span class="text-sm font-medium text-gray-900 dark:text-white">${feature.text}</span>
                         </div>
-                        <button onclick="removeFeature(${index})" class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
-                            <i class="fas fa-trash"></i>
-                        </button>
+                        <div class="flex items-center space-x-2">
+                            <button onclick="editFeature(${index})" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 p-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors" title="Edit Feature">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="removeFeature(${index})" class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors" title="Delete Feature">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
                     </div>
                 `).join('');
         }
@@ -1041,9 +1295,14 @@
                             <span class="font-semibold text-gray-900 dark:text-white">${spec.category}:</span>
                             <span class="text-gray-700 dark:text-gray-300"> ${spec.value}</span>
                         </div>
-                        <button onclick="removeSpec(${index})" class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
-                            <i class="fas fa-trash"></i>
-                        </button>
+                        <div class="flex items-center space-x-2">
+                            <button onclick="editSpec(${index})" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 p-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors" title="Edit Specification">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="removeSpec(${index})" class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors" title="Delete Specification">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
                     </div>
                 `).join('');
         }
@@ -1087,6 +1346,46 @@
             renderPreview();
         }
 
+        // Edit functions
+        let editingFeatureIndex = -1;
+        let editingSpecIndex = -1;
+        let editSelectedIcon = null;
+
+        function editFeature(index) {
+            editingFeatureIndex = index;
+            const feature = features[index];
+            
+            // Populate the edit modal
+            document.getElementById('edit-feature-input').value = feature.text;
+            editSelectedIcon = feature.icon || 'fa-star';
+            document.getElementById('edit-selected-icon-display').textContent = editSelectedIcon;
+            
+            // Reset icon selection
+            document.querySelectorAll('.edit-icon-option').forEach(btn => {
+                btn.classList.remove('bg-primary-100', 'border-primary-500');
+                if (btn.dataset.icon === editSelectedIcon) {
+                    btn.classList.add('bg-primary-100', 'border-primary-500');
+                }
+            });
+            
+            // Show the edit modal
+            document.getElementById('edit-feature-modal').classList.remove('hidden');
+            document.getElementById('edit-feature-input').focus();
+        }
+
+        function editSpec(index) {
+            editingSpecIndex = index;
+            const spec = specifications[index];
+            
+            // Populate the edit modal
+            document.getElementById('edit-spec-category').value = spec.category;
+            document.getElementById('edit-spec-value').value = spec.value;
+            
+            // Show the edit modal
+            document.getElementById('edit-spec-modal').classList.remove('hidden');
+            document.getElementById('edit-spec-category').focus();
+        }
+
         // Theme toggle
         document.getElementById('theme-toggle').addEventListener('click', () => {
             document.documentElement.classList.toggle('dark');
@@ -1096,6 +1395,18 @@
         window.addEventListener('click', (e) => {
             if (e.target.classList.contains('modal')) {
                 e.target.classList.add('hidden');
+                
+                // Reset edit states when closing modals
+                if (e.target.id === 'edit-feature-modal') {
+                    editingFeatureIndex = -1;
+                    editSelectedIcon = null;
+                    document.getElementById('edit-feature-input').value = '';
+                    document.getElementById('edit-selected-icon-display').textContent = 'None';
+                } else if (e.target.id === 'edit-spec-modal') {
+                    editingSpecIndex = -1;
+                    document.getElementById('edit-spec-category').value = '';
+                    document.getElementById('edit-spec-value').value = '';
+                }
             }
         });
 

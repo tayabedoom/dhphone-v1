@@ -450,6 +450,12 @@
                     if (window.wilayaData) {
                         console.log('✅ Wilaya data loaded successfully');
                         verifyWilayaData(); // Verify data integrity
+                        testOumElBouaghi(); // Test Oum El Bouaghi specifically
+                        
+                        // Test delivery pricing for all wilayas
+                        if (typeof testAllWilayaDeliveryPricing === 'function') {
+                            testAllWilayaDeliveryPricing();
+                        }
                     } else {
                         console.error('❌ Wilaya data not found');
                     }
@@ -1822,6 +1828,25 @@ Current status: Using demo data
         // Use external wilaya data from wilaya-data.js
         const wilayaData = window.wilayaData;
         
+        // Test function to verify Oum El Bouaghi is working
+        function testOumElBouaghi() {
+            console.log('🧪 Testing Oum El Bouaghi functionality...');
+            
+            if (window.wilayaData && window.wilayaData['04 - Oum El Bouaghi']) {
+                console.log('✅ Oum El Bouaghi found in wilaya data');
+                console.log('📊 Available dairas:', window.wilayaData['04 - Oum El Bouaghi']);
+                
+                // Test delivery pricing
+                const deliveryInfo = getDeliveryPrice('04 - Oum El Bouaghi');
+                console.log('🚚 Delivery info for Oum El Bouaghi:', deliveryInfo);
+                
+                return true;
+            } else {
+                console.error('❌ Oum El Bouaghi not found in wilaya data');
+                return false;
+            }
+        }
+        
         // Function to verify wilaya data integrity
         function verifyWilayaData() {
             console.log('🔍 Verifying wilaya data integrity...');
@@ -1839,8 +1864,8 @@ Current status: Using demo data
                 return false;
             }
             
-            // Check a few sample wilayas to ensure data structure is correct
-            const sampleWilayas = ['Alger', 'Oran', 'Constantine', 'Annaba'];
+            // Check specific wilayas including Oum El Bouaghi
+            const sampleWilayas = ['38 - Alger', '50 - Oran', '46 - Constantine', '44 - Annaba', '04 - Oum El Bouaghi'];
             let validCount = 0;
             
             sampleWilayas.forEach(wilaya => {
@@ -1851,6 +1876,13 @@ Current status: Using demo data
                     console.error(`❌ ${wilaya}: Invalid or missing data`);
                 }
             });
+            
+            // Also check if Oum El Bouaghi is specifically available
+            if (window.wilayaData['04 - Oum El Bouaghi']) {
+                console.log('✅ Oum El Bouaghi is available with dairas:', window.wilayaData['04 - Oum El Bouaghi']);
+            } else {
+                console.error('❌ Oum El Bouaghi not found in wilaya data');
+            }
             
             if (validCount === sampleWilayas.length) {
                 console.log('✅ Wilaya data integrity verified successfully');
@@ -1884,7 +1916,9 @@ Current status: Using demo data
                 sortedWilayas.forEach(wilaya => {
                     const option = document.createElement('option');
                     option.value = wilaya;
-                    option.textContent = wilaya;
+                    // Extract the wilaya name without the number prefix for display
+                    const wilayaName = wilaya.replace(/^\d+\s*-\s*/, '');
+                    option.textContent = wilayaName;
                     wilayaSelect.appendChild(option);
                 });
                 
@@ -1901,23 +1935,28 @@ Current status: Using demo data
             } else {
                 console.error('❌ Wilaya data not available, using fallback');
                 
-                // Enhanced fallback data with all 58 wilayas
+                // Enhanced fallback data with all 58 wilayas (matching the format from wilaya-data.js)
                 const fallbackWilayas = [
-                    'Adrar', 'Ain Defla', 'Ain Temouchent', 'Alger', 'Annaba', 'Batna', 'Bechar', 'Bejaia', 
-                    'Biskra', 'Blida', 'Bordj Bou Arreridj', 'Bordj Baji Mokhtar', 'Bouira', 'Boumerdes', 
-                    'Chlef', 'Constantine', 'Djelfa', 'El Bayadh', 'El M\'Ghair', 'El Meniaa', 'El Oued', 
-                    'El Tarf', 'Ghardaia', 'Guelma', 'Illizi', 'Jijel', 'Khenchela', 'Laghouat', 
-                    'Mascara', 'Medea', 'Mila', 'Mostaganem', 'M\'Sila', 'Naama', 'Oran', 'Ouargla', 
-                    'Oum El Bouaghi', 'Ouled Djellal', 'Relizane', 'Saida', 'Setif', 'Sidi Bel Abbes', 
-                    'Skikda', 'Souk Ahras', 'Tamanrasset', 'Tebessa', 'Tiaret', 'Tindouf', 'Tipaza', 
-                    'Tissemsilt', 'Tlemcen', 'Touggourt', 'Djanet', 'In Salah', 'In Guezzam', 
-                    'Timimoun', 'Béni Abbès'
+                    '01 - Adrar', '02 - Chlef', '03 - Laghouat', '04 - Oum El Bouaghi', '05 - Batna', 
+                    '06 - Bejaia', '07 - Biskra', '08 - Bechar', '09 - Blida', '10 - Bouira', 
+                    '11 - Tamanrasset', '12 - Tebessa', '13 - Tlemcen', '14 - Tiaret', '15 - Tissemsilt', 
+                    '16 - El Oued', '17 - Khenchela', '18 - Souk Ahras', '19 - Tipaza', '20 - Mila', 
+                    '21 - Ain Defla', '22 - Naama', '23 - Ain Temouchent', '24 - Ghardaia', '25 - Relizane', 
+                    '26 - El Tarf', '27 - Tindouf', '28 - El M\'Ghair', '29 - El Meniaa', '30 - Ouled Djellal', 
+                    '31 - Bordj Baji Mokhtar', '32 - Béni Abbès', '33 - Timimoun', '34 - Touggourt', 
+                    '35 - Djanet', '36 - In Salah', '37 - In Guezzam', '38 - Alger', '39 - Djelfa', 
+                    '40 - Jijel', '41 - Setif', '42 - Saida', '43 - Skikda', '44 - Annaba', 
+                    '45 - Guelma', '46 - Constantine', '47 - Medea', '48 - Mostaganem', '49 - Mascara', 
+                    '50 - Oran', '51 - El Bayadh', '52 - Illizi', '53 - Bordj Bou Arreridj', '54 - Boumerdes', 
+                    '55 - El Taref', '56 - Tindouf', '57 - El M\'Ghair', '58 - El Meniaa'
                 ];
                 
                 fallbackWilayas.forEach(wilaya => {
                     const option = document.createElement('option');
                     option.value = wilaya;
-                    option.textContent = wilaya;
+                    // Extract the wilaya name without the number prefix for display
+                    const wilayaName = wilaya.replace(/^\d+\s*-\s*/, '');
+                    option.textContent = wilayaName;
                     wilayaSelect.appendChild(option);
                 });
                 
@@ -1977,6 +2016,29 @@ Current status: Using demo data
             } else {
                 console.error('❌ No dairas found for wilaya:', wilaya);
                 console.log('📊 Available wilayas:', window.wilayaData ? Object.keys(window.wilayaData) : 'None');
+                
+                // Try to find the wilaya by name if the full format wasn't found
+                if (wilaya && window.wilayaData) {
+                    const wilayaKeys = Object.keys(window.wilayaData);
+                    const matchingWilaya = wilayaKeys.find(key => key.includes(wilaya) || wilaya.includes(key.replace(/^\d+\s*-\s*/, '')));
+                    
+                    if (matchingWilaya && window.wilayaData[matchingWilaya]) {
+                        console.log('✅ Found matching wilaya:', matchingWilaya);
+                        console.log('📊 Available dairas:', window.wilayaData[matchingWilaya].length);
+                        
+                        const sortedDairas = window.wilayaData[matchingWilaya].sort();
+                        
+                        sortedDairas.forEach(daira => {
+                            const option = document.createElement('option');
+                            option.value = daira;
+                            option.textContent = daira;
+                            dairaSelect.appendChild(option);
+                        });
+                        
+                        console.log('✅ Successfully loaded', sortedDairas.length, 'dairas for', matchingWilaya);
+                        return;
+                    }
+                }
                 
                 // Add a fallback message
                 const option = document.createElement('option');
@@ -2287,8 +2349,8 @@ Current status: Using demo data
                     </div>
 
                     <!-- Action Buttons -->
-                    <div class="flex flex-col space-y-3 sm:space-y-0 sm:space-x-4 sm:flex-row">
-                        <button onclick="openOrderForm()" class="group relative w-full sm:flex-1 bg-gradient-to-r from-green-500 to-green-600 text-white py-4 sm:py-5 rounded-xl sm:rounded-2xl hover:from-green-600 hover:to-green-700 transition-all duration-300 font-bold text-lg sm:text-xl shadow-lg hover:shadow-2xl transform hover:-translate-y-2 active:scale-95 overflow-hidden">
+                    <div class="flex flex-col space-y-6 sm:space-y-0 sm:space-x-6 sm:space-x-reverse sm:flex-row mt-8 sm:mt-12 mb-8 sm:mb-12">
+                        <button onclick="openOrderForm()" class="group relative w-full sm:flex-1 bg-gradient-to-r from-green-500 to-green-600 text-white py-6 sm:py-8 px-8 sm:px-12 rounded-xl sm:rounded-2xl hover:from-green-600 hover:to-green-700 transition-all duration-300 font-bold text-lg sm:text-xl shadow-lg hover:shadow-2xl transform hover:-translate-y-2 active:scale-95 overflow-hidden">
                             <!-- Animated background -->
                             <div class="absolute inset-0 bg-gradient-to-r from-green-400 to-green-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                             <!-- Button content -->
@@ -2299,7 +2361,7 @@ Current status: Using demo data
                             <div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300 rounded-xl sm:rounded-2xl"></div>
                         </button>
                         
-                        <a href="Contact.html" class="group relative w-full sm:flex-1 border-2 border-blue-600 text-blue-600 dark:text-blue-400 py-4 sm:py-5 rounded-xl sm:rounded-2xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-300 font-bold text-lg sm:text-xl text-center flex items-center justify-center transform hover:-translate-y-1 active:scale-95 overflow-hidden">
+                        <a href="Contact.html" class="group relative w-full sm:flex-1 border-2 border-blue-600 text-blue-600 dark:text-blue-400 py-6 sm:py-8 px-8 sm:px-12 rounded-xl sm:rounded-2xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-300 font-bold text-lg sm:text-xl text-center flex items-center justify-center transform hover:-translate-y-1 active:scale-95 overflow-hidden">
                             <!-- Animated background -->
                             <div class="absolute inset-0 bg-blue-600 opacity-0 group-hover:opacity-10 transition-opacity duration-300 rounded-xl sm:rounded-2xl"></div>
                             <!-- Button content -->
