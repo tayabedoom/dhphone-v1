@@ -493,7 +493,21 @@
                         const chatId = '-1002894581286';
                         
                         const deliveryStatus = orderData.deliveryAvailable ? '✅ Available' : '❌ Not Available';
-                        const message = `🛍️ *NEW ORDER*\n\n👤 *Customer:* ${orderData.firstName} ${orderData.lastName}\n📱 *Phone:* ${orderData.phone}\n📍 *Location:* ${orderData.wilaya}, ${orderData.daira}\n🚚 *Delivery:* ${deliveryStatus}\n💰 *Delivery Fee:* ${orderData.deliveryPrice}\n\n⏰ *Time:* ${new Date().toLocaleString('en-US', { timeZone: 'Africa/Algiers' })}`;
+                        
+                        // Get product information
+                        let productInfo = '';
+                        if (currentProduct) {
+                            const productPrice = currentProduct.price ? `${currentProduct.price} DZD` : 'Price not available';
+                            const productType = currentProduct.productType || 'Phone';
+                            productInfo = `📱 *Product:* ${currentProduct.title}\n🏷️ *Type:* ${productType}\n💰 *Price:* ${productPrice}\n`;
+                        }
+                        
+                        const message = `🛍️ *NEW ORDER*\n\n${productInfo}👤 *Customer:* ${orderData.firstName} ${orderData.lastName}\n📱 *Phone:* ${orderData.phone}\n📍 *Location:* ${orderData.wilaya}, ${orderData.daira}\n🚚 *Delivery:* ${deliveryStatus}\n💰 *Delivery Fee:* ${orderData.deliveryPrice}\n\n⏰ *Time:* ${new Date().toLocaleString('en-US', { timeZone: 'Africa/Algiers' })}`;
+                        
+                        // Add warning if no product info
+                        if (!currentProduct) {
+                            console.warn('⚠️ No product information available for Telegram message');
+                        }
                         
                         const response = await fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
                             method: 'POST',
