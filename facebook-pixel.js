@@ -1,6 +1,6 @@
 // Facebook Pixel Configuration
 // Facebook Pixel ID for DH Phone
-const FB_PIXEL_ID = '1088401762837358';
+const FB_PIXEL_ID = '1118651196841746';
 
 // Facebook Pixel Base Code
 !function(f,b,e,v,n,t,s)
