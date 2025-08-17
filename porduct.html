@@ -19,27 +19,154 @@
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
     
-    <!-- Facebook Pixel Code - Deferred -->
+    <!-- Meta Pixel Code -->
     <script>
-        // Defer Facebook Pixel loading
-        window.addEventListener('load', function() {
-            !function(f,b,e,v,n,t,s)
-            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-            n.queue=[];t=b.createElement(e);t.async=!0;
-            t.src=v;s=b.getElementsByTagName(e)[0];
-            s.parentNode.insertBefore(t,s)}(window, document,'script',
-            'https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', '1118651196841746');
-            fbq('track', 'PageView');
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '1118651196841746');
+        fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1118651196841746&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+
+    <!-- E-commerce Tracking Functions -->
+    <script>
+        // Wait for Meta Pixel to be fully loaded
+        function waitForMetaPixel(callback) {
+            if (typeof fbq === 'function' && window._fbq && window._fbq.loaded) {
+                callback();
+            } else {
+                setTimeout(() => waitForMetaPixel(callback), 100);
+            }
+        }
+
+        // Global variables for tracking
+        window.fbPixelData = {
+            currency: 'DZD',
+            products: {},
+            cart: {
+                items: [],
+                total: 0
+            }
+        };
+
+        // Helper function to format price
+        function formatPrice(price) {
+            return parseFloat(price).toFixed(2);
+        }
+
+        // 1. ViewContent Event
+        function trackViewContent(productId, productName, price, currency = 'DZD') {
+            console.log('📊 Meta Pixel: ViewContent', { productId, productName, price, currency });
+            
+            waitForMetaPixel(() => {
+                fbq('track', 'ViewContent', {
+                    content_ids: [productId],
+                    content_name: productName,
+                    value: formatPrice(price),
+                    currency: currency,
+                    content_type: 'product'
+                });
+                console.log('✅ ViewContent event sent to Facebook');
+            });
+        }
+
+        // 2. AddToCart Event
+        function trackAddToCart(productId, productName, price, quantity = 1, currency = 'DZD') {
+            console.log('📊 Meta Pixel: AddToCart', { productId, productName, price, quantity, currency });
+            
+            waitForMetaPixel(() => {
+                fbq('track', 'AddToCart', {
+                    content_ids: [productId],
+                    content_name: productName,
+                    value: formatPrice(price * quantity),
+                    currency: currency,
+                    content_type: 'product',
+                    contents: [{
+                        id: productId,
+                        quantity: quantity,
+                        price: formatPrice(price)
+                    }]
+                });
+                console.log('✅ AddToCart event sent to Facebook');
+            });
+        }
+
+        // 3. InitiateCheckout Event
+        function trackInitiateCheckout(cartTotal, currency = 'DZD') {
+            console.log('📊 Meta Pixel: InitiateCheckout', { cartTotal, currency });
+            
+            waitForMetaPixel(() => {
+                fbq('track', 'InitiateCheckout', {
+                    value: formatPrice(cartTotal),
+                    currency: currency,
+                    content_type: 'product'
+                });
+                console.log('✅ InitiateCheckout event sent to Facebook');
+            });
+        }
+
+        // 4. Purchase Event
+        function trackPurchase(orderId, orderTotal, currency = 'DZD') {
+            console.log('📊 Meta Pixel: Purchase', { orderId, orderTotal, currency });
+            
+            waitForMetaPixel(() => {
+                fbq('track', 'Purchase', {
+                    value: formatPrice(orderTotal),
+                    currency: currency,
+                    content_type: 'product',
+                    order_id: orderId
+                });
+                console.log('✅ Purchase event sent to Facebook');
+            });
+        }
+
+        // 5. Search Event
+        function trackSearch(searchTerm) {
+            console.log('📊 Meta Pixel: Search', { searchTerm });
+            
+            waitForMetaPixel(() => {
+                fbq('track', 'Search', {
+                    search_string: searchTerm,
+                    content_type: 'product'
+                });
+                console.log('✅ Search event sent to Facebook');
+            });
+        }
+
+        // 6. Contact Event
+        function trackContact() {
+            console.log('📊 Meta Pixel: Contact');
+            
+            waitForMetaPixel(() => {
+                fbq('track', 'Contact');
+                console.log('✅ Contact event sent to Facebook');
+            });
+        }
+
+        // Export functions for use
+        window.FacebookPixel = {
+            trackViewContent,
+            trackAddToCart,
+            trackInitiateCheckout,
+            trackPurchase,
+            trackSearch,
+            trackContact
+        };
+
+        // Initialize when Meta Pixel is ready
+        waitForMetaPixel(() => {
+            console.log('📊 Meta Pixel: E-commerce tracking system loaded successfully');
         });
     </script>
-    <noscript>
-        <img height="1" width="1" style="display:none"
-        src="https://www.facebook.com/tr?id=1118651196841746&ev=PageView&noscript=1"/>
-    </noscript>
-    <!-- End Facebook Pixel Code -->
 
     <!-- Critical CSS - Inline for faster loading -->
     <style>

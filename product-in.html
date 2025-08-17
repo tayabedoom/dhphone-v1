@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="hamburger-menu.css">
     
-    <!-- Facebook Pixel Code -->
+    <!-- Meta Pixel Code -->
     <script>
         !function(f,b,e,v,n,t,s)
         {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -36,11 +36,10 @@
         fbq('init', '1118651196841746');
         fbq('track', 'PageView');
     </script>
-    <noscript>
-        <img height="1" width="1" style="display:none"
-        src="https://www.facebook.com/tr?id=1118651196841746&ev=PageView&noscript=1"/>
-    </noscript>
-    <!-- End Facebook Pixel Code -->
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1118651196841746&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
 
     <!-- Custom CSS -->
     <style>
@@ -522,6 +521,31 @@
                         });
 
                         if (response.ok) {
+                            // Track successful order with Meta Pixel
+                            if (window.FacebookPixel && window.FacebookPixel.trackPurchase) {
+                                const orderId = 'ORDER_' + Date.now();
+                                const orderTotal = currentProduct ? parseFloat(currentProduct.price) : 0;
+                                
+                                // Track AddToCart first
+                                if (currentProduct) {
+                                    window.FacebookPixel.trackAddToCart(
+                                        currentProduct.id || 'unknown',
+                                        currentProduct.title || 'Product',
+                                        orderTotal,
+                                        1,
+                                        'DZD'
+                                    );
+                                }
+                                
+                                // Track InitiateCheckout
+                                window.FacebookPixel.trackInitiateCheckout(orderTotal, 'DZD');
+                                
+                                // Track Purchase
+                                window.FacebookPixel.trackPurchase(orderId, orderTotal, 'DZD');
+                                
+                                console.log('📊 Meta Pixel: Order tracked successfully', { orderId, orderTotal });
+                            }
+                            
                             closeOrderForm();
                             this.reset();
                             
@@ -531,7 +555,14 @@
                                 deliverySection.classList.add('hidden');
                             }
                             
-                            showSuccessAlert();
+                            // Store order data for thank you page
+                            if (currentProduct) {
+                                localStorage.setItem('orderTotal', currentProduct.price);
+                                localStorage.setItem('productId', currentProduct.id);
+                            }
+                            
+                            // Redirect to thank you page
+                            window.location.href = 'thank-you.html';
                         } else {
                             throw new Error('Failed to send order');
                         }
@@ -2206,6 +2237,112 @@ Current status: Using demo data
 
 
     </script>
+
+    <!-- E-commerce Tracking Functions -->
+    <script>
+        // Wait for Meta Pixel to be fully loaded
+        function waitForMetaPixel(callback) {
+            if (typeof fbq === 'function' && window._fbq && window._fbq.loaded) {
+                callback();
+            } else {
+                setTimeout(() => waitForMetaPixel(callback), 100);
+            }
+        }
+
+        // Global variables for tracking
+        window.fbPixelData = {
+            currency: 'DZD',
+            products: {},
+            cart: {
+                items: [],
+                total: 0
+            }
+        };
+
+        // Helper function to format price
+        function formatPrice(price) {
+            return parseFloat(price).toFixed(2);
+        }
+
+        // 1. ViewContent Event
+        function trackViewContent(productId, productName, price, currency = 'DZD') {
+            console.log('📊 Meta Pixel: ViewContent', { productId, productName, price, currency });
+            
+            waitForMetaPixel(() => {
+                fbq('track', 'ViewContent', {
+                    content_ids: [productId],
+                    content_name: productName,
+                    value: formatPrice(price),
+                    currency: currency,
+                    content_type: 'product'
+                });
+                console.log('✅ ViewContent event sent to Facebook');
+            });
+        }
+
+        // 2. AddToCart Event
+        function trackAddToCart(productId, productName, price, quantity = 1, currency = 'DZD') {
+            console.log('📊 Meta Pixel: AddToCart', { productId, productName, price, quantity, currency });
+            
+            waitForMetaPixel(() => {
+                fbq('track', 'AddToCart', {
+                    content_ids: [productId],
+                    content_name: productName,
+                    value: formatPrice(price * quantity),
+                    currency: currency,
+                    content_type: 'product',
+                    contents: [{
+                        id: productId,
+                        quantity: quantity,
+                        price: formatPrice(price)
+                    }]
+                });
+                console.log('✅ AddToCart event sent to Facebook');
+            });
+        }
+
+        // 3. InitiateCheckout Event
+        function trackInitiateCheckout(cartTotal, currency = 'DZD') {
+            console.log('📊 Meta Pixel: InitiateCheckout', { cartTotal, currency });
+            
+            waitForMetaPixel(() => {
+                fbq('track', 'InitiateCheckout', {
+                    value: formatPrice(cartTotal),
+                    currency: currency,
+                    content_type: 'product'
+                });
+                console.log('✅ InitiateCheckout event sent to Facebook');
+            });
+        }
+
+        // 4. Purchase Event
+        function trackPurchase(orderId, orderTotal, currency = 'DZD') {
+            console.log('📊 Meta Pixel: Purchase', { orderId, orderTotal, currency });
+            
+            waitForMetaPixel(() => {
+                fbq('track', 'Purchase', {
+                    value: formatPrice(orderTotal),
+                    currency: currency,
+                    content_type: 'product',
+                    order_id: orderId
+                });
+                console.log('✅ Purchase event sent to Facebook');
+            });
+        }
+
+        // Export functions for use
+        window.FacebookPixel = {
+            trackViewContent,
+            trackAddToCart,
+            trackInitiateCheckout,
+            trackPurchase
+        };
+
+        // Initialize when Meta Pixel is ready
+        waitForMetaPixel(() => {
+            console.log('📊 Meta Pixel: E-commerce tracking system loaded successfully');
+        });
+    </script>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-200">
     <!-- Header -->
@@ -2788,7 +2925,8 @@ Current status: Using demo data
                             <button type="button" onclick="closeOrderForm()" class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                                 إلغاء
                             </button>
-                            <button type="submit" class="flex-1 px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300 font-semibold">
+                            <button type="submit" class="flex-1 px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300 font-semibold" 
+                                    data-add-to-cart="true">
                                 <i class="fas fa-shopping-cart ml-2 rtl:ml-0 rtl:mr-2"></i>إرسال الطلب
                             </button>
                         </div>

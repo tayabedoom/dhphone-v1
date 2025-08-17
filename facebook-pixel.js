@@ -1,8 +1,7 @@
-// Facebook Pixel Configuration
-// Facebook Pixel ID for DH Phone
-const FB_PIXEL_ID = '1118651196841746';
+// Meta Pixel Code - DH Phone E-commerce Tracking
+// Pixel ID: 1118651196841746
 
-// Facebook Pixel Base Code
+// Initialize Meta Pixel
 !function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
 n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -12,152 +11,270 @@ t.src=v;s=b.getElementsByTagName(e)[0];
 s.parentNode.insertBefore(t,s)}(window, document,'script',
 'https://connect.facebook.net/en_US/fbevents.js');
 
-// Initialize Facebook Pixel
-fbq('init', FB_PIXEL_ID);
+// Initialize with your Pixel ID
+fbq('init', '1118651196841746');
+
+// Track PageView on every page load
 fbq('track', 'PageView');
 
-// Track page views on route changes
-function trackPageView(pageName) {
-    fbq('track', 'PageView', {
-        page_name: pageName,
-        page_title: document.title
-    });
+// Global variables for tracking
+window.fbPixelData = {
+    currency: 'DZD', // Default currency - can be updated dynamically
+    products: {}, // Store product data for tracking
+    cart: {
+        items: [],
+        total: 0
+    }
+};
+
+// Helper function to get product data
+function getProductData(productId) {
+    return window.fbPixelData.products[productId] || {
+        id: productId,
+        name: 'Unknown Product',
+        price: 0,
+        currency: window.fbPixelData.currency
+    };
 }
 
-// Track product views
-function trackProductView(productName, productCategory, productPrice) {
+// Helper function to format price
+function formatPrice(price) {
+    return parseFloat(price).toFixed(2);
+}
+
+// 1. ViewContent Event - Track when user views a product
+function trackViewContent(productId, productName, price, currency = 'DZD') {
+    console.log('📊 Meta Pixel: ViewContent', { productId, productName, price, currency });
+    
     fbq('track', 'ViewContent', {
+        content_ids: [productId],
         content_name: productName,
-        content_category: productCategory,
-        value: productPrice,
-        currency: 'DZD'
+        value: formatPrice(price),
+        currency: currency,
+        content_type: 'product'
     });
 }
 
-// Track add to cart events
-function trackAddToCart(productName, productCategory, productPrice) {
+// 2. AddToCart Event - Track when user adds product to cart
+function trackAddToCart(productId, productName, price, quantity = 1, currency = 'DZD') {
+    console.log('📊 Meta Pixel: AddToCart', { productId, productName, price, quantity, currency });
+    
     fbq('track', 'AddToCart', {
+        content_ids: [productId],
         content_name: productName,
-        content_category: productCategory,
-        value: productPrice,
-        currency: 'DZD'
+        value: formatPrice(price * quantity),
+        currency: currency,
+        content_type: 'product',
+        contents: [{
+            id: productId,
+            quantity: quantity,
+            price: formatPrice(price)
+        }]
+    });
+    
+    // Update cart data
+    const existingItem = window.fbPixelData.cart.items.find(item => item.id === productId);
+    if (existingItem) {
+        existingItem.quantity += quantity;
+    } else {
+        window.fbPixelData.cart.items.push({
+            id: productId,
+            name: productName,
+            price: price,
+            quantity: quantity
+        });
+    }
+    
+    // Update cart total
+    window.fbPixelData.cart.total = window.fbPixelData.cart.items.reduce((total, item) => {
+        return total + (item.price * item.quantity);
+    }, 0);
+}
+
+// 3. InitiateCheckout Event - Track when user starts checkout
+function trackInitiateCheckout(cartTotal, currency = 'DZD') {
+    console.log('📊 Meta Pixel: InitiateCheckout', { cartTotal, currency });
+    
+    const contents = window.fbPixelData.cart.items.map(item => ({
+        id: item.id,
+        quantity: item.quantity,
+        price: formatPrice(item.price)
+    }));
+    
+    fbq('track', 'InitiateCheckout', {
+        value: formatPrice(cartTotal),
+        currency: currency,
+        contents: contents,
+        content_type: 'product'
     });
 }
 
-// Track purchase events
-function trackPurchase(orderValue, orderId) {
+// 4. Purchase Event - Track successful purchase
+function trackPurchase(orderId, orderTotal, currency = 'DZD') {
+    console.log('📊 Meta Pixel: Purchase', { orderId, orderTotal, currency });
+    
+    const contents = window.fbPixelData.cart.items.map(item => ({
+        id: item.id,
+        quantity: item.quantity,
+        price: formatPrice(item.price)
+    }));
+    
     fbq('track', 'Purchase', {
-        value: orderValue,
-        currency: 'DZD',
-        content_ids: [orderId]
+        value: formatPrice(orderTotal),
+        currency: currency,
+        contents: contents,
+        content_type: 'product',
+        order_id: orderId
     });
+    
+    // Clear cart after successful purchase
+    window.fbPixelData.cart.items = [];
+    window.fbPixelData.cart.total = 0;
 }
 
-// Track contact form submissions
-function trackContactForm() {
-    fbq('track', 'Lead', {
-        content_name: 'Contact Form',
-        content_category: 'Contact'
-    });
-}
-
-// Track WhatsApp clicks
-function trackWhatsAppClick() {
-    fbq('track', 'Contact', {
-        content_name: 'WhatsApp Contact',
-        content_category: 'Contact'
-    });
-}
-
-// Track social media clicks
-function trackSocialMediaClick(platform) {
-    fbq('track', 'CustomEvent', {
-        event_name: 'Social Media Click',
-        content_name: platform,
-        content_category: 'Social Media'
-    });
-}
-
-// Track search events
+// 5. Search Event - Track product searches
 function trackSearch(searchTerm) {
+    console.log('📊 Meta Pixel: Search', { searchTerm });
+    
     fbq('track', 'Search', {
-        search_string: searchTerm
+        search_string: searchTerm,
+        content_type: 'product'
     });
 }
 
-// Track category filter clicks
-function trackCategoryFilter(categoryName) {
-    fbq('track', 'CustomEvent', {
-        event_name: 'Category Filter',
-        content_name: categoryName,
-        content_category: 'Product Category'
-    });
+// 6. Contact Event - Track contact form submissions
+function trackContact() {
+    console.log('📊 Meta Pixel: Contact');
+    
+    fbq('track', 'Contact');
 }
 
-// Auto-track important elements
+// Auto-detect and track ViewContent on product pages
 document.addEventListener('DOMContentLoaded', function() {
-    // Track contact form submissions
-    const contactForms = document.querySelectorAll('form');
-    contactForms.forEach(form => {
-        form.addEventListener('submit', function() {
-            trackContactForm();
-        });
-    });
-
-    // Track WhatsApp links
-    const whatsappLinks = document.querySelectorAll('a[href*="whatsapp"]');
-    whatsappLinks.forEach(link => {
-        link.addEventListener('click', function() {
-            trackWhatsAppClick();
-        });
-    });
-
-    // Track social media links
-    const socialLinks = document.querySelectorAll('a[href*="facebook"], a[href*="instagram"], a[href*="tiktok"]');
-    socialLinks.forEach(link => {
-        link.addEventListener('click', function() {
-            const href = link.href;
-            if (href.includes('facebook')) {
-                trackSocialMediaClick('Facebook');
-            } else if (href.includes('instagram')) {
-                trackSocialMediaClick('Instagram');
-            } else if (href.includes('tiktok')) {
-                trackSocialMediaClick('TikTok');
-            }
-        });
-    });
-
-    // Track product card clicks
-    const productCards = document.querySelectorAll('.product-card, [data-product]');
-    productCards.forEach(card => {
-        card.addEventListener('click', function() {
-            const productName = this.getAttribute('data-product-name') || 'Product';
-            const productCategory = this.getAttribute('data-product-category') || 'General';
-            const productPrice = this.getAttribute('data-product-price') || 0;
-            
-            trackProductView(productName, productCategory, productPrice);
-        });
-    });
-
-    // Track category filter buttons
-    const categoryButtons = document.querySelectorAll('.category-btn, [data-category]');
-    categoryButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const categoryName = this.getAttribute('data-category') || this.textContent.trim();
-            trackCategoryFilter(categoryName);
-        });
-    });
+    console.log('📊 Meta Pixel: DOM loaded, initializing tracking...');
+    
+    // Check if we're on a product detail page
+    const productId = getProductIdFromPage();
+    if (productId) {
+        const productData = getProductData(productId);
+        if (productData.name !== 'Unknown Product') {
+            trackViewContent(
+                productData.id,
+                productData.name,
+                productData.price,
+                productData.currency
+            );
+        }
+    }
+    
+    // Auto-track AddToCart button clicks
+    setupAddToCartTracking();
+    
+    // Auto-track form submissions
+    setupFormTracking();
+    
+    console.log('📊 Meta Pixel: Tracking initialized successfully');
 });
 
-// Export functions for manual tracking
+// Helper function to get product ID from current page
+function getProductIdFromPage() {
+    // Check URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('product') || urlParams.get('id');
+    
+    if (productId) return productId;
+    
+    // Check for product ID in page data attributes
+    const productElement = document.querySelector('[data-product-id]');
+    if (productElement) {
+        return productElement.getAttribute('data-product-id');
+    }
+    
+    // Check for product ID in meta tags
+    const productMeta = document.querySelector('meta[name="product-id"]');
+    if (productMeta) {
+        return productMeta.getAttribute('content');
+    }
+    
+    return null;
+}
+
+// Setup automatic AddToCart tracking
+function setupAddToCartTracking() {
+    // Track clicks on add to cart buttons
+    document.addEventListener('click', function(e) {
+        const addToCartBtn = e.target.closest('[data-add-to-cart], .add-to-cart, [onclick*="cart"], [onclick*="order"]');
+        
+        if (addToCartBtn) {
+            const productId = addToCartBtn.getAttribute('data-product-id') || 
+                             addToCartBtn.closest('[data-product-id]')?.getAttribute('data-product-id');
+            
+            if (productId) {
+                const productData = getProductData(productId);
+                trackAddToCart(
+                    productData.id,
+                    productData.name,
+                    productData.price,
+                    1,
+                    productData.currency
+                );
+            }
+        }
+    });
+}
+
+// Setup automatic form tracking
+function setupFormTracking() {
+    // Track order form submissions
+    const orderForm = document.querySelector('#orderForm, form[data-form-type="order"]');
+    if (orderForm) {
+        orderForm.addEventListener('submit', function(e) {
+            // Track InitiateCheckout when order form is submitted
+            trackInitiateCheckout(window.fbPixelData.cart.total, window.fbPixelData.currency);
+        });
+    }
+    
+    // Track contact form submissions
+    const contactForm = document.querySelector('#contactForm, form[data-form-type="contact"]');
+    if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+            trackContact();
+        });
+    }
+}
+
+// Function to update product data (call this when loading products)
+function updateProductData(products) {
+    products.forEach(product => {
+        window.fbPixelData.products[product.id] = {
+            id: product.id,
+            name: product.title || product.name,
+            price: parseFloat(product.price || product.priceRange?.minVariantPrice?.amount || 0),
+            currency: product.currency || product.priceRange?.minVariantPrice?.currencyCode || 'DZD'
+        };
+    });
+    console.log('📊 Meta Pixel: Product data updated', products.length, 'products');
+}
+
+// Function to manually trigger purchase event (call this on thank you page)
+function triggerPurchaseEvent(orderId, orderTotal, currency = 'DZD') {
+    trackPurchase(orderId, orderTotal, currency);
+}
+
+// Export functions for use in other scripts
 window.FacebookPixel = {
-    trackPageView,
-    trackProductView,
+    trackViewContent,
     trackAddToCart,
+    trackInitiateCheckout,
     trackPurchase,
-    trackContactForm,
-    trackWhatsAppClick,
-    trackSocialMediaClick,
     trackSearch,
-    trackCategoryFilter
-}; 
+    trackContact,
+    updateProductData,
+    triggerPurchaseEvent,
+    getProductData
+};
+
+// Also export as MetaPixel for compatibility
+window.MetaPixel = window.FacebookPixel;
+
+console.log('📊 Meta Pixel: E-commerce tracking system loaded successfully'); 

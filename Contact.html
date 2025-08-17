@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="Contact.css">
     <script src="Contact.js" defer></script>
     
-    <!-- Facebook Pixel Code -->
+    <!-- Meta Pixel Code -->
     <script>
         !function(f,b,e,v,n,t,s)
         {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -23,12 +23,44 @@
         fbq('init', '1118651196841746');
         fbq('track', 'PageView');
     </script>
-    <noscript>
-        <img height="1" width="1" style="display:none"
-        src="https://www.facebook.com/tr?id=1118651196841746&ev=PageView&noscript=1"/>
-    </noscript>
-    <!-- End Facebook Pixel Code -->
-    
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1118651196841746&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+
+    <!-- Contact Tracking Function -->
+    <script>
+        // Wait for Meta Pixel to be fully loaded
+        function waitForMetaPixel(callback) {
+            if (typeof fbq === 'function' && window._fbq && window._fbq.loaded) {
+                callback();
+            } else {
+                setTimeout(() => waitForMetaPixel(callback), 100);
+            }
+        }
+
+        // Contact Event
+        function trackContact() {
+            console.log('📊 Meta Pixel: Contact');
+            
+            waitForMetaPixel(() => {
+                fbq('track', 'Contact');
+                console.log('✅ Contact event sent to Facebook');
+            });
+        }
+
+        // Export function for use
+        window.FacebookPixel = {
+            trackContact
+        };
+
+        // Initialize when Meta Pixel is ready
+        waitForMetaPixel(() => {
+            console.log('📊 Meta Pixel: Contact tracking loaded successfully');
+        });
+    </script>
+
+    <!-- Tailwind CSS -->
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -950,6 +982,12 @@
                     sendTelegramMessage(telegramMessage)
                         .then(function(response) {
                             console.log('Telegram message sent successfully:', response);
+                            
+                            // Track contact form submission with Meta Pixel
+                            if (window.FacebookPixel && window.FacebookPixel.trackContact) {
+                                window.FacebookPixel.trackContact();
+                                console.log('📊 Meta Pixel: Contact form tracked');
+                            }
                             
                             // Reset form
                             contactForm.reset();

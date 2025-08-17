@@ -195,6 +195,12 @@ async function loadProducts() {
             console.log('Sample product:', allProducts[0]);
         }
         
+        // Update Meta Pixel with product data
+        if (window.FacebookPixel && window.FacebookPixel.updateProductData) {
+            window.FacebookPixel.updateProductData(allProducts);
+            console.log('📊 Meta Pixel: Product data updated');
+        }
+        
         // Initialize categories from products
         initializeCategoriesFromProducts();
         
@@ -437,9 +443,9 @@ if (mobileMenuButton && mobileMenu) {
 function viewProductWithTracking(handle, productTitle, productType, price, currency) {
     console.log('📊 Tracking product view:', productTitle);
     
-    // Track with Facebook Pixel
-    if (window.FacebookPixel && window.FacebookPixel.trackProductView) {
-        window.FacebookPixel.trackProductView(productTitle, productType, parseFloat(price));
+    // Track with Meta Pixel
+    if (window.FacebookPixel && window.FacebookPixel.trackViewContent) {
+        window.FacebookPixel.trackViewContent(handle, productTitle, parseFloat(price), currency);
     }
     
     // Navigate to product page
@@ -450,9 +456,9 @@ function viewProductWithTracking(handle, productTitle, productType, price, curre
 function contactForProduct(productTitle, productType, price, currency) {
     console.log('📊 Tracking contact for out-of-stock product:', productTitle);
     
-    // Track with Facebook Pixel
-    if (window.FacebookPixel && window.FacebookPixel.trackContactForm) {
-        window.FacebookPixel.trackContactForm();
+    // Track with Meta Pixel
+    if (window.FacebookPixel && window.FacebookPixel.trackContact) {
+        window.FacebookPixel.trackContact();
     }
     
     // Navigate to contact page
@@ -479,9 +485,9 @@ function addProductCardTracking() {
             
             console.log('📊 Tracking product card click:', productTitle);
             
-            // Track with Facebook Pixel
-            if (window.FacebookPixel && window.FacebookPixel.trackProductView) {
-                window.FacebookPixel.trackProductView(productTitle, productType, parseFloat(productPrice));
+            // Track with Meta Pixel
+            if (window.FacebookPixel && window.FacebookPixel.trackViewContent) {
+                window.FacebookPixel.trackViewContent(productHandle, productTitle, parseFloat(productPrice), productCurrency);
             }
             
             // Navigate to product page if available

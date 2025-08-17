@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meta Pixel Test - DH Phone</title>
+    
+    <!-- Meta Pixel Code -->
+    <script>
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '1118651196841746');
+        fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1118651196841746&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+    
+    <!-- E-commerce Tracking Functions -->
+    <script>
+        // Wait for Meta Pixel to be fully loaded
+        function waitForMetaPixel(callback) {
+            if (typeof fbq === 'function' && window._fbq && window._fbq.loaded) {
+                callback();
+            } else {
+                setTimeout(() => waitForMetaPixel(callback), 100);
+            }
+        }
+
+        // Global variables for tracking
+        window.fbPixelData = {
+            currency: 'DZD',
+            products: {},
+            cart: {
+                items: [],
+                total: 0
+            }
+        };
+
+        // Helper function to format price
+        function formatPrice(price) {
+            return parseFloat(price).toFixed(2);
+        }
+
+        // 1. ViewContent Event
+        function trackViewContent(productId, productName, price, currency = 'DZD') {
+            console.log('📊 Meta Pixel: ViewContent', { productId, productName, price, currency });
+            
+            // Ensure Meta Pixel is loaded before tracking
+            waitForMetaPixel(() => {
+                fbq('track', 'ViewContent', {
+                    content_ids: [productId],
+                    content_name: productName,
+                    value: formatPrice(price),
+                    currency: currency,
+                    content_type: 'product'
+                });
+                console.log('✅ ViewContent event sent to Facebook');
+            });
+        }
+
+        // 2. AddToCart Event
+        function trackAddToCart(productId, productName, price, quantity = 1, currency = 'DZD') {
+            console.log('📊 Meta Pixel: AddToCart', { productId, productName, price, quantity, currency });
+            
+            waitForMetaPixel(() => {
+                fbq('track', 'AddToCart', {
+                    content_ids: [productId],
+                    content_name: productName,
+                    value: formatPrice(price * quantity),
+                    currency: currency,
+                    content_type: 'product',
+                    contents: [{
+                        id: productId,
+                        quantity: quantity,
+                        price: formatPrice(price)
+                    }]
+                });
+                console.log('✅ AddToCart event sent to Facebook');
+            });
+        }
+
+        // 3. InitiateCheckout Event
+        function trackInitiateCheckout(cartTotal, currency = 'DZD') {
+            console.log('📊 Meta Pixel: InitiateCheckout', { cartTotal, currency });
+            
+            waitForMetaPixel(() => {
+                fbq('track', 'InitiateCheckout', {
+                    value: formatPrice(cartTotal),
+                    currency: currency,
+                    content_type: 'product'
+                });
+                console.log('✅ InitiateCheckout event sent to Facebook');
+            });
+        }
+
+        // 4. Purchase Event
+        function trackPurchase(orderId, orderTotal, currency = 'DZD') {
+            console.log('📊 Meta Pixel: Purchase', { orderId, orderTotal, currency });
+            
+            waitForMetaPixel(() => {
+                fbq('track', 'Purchase', {
+                    value: formatPrice(orderTotal),
+                    currency: currency,
+                    content_type: 'product',
+                    order_id: orderId
+                });
+                console.log('✅ Purchase event sent to Facebook');
+            });
+        }
+
+        // 5. Search Event
+        function trackSearch(searchTerm) {
+            console.log('📊 Meta Pixel: Search', { searchTerm });
+            
+            waitForMetaPixel(() => {
+                fbq('track', 'Search', {
+                    search_string: searchTerm,
+                    content_type: 'product'
+                });
+                console.log('✅ Search event sent to Facebook');
+            });
+        }
+
+        // 6. Contact Event
+        function trackContact() {
+            console.log('📊 Meta Pixel: Contact');
+            
+            waitForMetaPixel(() => {
+                fbq('track', 'Contact');
+                console.log('✅ Contact event sent to Facebook');
+            });
+        }
+
+        // Export functions for use
+        window.FacebookPixel = {
+            trackViewContent,
+            trackAddToCart,
+            trackInitiateCheckout,
+            trackPurchase,
+            trackSearch,
+            trackContact
+        };
+
+        // Initialize when Meta Pixel is ready
+        waitForMetaPixel(() => {
+            console.log('📊 Meta Pixel: E-commerce tracking system loaded successfully');
+            console.log('📊 Meta Pixel Status:', {
+                fbq: typeof fbq,
+                _fbq: !!window._fbq,
+                loaded: window._fbq?.loaded,
+                pixelId: '1118651196841746'
+            });
+        });
+    </script>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #0056b3;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+        .info {
+            color: blue;
+            font-weight: bold;
+        }
+        .warning {
+            color: orange;
+            font-weight: bold;
+        }
+        .debug-info {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Meta Pixel Test Page</h1>
+    <p>This page helps you test your Meta Pixel implementation. Open the browser console and Facebook Pixel Helper to see the events.</p>
+    
+    <div class="test-section">
+        <h2>✅ PageView Event</h2>
+        <p>This event should fire automatically when the page loads.</p>
+        <p class="info">Check Facebook Pixel Helper - you should see a PageView event.</p>
+        <div id="pageview-status" class="debug-info">Checking PageView status...</div>
+    </div>
+    
+    <div class="test-section">
+        <h2>📦 ViewContent Event</h2>
+        <p>Test product view tracking:</p>
+        <button class="test-button" onclick="testViewContent()">Test ViewContent</button>
+        <p class="info">This simulates viewing a product page.</p>
+        <div id="viewcontent-status" class="debug-info">Ready to test ViewContent...</div>
+    </div>
+    
+    <div class="test-section">
+        <h2>🛒 AddToCart Event</h2>
+        <p>Test add to cart tracking:</p>
+        <button class="test-button" onclick="testAddToCart()">Test AddToCart</button>
+        <p class="info">This simulates adding a product to cart.</p>
+        <div id="addtocart-status" class="debug-info">Ready to test AddToCart...</div>
+    </div>
+    
+    <div class="test-section">
+        <h2>💳 InitiateCheckout Event</h2>
+        <p>Test checkout initiation:</p>
+        <button class="test-button" onclick="testInitiateCheckout()">Test InitiateCheckout</button>
+        <p class="info">This simulates starting the checkout process.</p>
+        <div id="checkout-status" class="debug-info">Ready to test InitiateCheckout...</div>
+    </div>
+    
+    <div class="test-section">
+        <h2>💰 Purchase Event</h2>
+        <p>Test purchase tracking:</p>
+        <button class="test-button" onclick="testPurchase()">Test Purchase</button>
+        <p class="info">This simulates completing a purchase.</p>
+        <div id="purchase-status" class="debug-info">Ready to test Purchase...</div>
+    </div>
+    
+    <div class="test-section">
+        <h2>🔍 Search Event</h2>
+        <p>Test search tracking:</p>
+        <button class="test-button" onclick="testSearch()">Test Search</button>
+        <p class="info">This simulates searching for products.</p>
+        <div id="search-status" class="debug-info">Ready to test Search...</div>
+    </div>
+    
+    <div class="test-section">
+        <h2>📞 Contact Event</h2>
+        <p>Test contact form tracking:</p>
+        <button class="test-button" onclick="testContact()">Test Contact</button>
+        <p class="info">This simulates submitting a contact form.</p>
+        <div id="contact-status" class="debug-info">Ready to test Contact...</div>
+    </div>
+    
+    <div class="test-section">
+        <h2>🔧 Debug Information</h2>
+        <p>Check if Meta Pixel is loaded:</p>
+        <button class="test-button" onclick="checkPixelStatus()">Check Pixel Status</button>
+        <div id="pixel-status"></div>
+        <div id="network-status" class="debug-info">Checking network requests...</div>
+    </div>
+    
+    <div class="test-section">
+        <h2>📊 Test All Events</h2>
+        <p>Run all tests in sequence:</p>
+        <button class="test-button" onclick="runAllTests()">Run All Tests</button>
+        <p class="info">This will fire all events in sequence for comprehensive testing.</p>
+    </div>
+
+    <script>
+        // Test functions with enhanced debugging
+        function testViewContent() {
+            const statusDiv = document.getElementById('viewcontent-status');
+            statusDiv.innerHTML = 'Testing ViewContent...';
+            
+            if (window.FacebookPixel && window.FacebookPixel.trackViewContent) {
+                window.FacebookPixel.trackViewContent('test-product-123', 'Test iPhone 15', 50000, 'DZD');
+                statusDiv.innerHTML = '<span class="success">✅ ViewContent event fired! Check Facebook Pixel Helper and Events Manager.</span>';
+                console.log('✅ ViewContent event fired');
+            } else {
+                statusDiv.innerHTML = '<span class="error">❌ FacebookPixel not found</span>';
+                console.error('❌ FacebookPixel not found');
+            }
+        }
+        
+        function testAddToCart() {
+            const statusDiv = document.getElementById('addtocart-status');
+            statusDiv.innerHTML = 'Testing AddToCart...';
+            
+            if (window.FacebookPixel && window.FacebookPixel.trackAddToCart) {
+                window.FacebookPixel.trackAddToCart('test-product-123', 'Test iPhone 15', 50000, 1, 'DZD');
+                statusDiv.innerHTML = '<span class="success">✅ AddToCart event fired! Check Facebook Pixel Helper and Events Manager.</span>';
+                console.log('✅ AddToCart event fired');
+            } else {
+                statusDiv.innerHTML = '<span class="error">❌ FacebookPixel not found</span>';
+                console.error('❌ FacebookPixel not found');
+            }
+        }
+        
+        function testInitiateCheckout() {
+            const statusDiv = document.getElementById('checkout-status');
+            statusDiv.innerHTML = 'Testing InitiateCheckout...';
+            
+            if (window.FacebookPixel && window.FacebookPixel.trackInitiateCheckout) {
+                window.FacebookPixel.trackInitiateCheckout(50000, 'DZD');
+                statusDiv.innerHTML = '<span class="success">✅ InitiateCheckout event fired! Check Facebook Pixel Helper and Events Manager.</span>';
+                console.log('✅ InitiateCheckout event fired');
+            } else {
+                statusDiv.innerHTML = '<span class="error">❌ FacebookPixel not found</span>';
+                console.error('❌ FacebookPixel not found');
+            }
+        }
+        
+        function testPurchase() {
+            const statusDiv = document.getElementById('purchase-status');
+            statusDiv.innerHTML = 'Testing Purchase...';
+            
+            if (window.FacebookPixel && window.FacebookPixel.trackPurchase) {
+                const orderId = 'TEST_ORDER_' + Date.now();
+                window.FacebookPixel.trackPurchase(orderId, 50000, 'DZD');
+                statusDiv.innerHTML = '<span class="success">✅ Purchase event fired! Check Facebook Pixel Helper and Events Manager.</span>';
+                console.log('✅ Purchase event fired');
+            } else {
+                statusDiv.innerHTML = '<span class="error">❌ FacebookPixel not found</span>';
+                console.error('❌ FacebookPixel not found');
+            }
+        }
+        
+        function testSearch() {
+            const statusDiv = document.getElementById('search-status');
+            statusDiv.innerHTML = 'Testing Search...';
+            
+            if (window.FacebookPixel && window.FacebookPixel.trackSearch) {
+                window.FacebookPixel.trackSearch('iPhone 15');
+                statusDiv.innerHTML = '<span class="success">✅ Search event fired! Check Facebook Pixel Helper and Events Manager.</span>';
+                console.log('✅ Search event fired');
+            } else {
+                statusDiv.innerHTML = '<span class="error">❌ FacebookPixel not found</span>';
+                console.error('❌ FacebookPixel not found');
+            }
+        }
+        
+        function testContact() {
+            const statusDiv = document.getElementById('contact-status');
+            statusDiv.innerHTML = 'Testing Contact...';
+            
+            if (window.FacebookPixel && window.FacebookPixel.trackContact) {
+                window.FacebookPixel.trackContact();
+                statusDiv.innerHTML = '<span class="success">✅ Contact event fired! Check Facebook Pixel Helper and Events Manager.</span>';
+                console.log('✅ Contact event fired');
+            } else {
+                statusDiv.innerHTML = '<span class="error">❌ FacebookPixel not found</span>';
+                console.error('❌ FacebookPixel not found');
+            }
+        }
+        
+        function checkPixelStatus() {
+            const statusDiv = document.getElementById('pixel-status');
+            let status = '';
+            
+            // Check if fbq function exists
+            if (typeof fbq === 'function') {
+                status += '<p class="success">✅ Meta Pixel (fbq) is loaded and working</p>';
+            } else {
+                status += '<p class="error">❌ Meta Pixel (fbq) is NOT loaded</p>';
+            }
+            
+            // Check if _fbq object exists
+            if (window._fbq) {
+                status += '<p class="success">✅ Meta Pixel object (_fbq) is available</p>';
+            } else {
+                status += '<p class="error">❌ Meta Pixel object (_fbq) is NOT available</p>';
+            }
+            
+            // Check if pixel is initialized
+            if (window._fbq && window._fbq.loaded) {
+                status += '<p class="success">✅ Meta Pixel is initialized and ready</p>';
+            } else {
+                status += '<p class="error">❌ Meta Pixel is NOT initialized</p>';
+            }
+            
+            // Check pixel ID
+            if (window._fbq && window._fbq.pixelId) {
+                status += '<p class="success">✅ Pixel ID: ' + window._fbq.pixelId + '</p>';
+            } else {
+                status += '<p class="info">ℹ️ Pixel ID: 1118651196841746 (expected)</p>';
+            }
+            
+            // Check FacebookPixel object
+            if (window.FacebookPixel) {
+                status += '<p class="success">✅ FacebookPixel object is available</p>';
+            } else {
+                status += '<p class="error">❌ FacebookPixel object is NOT available</p>';
+            }
+            
+            statusDiv.innerHTML = status;
+        }
+        
+        function runAllTests() {
+            console.log('🧪 Running all Meta Pixel tests...');
+            
+            setTimeout(() => testViewContent(), 1000);
+            setTimeout(() => testAddToCart(), 2000);
+            setTimeout(() => testInitiateCheckout(), 3000);
+            setTimeout(() => testPurchase(), 4000);
+            setTimeout(() => testSearch(), 5000);
+            setTimeout(() => testContact(), 6000);
+            
+            alert('All tests will run in sequence. Check Facebook Pixel Helper and Events Manager for results.');
+        }
+        
+        // Check PageView status
+        function checkPageViewStatus() {
+            const statusDiv = document.getElementById('pageview-status');
+            if (typeof fbq === 'function') {
+                statusDiv.innerHTML = '<span class="success">✅ PageView should have fired automatically. Check Facebook Pixel Helper.</span>';
+            } else {
+                statusDiv.innerHTML = '<span class="error">❌ Meta Pixel not loaded - PageView may not have fired</span>';
+            }
+        }
+        
+        // Monitor network requests
+        function monitorNetworkRequests() {
+            const statusDiv = document.getElementById('network-status');
+            
+            // Check if we can detect Facebook requests
+            const observer = new PerformanceObserver((list) => {
+                for (const entry of list.getEntries()) {
+                    if (entry.name.includes('facebook.com') || entry.name.includes('fbcdn.net')) {
+                        statusDiv.innerHTML = '<span class="success">✅ Facebook network requests detected: ' + entry.name + '</span>';
+                        break;
+                    }
+                }
+            });
+            
+            try {
+                observer.observe({ entryTypes: ['resource'] });
+            } catch (e) {
+                statusDiv.innerHTML = '<span class="warning">⚠️ Cannot monitor network requests (PerformanceObserver not supported)</span>';
+            }
+        }
+        
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🧪 Meta Pixel Test Page loaded');
+            
+            // Wait for Meta Pixel to load, then check status
+            setTimeout(() => {
+                checkPixelStatus();
+                checkPageViewStatus();
+                monitorNetworkRequests();
+            }, 2000);
+            
+            // Check again after 5 seconds to be sure
+            setTimeout(() => {
+                checkPixelStatus();
+                checkPageViewStatus();
+            }, 5000);
+        });
+        
+        // Also check when window loads
+        window.addEventListener('load', function() {
+            console.log('🔍 Window loaded, checking Meta Pixel status...');
+            setTimeout(() => {
+                checkPixelStatus();
+                checkPageViewStatus();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

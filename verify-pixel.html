@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meta Pixel Verification - DH Phone</title>
+    
+    <!-- Meta Pixel Code -->
+    <script>
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '1118651196841746');
+        fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1118651196841746&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .status-box {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+        .info {
+            color: blue;
+            font-weight: bold;
+        }
+        .test-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Meta Pixel Verification</h1>
+    <p>This page verifies that your Meta Pixel is loading correctly.</p>
+    
+    <div class="status-box">
+        <h2>📊 Pixel Status</h2>
+        <div id="pixel-status">Checking...</div>
+    </div>
+    
+    <div class="status-box">
+        <h2>🧪 Quick Test</h2>
+        <button class="test-button" onclick="testPixel()">Test Meta Pixel</button>
+        <div id="test-result"></div>
+    </div>
+    
+    <div class="status-box">
+        <h2>📋 Instructions</h2>
+        <ol>
+            <li>Open <strong>Facebook Pixel Helper</strong> extension</li>
+            <li>Refresh this page</li>
+            <li>You should see a <strong>PageView</strong> event</li>
+            <li>Click "Test Meta Pixel" to verify tracking works</li>
+        </ol>
+    </div>
+
+    <script>
+        function checkPixelStatus() {
+            const statusDiv = document.getElementById('pixel-status');
+            let status = '';
+            
+            // Check if fbq function exists
+            if (typeof fbq === 'function') {
+                status += '<p class="success">✅ Meta Pixel (fbq) is loaded and working</p>';
+            } else {
+                status += '<p class="error">❌ Meta Pixel (fbq) is NOT loaded</p>';
+            }
+            
+            // Check if _fbq object exists
+            if (window._fbq) {
+                status += '<p class="success">✅ Meta Pixel object (_fbq) is available</p>';
+            } else {
+                status += '<p class="error">❌ Meta Pixel object (_fbq) is NOT available</p>';
+            }
+            
+            // Check if pixel is initialized
+            if (window._fbq && window._fbq.loaded) {
+                status += '<p class="success">✅ Meta Pixel is initialized and ready</p>';
+            } else {
+                status += '<p class="error">❌ Meta Pixel is NOT initialized</p>';
+            }
+            
+            // Check pixel ID
+            if (window._fbq && window._fbq.pixelId) {
+                status += '<p class="success">✅ Pixel ID: ' + window._fbq.pixelId + '</p>';
+            } else {
+                status += '<p class="info">ℹ️ Pixel ID: 1118651196841746 (expected)</p>';
+            }
+            
+            statusDiv.innerHTML = status;
+        }
+        
+        function testPixel() {
+            const resultDiv = document.getElementById('test-result');
+            
+            if (typeof fbq === 'function') {
+                // Test a simple event
+                fbq('track', 'ViewContent', {
+                    content_name: 'Test Product',
+                    value: 100,
+                    currency: 'DZD'
+                });
+                
+                resultDiv.innerHTML = '<p class="success">✅ Test event sent successfully! Check Facebook Pixel Helper.</p>';
+                console.log('✅ Meta Pixel test event sent');
+            } else {
+                resultDiv.innerHTML = '<p class="error">❌ Meta Pixel is not loaded. Cannot send test event.</p>';
+                console.error('❌ Meta Pixel not available for testing');
+            }
+        }
+        
+        // Check status when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔍 Meta Pixel Verification page loaded');
+            
+            // Wait a bit for Meta Pixel to load
+            setTimeout(checkPixelStatus, 2000);
+            
+            // Check again after 5 seconds to be sure
+            setTimeout(checkPixelStatus, 5000);
+        });
+        
+        // Also check when window loads
+        window.addEventListener('load', function() {
+            console.log('🔍 Window loaded, checking Meta Pixel status...');
+            setTimeout(checkPixelStatus, 1000);
+        });
+    </script>
+</body>
+</html>
